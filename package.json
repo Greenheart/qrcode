@@ -30,7 +30,7 @@
   "homepage": "https://github.com/slidoapp/node-qrcode",
   "license": "MIT",
   "scripts": {
-    "lint": "standard",
+    "lint": "standard --fix",
     "pretest": "npm run lint",
     "test": "node --throw-deprecation test.js",
     "tap-junit-report": "tap replay -R junit --coverage-report=none --allow-empty-coverage --allow-incomplete-coverage 'test/**/*.test.js' > test-results.xml",

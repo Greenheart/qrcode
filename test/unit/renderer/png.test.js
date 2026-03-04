@@ -1,10 +1,10 @@
 import sinon from 'sinon'
 import fs from 'fs'
-import {PNG} from 'pngjs'
+import { PNG } from 'pngjs'
 import { test } from 'tap'
 import * as QRCode from '#core/qrcode.js'
 import * as PngRenderer from '#renderer/png.js'
-import * as StreamMock from '../../mocks/writable-stream.js'
+import StreamMock from '../../mocks/writable-stream.js'
 
 test('PNG renderer interface', function (t) {
   t.type(PngRenderer.render, 'function',
