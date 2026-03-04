@@ -12,6 +12,6 @@
     "noEmit": true,
     "lib": ["esnext", "dom", "dom.iterable"],
   },
-  "include": ["lib", "helper", "test", "types", "bin"],
-  "exclude": ["node_modules"],
+  "include": ["**/*.js", "**/*.ts"],
+  "exclude": ["node_modules", "examples", "build", ".tap"],
 }
