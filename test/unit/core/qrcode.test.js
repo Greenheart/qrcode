@@ -1,6 +1,6 @@
-import ECLevel from '#core/error-correction-level'
-import Version from '#core/version'
-import QRCode from '#core/qrcode'
+import * as ECLevel from '#core/error-correction-level.js'
+import * as Version from '#core/version.js'
+import * as QRCode from '#core/qrcode.js'
 import toSJIS from 'helper/to-sjis'
 
 import { test } from 'tap'

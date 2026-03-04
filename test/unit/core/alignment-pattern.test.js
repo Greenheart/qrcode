@@ -1,4 +1,4 @@
-import pattern from '#core/alignment-pattern'
+import * as pattern from '#core/alignment-pattern'
 
 import { test } from 'tap'
 /**

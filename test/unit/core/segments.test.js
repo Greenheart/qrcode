@@ -1,10 +1,10 @@
-import Mode from '#core/mode'
-import Segments from '#core/segments'
-import NumericData from '#core/numeric-data'
+import * as Mode from '#core/mode'
+import * as Segments from '#core/segments'
+import * as NumericData from '#core/numeric-data'
 import AlphanumericData from '#core/alphanumeric-data'
-import ByteData from '#core/byte-data'
-import toSJIS from 'helper/to-sjis'
-import Utils from '#core/utils'
+import ByteData from '#core/byte-data.js'
+import toSJIS from 'helper/to-sjis.js'
+import * as Utils from '#core/utils.js'
 
 import { test } from 'tap'
 let testData = [

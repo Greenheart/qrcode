@@ -1,5 +1,5 @@
-import QRCode from '#core/qrcode.js'
-import TerminalRenderer from '#renderer/terminal.js'
+import * as QRCode from '#core/qrcode.js'
+import * as TerminalRenderer from '#renderer/terminal.js'
 import { test } from 'tap'
 
 test('TerminalRenderer interface', function (t) {

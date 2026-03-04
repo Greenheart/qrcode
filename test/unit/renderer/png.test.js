@@ -1,11 +1,11 @@
 import sinon from 'sinon'
 import fs from 'fs'
-import QRCode from '#core/qrcode'
-import PngRenderer from '#renderer/png'
-import StreamMock from '../../mocks/writable-stream.js'
-
+import {PNG} from 'pngjs'
 import { test } from 'tap'
-const PNG = require('pngjs').PNG
+import * as QRCode from '#core/qrcode.js'
+import * as PngRenderer from '#renderer/png.js'
+import * as StreamMock from '../../mocks/writable-stream.js'
+
 test('PNG renderer interface', function (t) {
   t.type(PngRenderer.render, 'function',
     'Should have render function')

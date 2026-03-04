@@ -1,7 +1,7 @@
 import sinon from 'sinon'
 import fs from 'fs'
-import QRCode from '#core/qrcode.js'
-import Utf8Renderer from '#renderer/utf8.js'
+import * as QRCode from '#core/qrcode.js'
+import * as Utf8Renderer from '#renderer/utf8.js'
 
 import { test } from 'tap'
 test('Utf8Renderer interface', function (t) {

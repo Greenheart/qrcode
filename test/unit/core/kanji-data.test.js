@@ -1,6 +1,6 @@
 import BitBuffer from '#core/bit-buffer'
 import KanjiData from '#core/kanji-data'
-import Mode from '#core/mode'
+import * as Mode from '#core/mode'
 import toSJIS from 'helper/to-sjis'
 
 import { test } from 'tap'

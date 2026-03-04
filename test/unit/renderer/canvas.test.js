@@ -1,6 +1,6 @@
 import { Canvas, createCanvas } from 'canvas'
-import QRCode from '#core/qrcode'
-import CanvasRenderer from '#renderer/canvas'
+import * as QRCode from '#core/qrcode.js'
+import * as CanvasRenderer from '#renderer/canvas'
 
 import { test } from 'tap'
 test('CanvasRenderer interface', function (t) {

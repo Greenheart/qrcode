@@ -1,6 +1,6 @@
 import BitBuffer from '#core/bit-buffer'
-import ByteData from '#core/byte-data'
-import Mode from '#core/mode'
+import * as ByteData from '#core/byte-data'
+import * as Mode from '#core/mode'
 
 import { test } from 'tap'
 test('Byte Data: String Input', function (t) {

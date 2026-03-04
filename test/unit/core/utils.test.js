@@ -1,4 +1,4 @@
-import Utils from '#core/utils'
+import * as Utils from '#core/utils'
 
 import { test } from 'tap'
 /**

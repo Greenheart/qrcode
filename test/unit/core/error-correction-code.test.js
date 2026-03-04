@@ -1,8 +1,8 @@
-import Utils from '#core/utils'
-import Version from '#core/version'
-import ECLevel from '#core/error-correction-level'
-import ECCode from '#core/error-correction-code'
-import Mode from '#core/mode'
+import * as Utils from '#core/utils.js'
+import * as Version from '#core/version.js'
+import * as ECLevel from '#core/error-correction-level.js'
+import * as ECCode from '#core/error-correction-code'
+import * as Mode from '#core/mode'
 
 import { test } from 'tap'
 test('Error correction codewords', function (t) {

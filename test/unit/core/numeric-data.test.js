@@ -1,6 +1,6 @@
 import BitBuffer from '#core/bit-buffer'
-import NumericData from '#core/numeric-data'
-import Mode from '#core/mode'
+import * as NumericData from '#core/numeric-data'
+import * as Mode from '#core/mode'
 
 import { test } from 'tap'
 const testData = [

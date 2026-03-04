@@ -1,4 +1,4 @@
-import Utils from '#renderer/utils.js'
+import * as Utils from '#renderer/utils.js'
 import { test } from 'tap'
 
 test('Utils getOptions', function (t) {
