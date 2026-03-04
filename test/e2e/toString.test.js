@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import * as QRCode from '#lib/index.js'
+import QRCode from '#lib/index.js'
 import * as browser from '#lib/browser.js'
 import * as Helpers from '#test/helpers.js'
 
@@ -76,7 +76,7 @@ test('toString (browser)', function (t) {
 })
 
 test('toString svg', function (t) {
-  const file = path.join(__dirname, '/svgtag.expected.out')
+  const file = path.join(import.meta.dirname, '/svgtag.expected.out')
   t.plan(6)
 
   QRCode.toString('http://www.google.com', {
@@ -121,7 +121,7 @@ test('toString svg', function (t) {
 })
 
 test('toString browser svg', function (t) {
-  const file = path.join(__dirname, '/svgtag.expected.out')
+  const file = path.join(import.meta.dirname, '/svgtag.expected.out')
 
   t.plan(3)
 
@@ -212,7 +212,7 @@ test('toString utf8', function (t) {
 })
 
 test('toString terminal', function (t) {
-  const expectedTerminal = fs.readFileSync(path.join(__dirname, '/terminal.expected.out')) + ''
+  const expectedTerminal = fs.readFileSync(path.join(import.meta.dirname, '/terminal.expected.out')) + ''
 
   t.plan(3)
 

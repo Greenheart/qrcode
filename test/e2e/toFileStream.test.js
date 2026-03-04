@@ -1,5 +1,5 @@
 import sinon from 'sinon'
-import QRCode from '#lib'
+import * as QRCode from '#lib'
 import StreamMock from '../mocks/writable-stream.js'
 
 import { test } from 'tap'

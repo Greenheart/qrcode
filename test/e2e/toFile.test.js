@@ -2,8 +2,8 @@ import fs from 'fs'
 import path from 'path'
 import os from 'os'
 import sinon from 'sinon'
-import QRCode from '#lib'
-import Helpers from '#test/helpers'
+import * as QRCode from '#lib'
+import * as Helpers from '#test/helpers.js'
 import StreamMock from '#test/mocks/writable-stream'
 
 import { test } from 'tap'
@@ -120,7 +120,7 @@ test('toFile png', function (t) {
 test('toFile svg', function (t) {
   const fileName = path.join(os.tmpdir(), 'qrimage.svg')
   const expectedOutput = fs.readFileSync(
-    path.join(__dirname, '/svg.expected.out'), 'UTF-8')
+    path.join(import.meta.dirname, '/svg.expected.out'), 'UTF-8')
 
   t.plan(6)
 
