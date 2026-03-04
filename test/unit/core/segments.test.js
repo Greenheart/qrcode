@@ -1,12 +1,12 @@
-const test = require('tap').test
-const Mode = require('core/mode')
-const Segments = require('core/segments')
-const NumericData = require('core/numeric-data')
-const AlphanumericData = require('core/alphanumeric-data')
-const ByteData = require('core/byte-data')
-const toSJIS = require('helper/to-sjis')
-const Utils = require('core/utils')
+import Mode from 'core/mode'
+import Segments from 'core/segments'
+import NumericData from 'core/numeric-data'
+import AlphanumericData from 'core/alphanumeric-data'
+import ByteData from 'core/byte-data'
+import toSJIS from 'helper/to-sjis'
+import Utils from 'core/utils'
 
+const test = require('tap').test
 let testData = [
   {
     input: '1A1',

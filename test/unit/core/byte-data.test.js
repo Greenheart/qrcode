@@ -1,8 +1,8 @@
-const test = require('tap').test
-const BitBuffer = require('core/bit-buffer')
-const ByteData = require('core/byte-data')
-const Mode = require('core/mode')
+import BitBuffer from 'core/bit-buffer'
+import ByteData from 'core/byte-data'
+import Mode from 'core/mode'
 
+const test = require('tap').test
 test('Byte Data: String Input', function (t) {
   const text = '1234'
   const textBitLength = 32

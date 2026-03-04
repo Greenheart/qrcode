@@ -1,9 +1,9 @@
-const test = require('tap').test
-const ECLevel = require('core/error-correction-level')
-const Version = require('core/version')
-const QRCode = require('core/qrcode')
-const toSJIS = require('helper/to-sjis')
+import ECLevel from 'core/error-correction-level'
+import Version from 'core/version'
+import QRCode from 'core/qrcode'
+import toSJIS from 'helper/to-sjis'
 
+const test = require('tap').test
 test('QRCode interface', function (t) {
   t.type(QRCode.create, 'function', 'Should have "create" function')
   t.throws(function () { QRCode.create() }, 'Should throw if no data is provided')

@@ -1,6 +1,6 @@
-const test = require('tap').test
-const pattern = require('core/alignment-pattern')
+import pattern from 'core/alignment-pattern'
 
+const test = require('tap').test
 /**
  * Row/column coordinates of the center module of each alignment pattern.
  * Each sub-array refers to a qr code version.

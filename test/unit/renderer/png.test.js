@@ -1,11 +1,11 @@
-const test = require('tap').test
-const sinon = require('sinon')
-const fs = require('fs')
-const QRCode = require('core/qrcode')
-const PngRenderer = require('renderer/png')
-const PNG = require('pngjs').PNG
-const StreamMock = require('../../mocks/writable-stream')
+import sinon from 'sinon'
+import fs from 'fs'
+import QRCode from 'core/qrcode'
+import PngRenderer from 'renderer/png'
+import StreamMock from '../../mocks/writable-stream.js'
 
+const test = require('tap').test
+const PNG = require('pngjs').PNG
 test('PNG renderer interface', function (t) {
   t.type(PngRenderer.render, 'function',
     'Should have render function')

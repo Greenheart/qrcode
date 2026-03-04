@@ -1,6 +1,6 @@
-const test = require('tap').test
-const Utils = require('core/utils')
+import Utils from 'core/utils'
 
+const test = require('tap').test
 /**
  * QR Code sizes. Each element refers to a version
  * @type {Array}

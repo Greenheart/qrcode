@@ -1,6 +1,6 @@
-const test = require('tap').test
-const Regex = require('core/regex')
+import Regex from 'core/regex'
 
+const test = require('tap').test
 test('Regex', function (t) {
   t.ok(Regex.NUMERIC instanceof RegExp,
     'Should export a regex for NUMERIC')

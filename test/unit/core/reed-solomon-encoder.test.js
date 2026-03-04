@@ -1,6 +1,6 @@
-const test = require('tap').test
-const RS = require('core/reed-solomon-encoder')
+import RS from 'core/reed-solomon-encoder'
 
+const test = require('tap').test
 test('Reed-Solomon encoder', function (t) {
   let enc = new RS()
 

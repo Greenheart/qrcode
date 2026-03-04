@@ -1,8 +1,8 @@
-const test = require('tap').test
-const { Canvas, createCanvas } = require('canvas')
-const QRCode = require('lib')
-const Helpers = require('test/helpers')
+import { Canvas, createCanvas } from 'canvas'
+import QRCode from 'lib'
+import Helpers from 'test/helpers'
 
+const test = require('tap').test
 test('toCanvas - no promise available', function (t) {
   Helpers.removeNativePromise()
 

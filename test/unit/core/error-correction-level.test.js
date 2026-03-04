@@ -1,6 +1,6 @@
-const test = require('tap').test
-const ECLevel = require('core/error-correction-level')
+import ECLevel from 'core/error-correction-level'
 
+const test = require('tap').test
 const EC_LEVELS = [ECLevel.L, ECLevel.M, ECLevel.Q, ECLevel.H]
 
 test('Error level from input value', function (t) {

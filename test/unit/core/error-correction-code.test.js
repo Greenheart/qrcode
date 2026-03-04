@@ -1,10 +1,10 @@
-const test = require('tap').test
-const Utils = require('core/utils')
-const Version = require('core/version')
-const ECLevel = require('core/error-correction-level')
-const ECCode = require('core/error-correction-code')
-const Mode = require('core/mode')
+import Utils from 'core/utils'
+import Version from 'core/version'
+import ECLevel from 'core/error-correction-level'
+import ECCode from 'core/error-correction-code'
+import Mode from 'core/mode'
 
+const test = require('tap').test
 test('Error correction codewords', function (t) {
   const levels = [ECLevel.L, ECLevel.M, ECLevel.Q, ECLevel.H]
 

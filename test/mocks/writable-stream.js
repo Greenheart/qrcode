@@ -1,5 +1,5 @@
-const stream = require('stream')
-const util = require('util')
+import stream from 'stream'
+import util from 'util'
 
 function WritableStream () {
   stream.Writable.call(this)
@@ -27,4 +27,4 @@ WritableStream.prototype.forceErrorOnWrite = function () {
   return this
 }
 
-module.exports = WritableStream
+export default WritableStream

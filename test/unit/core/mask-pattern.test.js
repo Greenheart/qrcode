@@ -1,7 +1,7 @@
-const test = require('tap').test
-const BitMatrix = require('core/bit-matrix')
-const MaskPattern = require('core/mask-pattern')
+import BitMatrix from 'core/bit-matrix'
+import MaskPattern from 'core/mask-pattern'
 
+const test = require('tap').test
 test('Mask pattern - Pattern references', function (t) {
   const patternsCount = Object.keys(MaskPattern.Patterns).length
   t.equal(patternsCount, 8, 'Should return 8 patterns')

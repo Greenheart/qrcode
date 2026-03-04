@@ -1,6 +1,6 @@
-const test = require('tap').test
-const GF = require('core/galois-field')
+import GF from 'core/galois-field'
 
+const test = require('tap').test
 test('Galois Field', function (t) {
   t.throws(function () { GF.log(0) }, 'Should throw for log(n) with n < 1')
 

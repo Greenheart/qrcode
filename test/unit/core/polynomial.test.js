@@ -1,6 +1,6 @@
-const test = require('tap').test
-const Poly = require('core/polynomial')
+import Poly from 'core/polynomial'
 
+const test = require('tap').test
 test('Generator polynomial', function (t) {
   const result = Poly.generateECPolynomial(0)
   t.ok(result instanceof Uint8Array, 'Should return an Uint8Array')

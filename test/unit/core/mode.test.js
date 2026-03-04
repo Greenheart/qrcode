@@ -1,6 +1,6 @@
-const test = require('tap').test
-const Mode = require('core/mode')
+import Mode from 'core/mode'
 
+const test = require('tap').test
 test('Mode bits', function (t) {
   const EXPECTED_BITS = {
     numeric: 1,

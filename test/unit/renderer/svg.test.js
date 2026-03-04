@@ -1,9 +1,10 @@
+import sinon from 'sinon'
+import fs from 'fs'
+import htmlparser from 'htmlparser2'
+import QRCode from 'core/qrcode'
+import SvgRenderer from 'renderer/svg'
+
 const test = require('tap').test
-const sinon = require('sinon')
-const fs = require('fs')
-const htmlparser = require('htmlparser2')
-const QRCode = require('core/qrcode')
-const SvgRenderer = require('renderer/svg')
 
 function getExpectedViewbox (size, margin) {
   const expectedQrCodeSize = size + margin * 2

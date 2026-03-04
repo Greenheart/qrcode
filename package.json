@@ -78,5 +78,6 @@
       "examples/vendors/",
       "lib/core/regex.js"
     ]
-  }
+  },
+  "type": "module"
 }

@@ -1,8 +1,8 @@
-const test = require('tap').test
-const sinon = require('sinon')
-const QRCode = require('lib')
-const StreamMock = require('../mocks/writable-stream')
+import sinon from 'sinon'
+import QRCode from 'lib'
+import StreamMock from '../mocks/writable-stream.js'
 
+const test = require('tap').test
 test('toFileStream png', function (t) {
   t.throws(function () { QRCode.toFileStream('some text') },
     'Should throw if stream is not provided')

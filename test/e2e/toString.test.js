@@ -1,10 +1,10 @@
-const test = require('tap').test
-const fs = require('fs')
-const path = require('path')
-const QRCode = require('lib')
-const browser = require('lib/browser')
-const Helpers = require('test/helpers')
+import fs from 'fs'
+import path from 'path'
+import QRCode from 'lib'
+import browser from 'lib/browser'
+import Helpers from 'test/helpers'
 
+const test = require('tap').test
 test('toString - no promise available', function (t) {
   Helpers.removeNativePromise()
 

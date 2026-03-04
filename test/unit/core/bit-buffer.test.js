@@ -1,6 +1,6 @@
-const test = require('tap').test
-const BitBuffer = require('core/bit-buffer')
+import BitBuffer from 'core/bit-buffer'
 
+const test = require('tap').test
 test('Bit Buffer', function (t) {
   const testData = 0x41 // 'A'
   const expectedDataBits = [false, true, false, false, false, false, false, true]

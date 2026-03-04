@@ -1,8 +1,8 @@
-const test = require('tap').test
-const { Canvas, createCanvas } = require('canvas')
-const QRCode = require('core/qrcode')
-const CanvasRenderer = require('renderer/canvas')
+import { Canvas, createCanvas } from 'canvas'
+import QRCode from 'core/qrcode'
+import CanvasRenderer from 'renderer/canvas'
 
+const test = require('tap').test
 test('CanvasRenderer interface', function (t) {
   t.type(CanvasRenderer.render, 'function',
     'Should have render function')
