@@ -1,6 +1,6 @@
 import toSJIS from 'helper/to-sjis'
 
-const test = require('tap').test
+import { test } from 'tap'
 test('SJIS from char', function (t) {
   t.notOk(toSJIS(''),
     'Should return undefined if character is invalid')

@@ -1,8 +1,8 @@
-import BitBuffer from 'core/bit-buffer'
-import AlphanumericData from 'core/alphanumeric-data'
-import Mode from 'core/mode'
+import BitBuffer from '#core/bit-buffer'
+import AlphanumericData from '#core/alphanumeric-data'
+import Mode from '#core/mode'
 
-const test = require('tap').test
+import { test } from 'tap'
 const testData = [
   {
     data: 'A',

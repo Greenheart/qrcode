@@ -1,12 +1,12 @@
-import Mode from 'core/mode'
-import Segments from 'core/segments'
-import NumericData from 'core/numeric-data'
-import AlphanumericData from 'core/alphanumeric-data'
-import ByteData from 'core/byte-data'
+import Mode from '#core/mode'
+import Segments from '#core/segments'
+import NumericData from '#core/numeric-data'
+import AlphanumericData from '#core/alphanumeric-data'
+import ByteData from '#core/byte-data'
 import toSJIS from 'helper/to-sjis'
-import Utils from 'core/utils'
+import Utils from '#core/utils'
 
-const test = require('tap').test
+import { test } from 'tap'
 let testData = [
   {
     input: '1A1',

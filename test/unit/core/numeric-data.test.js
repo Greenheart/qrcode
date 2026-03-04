@@ -1,8 +1,8 @@
-import BitBuffer from 'core/bit-buffer'
-import NumericData from 'core/numeric-data'
-import Mode from 'core/mode'
+import BitBuffer from '#core/bit-buffer'
+import NumericData from '#core/numeric-data'
+import Mode from '#core/mode'
 
-const test = require('tap').test
+import { test } from 'tap'
 const testData = [
   {
     data: 8,

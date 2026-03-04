@@ -69,6 +69,12 @@
     "type": "git",
     "url": "git+https://github.com/slidoapp/node-qrcode.git"
   },
+  "imports": {
+    "#renderer/*": "renderer/*",
+    "#lib/*": "lib/*",
+    "#core/*": "core/*",
+    "#test/*": "test/*"
+  },
   "engines": {
     "node": ">=18"
   },

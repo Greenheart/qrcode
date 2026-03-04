@@ -2,11 +2,11 @@ import fs from 'fs'
 import path from 'path'
 import os from 'os'
 import sinon from 'sinon'
-import QRCode from 'lib'
-import Helpers from 'test/helpers'
-import StreamMock from 'test/mocks/writable-stream'
+import QRCode from '#lib'
+import Helpers from '#test/helpers'
+import StreamMock from '#test/mocks/writable-stream'
 
-const test = require('tap').test
+import { test } from 'tap'
 test('toFile - no promise available', function (t) {
   Helpers.removeNativePromise()
   const fileName = path.join(os.tmpdir(), 'qrimage.png')

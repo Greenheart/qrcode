@@ -1,9 +1,9 @@
 import sinon from 'sinon'
 import fs from 'fs'
-import QRCode from 'core/qrcode'
-import Utf8Renderer from 'renderer/utf8'
+import QRCode from '#core/qrcode'
+import Utf8Renderer from '#renderer/utf8'
 
-const test = require('tap').test
+import { test } from 'tap'
 test('Utf8Renderer interface', function (t) {
   t.type(Utf8Renderer.render, 'function',
     'Should have render function')

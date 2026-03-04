@@ -1,8 +1,8 @@
 import { Canvas, createCanvas } from 'canvas'
-import QRCode from 'core/qrcode'
-import CanvasRenderer from 'renderer/canvas'
+import QRCode from '#core/qrcode'
+import CanvasRenderer from '#renderer/canvas'
 
-const test = require('tap').test
+import { test } from 'tap'
 test('CanvasRenderer interface', function (t) {
   t.type(CanvasRenderer.render, 'function',
     'Should have render function')

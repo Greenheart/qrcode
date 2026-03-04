@@ -1,13 +1,13 @@
-import Version from 'core/version'
-import VersionCheck from 'core/version-check'
-import ECLevel from 'core/error-correction-level'
-import Mode from 'core/mode'
-import NumericData from 'core/numeric-data'
-import AlphanumericData from 'core/alphanumeric-data'
-import KanjiData from 'core/kanji-data'
-import ByteData from 'core/byte-data'
+import Version from '#core/version'
+import VersionCheck from '#core/version-check'
+import ECLevel from '#core/error-correction-level'
+import Mode from '#core/mode'
+import NumericData from '#core/numeric-data'
+import AlphanumericData from '#core/alphanumeric-data'
+import KanjiData from '#core/kanji-data'
+import ByteData from '#core/byte-data'
 
-const test = require('tap').test
+import { test } from 'tap'
 const EC_LEVELS = [ECLevel.L, ECLevel.M, ECLevel.Q, ECLevel.H]
 
 const EXPECTED_NUMERIC_CAPACITY = [

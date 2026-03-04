@@ -1,6 +1,6 @@
-import BitMatrix from 'core/bit-matrix'
+import BitMatrix from '#core/bit-matrix'
 
-const test = require('tap').test
+import { test } from 'tap'
 test('Bit Matrix', function (t) {
   t.throws(function () { BitMatrix(0) }, 'Should throw if size is 0')
   t.throws(function () { BitMatrix(-1) }, 'Should throw if size less than 0')
