@@ -1,6 +1,6 @@
 import sinon from 'sinon'
 import fs from 'fs'
-import htmlparser from 'htmlparser2'
+import { Parser } from 'htmlparser2'
 import * as QRCode from '#core/qrcode.js'
 import * as SvgRenderer from '#renderer/svg.js'
 
@@ -13,7 +13,7 @@ function getExpectedViewbox (size, margin) {
 
 function testSvgFragment (t, svgFragment, expectedTags) {
   return new Promise(function (resolve, reject) {
-    const parser = new htmlparser.Parser({
+    const parser = new Parser({
       onopentag: function (name, attribs) {
         const tag = expectedTags.shift()
 

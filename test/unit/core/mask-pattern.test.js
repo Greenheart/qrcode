@@ -1,5 +1,5 @@
 import BitMatrix from '#core/bit-matrix.js'
-import MaskPattern from '#core/mask-pattern.js'
+import * as MaskPattern from '#core/mask-pattern.js'
 
 import { test } from 'tap'
 test('Mask pattern - Pattern references', function (t) {

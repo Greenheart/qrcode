@@ -76,7 +76,8 @@
     "#renderer/*": "./lib/renderer/*",
     "#lib/*": "./lib/*",
     "#core/*": "./lib/core/*",
-    "#test/*": "./test/*"
+    "#test/*": "./test/*",
+    "#helper/*": "./helper/*"
   },
   "engines": {
     "node": ">=18"

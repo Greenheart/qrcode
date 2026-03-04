@@ -1,9 +1,9 @@
 import * as Mode from '#core/mode.js'
 import * as Segments from '#core/segments.js'
-import * as NumericData from '#core/numeric-data.js'
+import NumericData from '#core/numeric-data.js'
 import AlphanumericData from '#core/alphanumeric-data.js'
 import ByteData from '#core/byte-data.js'
-import toSJIS from 'helper/to-sjis.js'
+import toSJIS from '#helper/to-sjis.js'
 import * as Utils from '#core/utils.js'
 
 import { test } from 'tap'
