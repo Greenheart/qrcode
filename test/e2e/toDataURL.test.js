@@ -1,5 +1,5 @@
 import { createCanvas } from 'canvas'
-import * as QRCode from '#lib/index.js'
+import QRCode from '#lib/index.js'
 import * as QRCodeBrowser from '#lib/browser.js'
 import * as Helpers from '#test/helpers.js'
 
