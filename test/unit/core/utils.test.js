@@ -1,4 +1,4 @@
-import * as Utils from '#core/utils'
+import * as Utils from '#core/utils.js'
 
 import { test } from 'tap'
 /**

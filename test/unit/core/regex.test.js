@@ -1,4 +1,4 @@
-import Regex from '#core/regex'
+import Regex from '#core/regex.js'
 
 import { test } from 'tap'
 test('Regex', function (t) {

@@ -1,8 +1,8 @@
 import fs from 'fs'
 import path from 'path'
-import QRCode from '#lib'
-import browser from '#lib/browser'
-import Helpers from '#test/helpers'
+import * as QRCode from '#lib/index.js'
+import * as browser from '#lib/browser.js'
+import * as Helpers from '#test/helpers.js'
 
 import { test } from 'tap'
 test('toString - no promise available', function (t) {

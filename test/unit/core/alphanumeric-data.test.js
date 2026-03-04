@@ -1,6 +1,6 @@
-import BitBuffer from '#core/bit-buffer'
-import AlphanumericData from '#core/alphanumeric-data'
-import * as Mode from '#core/mode'
+import BitBuffer from '#core/bit-buffer.js'
+import AlphanumericData from '#core/alphanumeric-data.js'
+import * as Mode from '#core/mode.js'
 
 import { test } from 'tap'
 const testData = [

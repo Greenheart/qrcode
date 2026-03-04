@@ -1,6 +1,6 @@
-import FormatInfo from '#core/format-info'
-import ECLevel from '#core/error-correction-level'
-import MaskPattern from '#core/mask-pattern'
+import FormatInfo from '#core/format-info.js'
+import ECLevel from '#core/error-correction-level.js'
+import MaskPattern from '#core/mask-pattern.js'
 
 import { test } from 'tap'
 const EXPECTED_FORMAT_BITS = [

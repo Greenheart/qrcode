@@ -1,4 +1,4 @@
-import BitBuffer from '#core/bit-buffer'
+import BitBuffer from '#core/bit-buffer.js'
 
 import { test } from 'tap'
 test('Bit Buffer', function (t) {

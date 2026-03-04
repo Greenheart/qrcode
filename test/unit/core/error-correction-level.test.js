@@ -1,4 +1,4 @@
-import ECLevel from '#core/error-correction-level'
+import * as ECLevel from '#core/error-correction-level.js'
 
 import { test } from 'tap'
 const EC_LEVELS = [ECLevel.L, ECLevel.M, ECLevel.Q, ECLevel.H]

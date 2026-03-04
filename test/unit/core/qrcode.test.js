@@ -1,7 +1,7 @@
 import * as ECLevel from '#core/error-correction-level.js'
 import * as Version from '#core/version.js'
 import * as QRCode from '#core/qrcode.js'
-import toSJIS from 'helper/to-sjis'
+import toSJIS from 'helper/to-sjis.js'
 
 import { test } from 'tap'
 test('QRCode interface', function (t) {

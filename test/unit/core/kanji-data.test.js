@@ -1,7 +1,7 @@
-import BitBuffer from '#core/bit-buffer'
-import KanjiData from '#core/kanji-data'
-import * as Mode from '#core/mode'
-import toSJIS from 'helper/to-sjis'
+import BitBuffer from '#core/bit-buffer.js'
+import KanjiData from '#core/kanji-data.js'
+import * as Mode from '#core/mode.js'
+import toSJIS from 'helper/to-sjis.js'
 
 import { test } from 'tap'
 require('core/utils').setToSJISFunction(toSJIS)

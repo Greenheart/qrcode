@@ -1,4 +1,4 @@
-import toSJIS from 'helper/to-sjis'
+import toSJIS from 'helper/to-sjis.js'
 
 import { test } from 'tap'
 test('SJIS from char', function (t) {

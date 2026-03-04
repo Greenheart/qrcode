@@ -1,4 +1,4 @@
-import RS from '#core/reed-solomon-encoder'
+import RS from '#core/reed-solomon-encoder.js'
 
 import { test } from 'tap'
 test('Reed-Solomon encoder', function (t) {

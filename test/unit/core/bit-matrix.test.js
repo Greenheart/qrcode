@@ -1,4 +1,4 @@
-import BitMatrix from '#core/bit-matrix'
+import BitMatrix from '#core/bit-matrix.js'
 
 import { test } from 'tap'
 test('Bit Matrix', function (t) {

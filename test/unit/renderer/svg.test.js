@@ -1,8 +1,8 @@
 import sinon from 'sinon'
 import fs from 'fs'
 import htmlparser from 'htmlparser2'
-import QRCode from '#core/qrcode'
-import SvgRenderer from '#renderer/svg'
+import * as QRCode from '#core/qrcode.js'
+import * as SvgRenderer from '#renderer/svg.js'
 
 import { test } from 'tap'
 

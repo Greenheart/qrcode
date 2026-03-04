@@ -1,4 +1,4 @@
-import Poly from '#core/polynomial'
+import Poly from '#core/polynomial.js'
 
 import { test } from 'tap'
 test('Generator polynomial', function (t) {

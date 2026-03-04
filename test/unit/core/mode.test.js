@@ -1,4 +1,4 @@
-import * as Mode from '#core/mode'
+import * as Mode from '#core/mode.js'
 
 import { test } from 'tap'
 test('Mode bits', function (t) {

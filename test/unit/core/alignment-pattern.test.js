@@ -1,4 +1,4 @@
-import * as pattern from '#core/alignment-pattern'
+import * as pattern from '#core/alignment-pattern.js'
 
 import { test } from 'tap'
 /**

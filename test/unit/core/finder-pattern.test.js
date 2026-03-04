@@ -1,4 +1,4 @@
-import pattern from '#core/finder-pattern'
+import pattern from '#core/finder-pattern.js'
 
 import { test } from 'tap'
 test('Finder pattern', function (t) {
