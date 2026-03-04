@@ -1,7 +1,7 @@
 import { createCanvas } from 'canvas'
 import * as QRCode from '#lib/index.js'
 import * as QRCodeBrowser from '#lib/browser.js'
-import * as Helpers from '#test/helpers'
+import * as Helpers from '#test/helpers.js'
 
 import { test } from 'tap'
 test('toDataURL - no promise available', function (t) {

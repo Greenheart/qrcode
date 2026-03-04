@@ -2,9 +2,9 @@ import fs from 'fs'
 import path from 'path'
 import os from 'os'
 import sinon from 'sinon'
-import * as QRCode from '#lib'
+import QRCode from '#lib/index.js'
 import * as Helpers from '#test/helpers.js'
-import StreamMock from '#test/mocks/writable-stream'
+import StreamMock from '#test/mocks/writable-stream.js'
 
 import { test } from 'tap'
 test('toFile - no promise available', function (t) {
