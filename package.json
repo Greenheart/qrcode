@@ -42,6 +42,7 @@
     "qrcode": "./bin/qrcode"
   },
   "dependencies": {
+    "@types/pngjs": "^6.0.5",
     "dijkstrajs": "^1.0.3",
     "pngjs": "^7.0.0",
     "yargs": "^17.7.2"
@@ -72,10 +73,10 @@
     "url": "git+https://github.com/slidoapp/node-qrcode.git"
   },
   "imports": {
-    "#renderer/*": "renderer/*",
-    "#lib/*": "lib/*",
-    "#core/*": "core/*",
-    "#test/*": "test/*"
+    "#renderer/*": "./lib/renderer/*",
+    "#lib/*": "./lib/*",
+    "#core/*": "./lib/core/*",
+    "#test/*": "./test/*"
   },
   "engines": {
     "node": ">=18"

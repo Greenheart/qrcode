@@ -1,4 +1,4 @@
-import GF from '#core/galois-field'
+import GF from '#core/galois-field.js'
 
 import { test } from 'tap'
 test('Galois Field', function (t) {
