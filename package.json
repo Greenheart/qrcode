@@ -65,7 +65,8 @@
     "sinon": "^21.0.2",
     "standard": "^17.1.2",
     "tap": "^21.6.2",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
   },
   "repository": {
     "type": "git",
