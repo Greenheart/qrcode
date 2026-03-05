@@ -1,8 +1,8 @@
+import { test, expect } from 'vitest'
 import BitBuffer from '#core/bit-buffer.js'
 import NumericData from '#core/numeric-data.js'
 import * as Mode from '#core/mode.js'
 
-import { test } from 'tap'
 const testData = [
   {
     data: 8,
@@ -37,18 +37,16 @@ const testData = [
   },
 ]
 
-test('Numeric Data', function (t) {
-  testData.forEach(function (data) {
+test('Numeric Data', () => {
+  testData.forEach((data) => {
     const numericData = new NumericData(data.data)
 
-    t.equal(numericData.mode, Mode.NUMERIC, 'Mode should be NUMERIC')
-    t.equal(numericData.getLength(), data.length, 'Should return correct length')
-    t.equal(numericData.getBitsLength(), data.bitLength, 'Should return correct bit length')
+    expect(numericData.mode, 'Mode should be NUMERIC').toEqual(Mode.NUMERIC)
+    expect(numericData.getLength(), 'Should return correct length').toEqual(data.length)
+    expect(numericData.getBitsLength(), 'Should return correct bit length').toEqual(data.bitLength)
 
     const bitBuffer = new BitBuffer()
     numericData.write(bitBuffer)
-    t.same(bitBuffer.buffer, data.dataBit, 'Should write correct data to buffer')
+    expect(bitBuffer.buffer, 'Should write correct data to buffer').toStrictEqual(data.dataBit)
   })
-
-  t.end()
 })
