@@ -1,11 +1,9 @@
+import { test, expect } from 'vitest'
 import * as pattern from '#core/alignment-pattern.js'
 
-import { test } from 'tap'
 /**
  * Row/column coordinates of the center module of each alignment pattern.
  * Each sub-array refers to a qr code version.
- *
- * @type {Array}
  */
 const EXPECTED_POSITION_TABLE = [
   [],
@@ -50,30 +48,26 @@ const EXPECTED_POSITION_TABLE = [
   [6, 30, 58, 86, 114, 142, 170],
 ]
 
-test('Alignment pattern - Row/Col coords', function (t) {
-  t.plan(40)
-
+test('Alignment pattern - Row/Col coords', () => {
   for (let i = 1; i <= 40; i++) {
     const pos = pattern.getRowColCoords(i)
-    t.same(pos, EXPECTED_POSITION_TABLE[i - 1], 'Should return correct coords')
+    expect(pos, 'Should return correct coords').toStrictEqual(EXPECTED_POSITION_TABLE[i - 1])
   }
 })
 
-test('Alignment pattern - Positions', function (t) {
+test('Alignment pattern - Positions', () => {
   for (let i = 1; i <= 40; i++) {
     const pos = pattern.getPositions(i)
     const expectedPos = EXPECTED_POSITION_TABLE[i - 1]
     const expectedLength = (Math.pow(expectedPos.length, 2) || 3) - 3
 
-    t.equal(pos.length, expectedLength, 'Should return correct number of positions')
+    expect(pos.length, 'Should return correct number of positions').toStrictEqual(expectedLength)
 
     // For each coord value check if it's present in the expected coords table
-    pos.forEach(function (position) {
-      position.forEach(function (coord) {
-        t.not(expectedPos.indexOf(coord), -1, 'Should return valid coord value')
+    pos.forEach((position) => {
+      position.forEach((coord) => {
+        expect(expectedPos.indexOf(coord), 'Should return valid coord value').not.toEqual(-1)
       })
     })
   }
-
-  t.end()
 })
