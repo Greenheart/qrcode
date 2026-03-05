@@ -62,7 +62,7 @@ test('TerminalRenderer render small', () => {
     )
   }, 'Should not throw with options param and callback').not.toThrow()
 
-  expect(str, 'string', 'Should return a string').toBeTypeOf('string')
+  expect(str, 'Should return a string').toBeTypeOf('string')
 
   expect(calledCallback, 'Should call a callback').toEqual(true)
 
@@ -70,5 +70,5 @@ test('TerminalRenderer render small', () => {
     str = TerminalRenderer.render(sampleQrData, { small: true, inverse: true })
   }, 'Should not throw with inverse options').not.toThrow()
 
-  expect(str, 'string', 'Should return a string if inverse option is set').toBeTypeOf('string')
+  expect(str, 'Should return a string if inverse option is set').toBeTypeOf('string')
 })
