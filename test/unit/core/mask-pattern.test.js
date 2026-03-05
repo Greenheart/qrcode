@@ -198,7 +198,7 @@ test('Mask pattern - Penalty N4', function (t) {
   t.equal(MaskPattern.getPenaltyN4(matrix2), 10, 'Should return correct penalty points')
 
   const matrix3 = new BitMatrix(10)
-  matrix3.data = arrayWithFill(22,1).concat(arrayWithFill(78,0))
+  matrix3.data = arrayWithFill(22, 1).concat(arrayWithFill(78, 0))
 
   t.equal(MaskPattern.getPenaltyN4(matrix3), 50, 'Should return correct penalty points')
 
