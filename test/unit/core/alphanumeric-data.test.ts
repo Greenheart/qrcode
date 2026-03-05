@@ -1,8 +1,9 @@
+import { test, expect } from 'vitest'
+
 import BitBuffer from '#core/bit-buffer.js'
 import AlphanumericData from '#core/alphanumeric-data.js'
 import * as Mode from '#core/mode.js'
 
-import { test } from 'tap'
 const testData = [
   {
     data: 'A',
@@ -24,18 +25,18 @@ const testData = [
   },
 ]
 
-test('Alphanumeric Data', function (t) {
-  testData.forEach(function (data) {
+test('Alphanumeric Data', () => {
+  testData.forEach((data) => {
     const alphanumericData = new AlphanumericData(data.data)
 
-    t.equal(alphanumericData.mode, Mode.ALPHANUMERIC, 'Mode should be ALPHANUMERIC')
-    t.equal(alphanumericData.getLength(), data.length, 'Should return correct length')
-    t.equal(alphanumericData.getBitsLength(), data.bitLength, 'Should return correct bit length')
+    expect(alphanumericData.mode, 'Mode should be ALPHANUMERIC').toEqual(Mode.ALPHANUMERIC)
+    expect(alphanumericData.getLength(), 'Should return correct length').toEqual(data.length)
+    expect(alphanumericData.getBitsLength(), 'Should return correct bit length').toEqual(
+      data.bitLength,
+    )
 
     const bitBuffer = new BitBuffer()
     alphanumericData.write(bitBuffer)
-    t.same(bitBuffer.buffer, data.dataBit, 'Should write correct data to buffer')
+    expect(bitBuffer.buffer, 'Should write correct data to buffer').toStrictEqual(data.dataBit)
   })
-
-  t.end()
 })
