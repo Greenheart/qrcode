@@ -105,7 +105,7 @@ test('PNG renderToFile', () => {
   fsStub.restore()
 })
 
-test('PNG renderToFileStream', (t) => {
+test('PNG renderToFileStream', () => {
   const sampleQrData = QRCode.create('sample text', { version: 2 })
 
   expect(() => {
