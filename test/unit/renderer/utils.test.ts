@@ -1,7 +1,7 @@
 import * as Utils from '#renderer/utils.js'
-import { test } from 'tap'
+import { test, expect } from 'vitest'
 
-test('Utils getOptions', function (t) {
+test('Utils getOptions', () => {
   const defaultOptions = {
     width: undefined,
     scale: 4,
@@ -14,111 +14,96 @@ test('Utils getOptions', function (t) {
     rendererOpts: {},
   }
 
-  t.ok(Utils.getOptions, 'getOptions should be defined')
+  expect(Utils.getOptions, 'getOptions should be defined').toBeTruthy()
 
-  t.same(
-    Utils.getOptions(),
+  expect(Utils.getOptions(), 'Should return default options if called without param').toStrictEqual(
     defaultOptions,
-    'Should return default options if called without param',
   )
 
-  t.equal(Utils.getOptions({ scale: 8 }).scale, 8, 'Should return correct scale value')
+  expect(Utils.getOptions({ scale: 8 }).scale, 'Should return correct scale value').toEqual(8)
 
-  t.equal(
+  expect(
     Utils.getOptions({ width: 300 }).scale,
-    4,
+
     'Should reset scale value to default if width is set',
-  )
+  ).toEqual(4)
 
-  t.equal(
+  expect(
     Utils.getOptions({ margin: null }).margin,
-    4,
     'Should return default margin if specified value is null',
-  )
+  ).toEqual(4)
 
-  t.equal(
+  expect(
     Utils.getOptions({ margin: -1 }).margin,
-    4,
+
     'Should return default margin if specified value is < 0',
-  )
+  ).toEqual(4)
 
-  t.equal(Utils.getOptions({ margin: 20 }).margin, 20, 'Should return correct margin value')
+  expect(Utils.getOptions({ margin: 20 }).margin, 'Should return correct margin value').toEqual(20)
 
-  t.same(
+  expect(
     Utils.getOptions({ color: { dark: '#fff', light: '#000000' } }).color,
-    {
-      dark: { r: 255, g: 255, b: 255, a: 255, hex: '#ffffff' },
-      light: { r: 0, g: 0, b: 0, a: 255, hex: '#000000' },
-    },
     'Should return correct colors value from strings',
-  )
+  ).toStrictEqual({
+    dark: { r: 255, g: 255, b: 255, a: 255, hex: '#ffffff' },
+    light: { r: 0, g: 0, b: 0, a: 255, hex: '#000000' },
+  })
 
-  t.same(
+  expect(
     Utils.getOptions({ color: { dark: 111, light: 999 } }).color,
-    {
-      dark: { r: 17, g: 17, b: 17, a: 255, hex: '#111111' },
-      light: { r: 153, g: 153, b: 153, a: 255, hex: '#999999' },
-    },
     'Should return correct colors value from numbers',
-  )
+  ).toStrictEqual({
+    dark: { r: 17, g: 17, b: 17, a: 255, hex: '#111111' },
+    light: { r: 153, g: 153, b: 153, a: 255, hex: '#999999' },
+  })
 
-  t.throws(function () {
+  expect(() => {
     Utils.getOptions({ color: { dark: true } })
-  }, 'Should throw if color is not a string')
+  }, 'Should throw if color is not a string').toThrow()
 
-  t.throws(function () {
+  expect(() => {
     Utils.getOptions({ color: { dark: '#aa' } })
-  }, 'Should throw if color is not in a valid hex format')
-
-  t.end()
+  }, 'Should throw if color is not in a valid hex format').toThrow()
 })
 
-test('Utils getScale', function (t) {
+test('Utils getScale', () => {
   const symbolSize = 21
 
-  t.equal(Utils.getScale(symbolSize, { scale: 5 }), 5, 'Should return correct scale value')
+  expect(Utils.getScale(symbolSize, { scale: 5 }), 'Should return correct scale value').toEqual(5)
 
-  t.equal(
+  expect(
     Utils.getScale(symbolSize, { width: 50, margin: 2 }),
-    2,
     'Should calculate correct scale from width and margin',
-  )
+  ).toEqual(2)
 
-  t.equal(
+  expect(
     Utils.getScale(symbolSize, { width: 21, margin: 2, scale: 4 }),
-    4,
     'Should return default scale if width is too small to contain the symbol',
-  )
-
-  t.end()
+  ).toEqual(4)
 })
 
-test('Utils getImageWidth', function (t) {
+test('Utils getImageWidth', () => {
   const symbolSize = 21
 
-  t.equal(
+  expect(
     Utils.getImageWidth(symbolSize, { scale: 5, margin: 0 }),
-    105,
     'Should return correct width value',
-  )
+  ).toEqual(105)
 
-  t.equal(
+  expect(
     Utils.getImageWidth(symbolSize, { width: 250, margin: 2 }),
-    250,
+
     'Should return specified width value',
-  )
+  ).toEqual(250)
 
-  t.equal(
+  expect(
     Utils.getImageWidth(symbolSize, { width: 10, margin: 4, scale: 4 }),
-    116,
     'Should ignore width option if too small to contain the symbol',
-  )
-
-  t.end()
+  ).toEqual(116)
 })
 
-test('Utils qrToImageData', function (t) {
-  t.ok(Utils.qrToImageData, 'qrToImageData should be defined')
+test('Utils qrToImageData', () => {
+  expect(Utils.qrToImageData, 'qrToImageData should be defined').toBeTruthy()
 
   const sampleQrData = {
     modules: {
@@ -148,15 +133,16 @@ test('Utils qrToImageData', function (t) {
 
   Utils.qrToImageData(imageData, sampleQrData, opts)
 
-  t.equal(imageData.length, expectedImageDataLength, 'Should return correct imageData length')
+  expect(imageData.length, 'Should return correct imageData length').toEqual(
+    expectedImageDataLength,
+  )
 
   imageData = []
-  opts.width = width
   expectedImageDataLength = Math.pow(width, 2) * 4
 
-  Utils.qrToImageData(imageData, sampleQrData, opts)
+  Utils.qrToImageData(imageData, sampleQrData, { ...opts, width })
 
-  t.equal(imageData.length, expectedImageDataLength, 'Should return correct imageData length')
-
-  t.end()
+  expect(imageData.length, 'Should return correct imageData length').toEqual(
+    expectedImageDataLength,
+  )
 })
