@@ -1,60 +1,56 @@
 import * as QRCode from '#core/qrcode.js'
 import * as TerminalRenderer from '#renderer/terminal.js'
-import { test } from 'tap'
+import { test, expect } from 'vitest'
 
-test('TerminalRenderer interface', function (t) {
-  t.type(TerminalRenderer.render, 'function', 'Should have render function')
-
-  t.end()
+test('TerminalRenderer interface', () => {
+  expect(TerminalRenderer.render, 'Should have render function').toBeTypeOf('function')
 })
 
-test('TerminalRenderer render big', function (t) {
+test('TerminalRenderer render big', () => {
   const sampleQrData = QRCode.create('sample text', { version: 2 })
   let str
 
-  t.doesNotThrow(function () {
+  expect(() => {
     str = TerminalRenderer.render(sampleQrData)
-  }, 'Should not throw with only qrData param')
+  }, 'Should not throw with only qrData param').not.toThrow()
 
-  t.doesNotThrow(function () {
+  expect(() => {
     str = TerminalRenderer.render(sampleQrData, {
       margin: 10,
       scale: 1,
     })
-  }, 'Should not throw with options param')
+  }, 'Should not throw with options param').not.toThrow()
 
-  t.type(str, 'string', 'Should return a string')
+  expect(str, 'Should return a string').toBeTypeOf('string')
 
-  t.doesNotThrow(function () {
+  expect(() => {
     str = TerminalRenderer.render(sampleQrData, { inverse: true })
-  }, 'Should not throw with inverse options')
+  }, 'Should not throw with inverse options').not.toThrow()
 
-  t.type(str, 'string', 'Should return a string if inverse option is set')
-
-  t.end()
+  expect(str, 'Should return a string if inverse option is set').toBeTypeOf('string')
 })
 
-test('TerminalRenderer render small', function (t) {
+test('TerminalRenderer render small', () => {
   const sampleQrData = QRCode.create('sample text', { version: 2 })
   let str
   let calledCallback = false
-  const callback = function () {
+  const callback = () => {
     calledCallback = true
   }
 
-  t.doesNotThrow(function () {
+  expect(() => {
     str = TerminalRenderer.render(sampleQrData)
-  }, 'Should not throw with only qrData param')
+  }, 'Should not throw with only qrData param').not.toThrow()
 
-  t.doesNotThrow(function () {
+  expect(() => {
     str = TerminalRenderer.render(sampleQrData, {
       margin: 10,
       scale: 1,
       small: true,
     })
-  }, 'Should not throw with options param and without callback')
+  }, 'Should not throw with options param and without callback').not.toThrow()
 
-  t.doesNotThrow(function () {
+  expect(() => {
     str = TerminalRenderer.render(
       sampleQrData,
       {
@@ -64,17 +60,15 @@ test('TerminalRenderer render small', function (t) {
       },
       callback,
     )
-  }, 'Should not throw with options param and callback')
+  }, 'Should not throw with options param and callback').not.toThrow()
 
-  t.type(str, 'string', 'Should return a string')
+  expect(str, 'string', 'Should return a string').toBeTypeOf('string')
 
-  t.equal(calledCallback, true, 'Should call a callback')
+  expect(calledCallback, 'Should call a callback').toEqual(true)
 
-  t.doesNotThrow(function () {
+  expect(() => {
     str = TerminalRenderer.render(sampleQrData, { small: true, inverse: true })
-  }, 'Should not throw with inverse options')
+  }, 'Should not throw with inverse options').not.toThrow()
 
-  t.type(str, 'string', 'Should return a string if inverse option is set')
-
-  t.end()
+  expect(str, 'string', 'Should return a string if inverse option is set').toBeTypeOf('string')
 })
