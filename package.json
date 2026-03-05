@@ -45,7 +45,6 @@
     "#helper/*": "./helper/*"
   },
   "scripts": {
-    "lint:old": "standard --fix",
     "lint": "oxlint",
     "format": "oxfmt --write",
     "pretest": "pnpm lint",
@@ -79,19 +78,11 @@
     "oxlint": "^1.51.0",
     "rollup": "^4.59.0",
     "sinon": "^21.0.2",
-    "standard": "^17.1.2",
     "tap": "^21.6.2",
     "typescript": "^5.9.3",
     "vitest": "^4.0.18"
   },
-  "standard": {
-    "ignore": [
-      "build/",
-      "examples/vendors/",
-      "lib/core/regex.js"
-    ]
-  },
   "engines": {
-    "node": ">=18"
+    "node": ">=24"
   }
 }
