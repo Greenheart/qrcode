@@ -1,4 +1,4 @@
-import { test } from 'tap'
+import { test, expect } from 'vitest'
 
 import BitBuffer from '#core/bit-buffer.js'
 import KanjiData from '#core/kanji-data.js'
@@ -8,7 +8,7 @@ import { setToSJISFunction } from '#lib/core/utils.js'
 
 setToSJISFunction(toSJIS)
 
-test('Kanji Data', function (t) {
+test('Kanji Data', () => {
   const data = '漢字漾癶'
   const length = 4
   const bitLength = 52 // length * 13
@@ -17,19 +17,17 @@ test('Kanji Data', function (t) {
 
   let kanjiData = new KanjiData(data)
 
-  t.equal(kanjiData.mode, Mode.KANJI, 'Mode should be KANJI')
-  t.equal(kanjiData.getLength(), length, 'Should return correct length')
-  t.equal(kanjiData.getBitsLength(), bitLength, 'Should return correct bit length')
+  expect(kanjiData.mode, 'Mode should be KANJI').toEqual(Mode.KANJI)
+  expect(kanjiData.getLength(), 'Should return correct length').toEqual(length)
+  expect(kanjiData.getBitsLength(), 'Should return correct bit length').toEqual(bitLength)
 
   let bitBuffer = new BitBuffer()
   kanjiData.write(bitBuffer)
-  t.same(bitBuffer.buffer, dataBit, 'Should write correct data to buffer')
+  expect(bitBuffer.buffer, 'Should write correct data to buffer').toStrictEqual(dataBit)
 
   kanjiData = new KanjiData('abc')
   bitBuffer = new BitBuffer()
-  t.throws(function () {
+  expect(() => {
     kanjiData.write(bitBuffer)
-  }, 'Should throw if data is invalid')
-
-  t.end()
+  }, 'Should throw if data is invalid').toThrow()
 })
