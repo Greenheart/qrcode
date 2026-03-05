@@ -8,6 +8,7 @@ import KanjiData from '#core/kanji-data.js'
 import ByteData from '#core/byte-data.js'
 
 import { test } from 'tap'
+import { arrayWithLength } from '#test/helpers.js'
 const EC_LEVELS = [ECLevel.L, ECLevel.M, ECLevel.Q, ECLevel.H]
 
 const EXPECTED_NUMERIC_CAPACITY = [
@@ -263,7 +264,7 @@ test('Version best match', function (t) {
     for (let v = 0; v < 40; v++) {
       for (let l = 0; l < EC_LEVELS.length; l++) {
         const capacity = expectedCapacity[v][l]
-        const data = new DataCtor(new Array(capacity + 1).join('-'))
+        const data = new DataCtor(arrayWithLength(capacity + 1).join('-'))
 
         t.equal(
           Version.getBestVersionForData(data, EC_LEVELS[l]),
@@ -293,10 +294,10 @@ test('Version best match', function (t) {
 
     for (let i = 0; i < EC_LEVELS.length; i++) {
       const exceededCapacity = expectedCapacity[39][i] + 1
-      const tooBigData = new DataCtor(new Array(exceededCapacity + 1).join('-'))
+      const tooBigData = new DataCtor(arrayWithLength(exceededCapacity + 1).join('-'))
       const tooBigDataArray = [
-        new DataCtor(new Array(Math.floor(exceededCapacity / 2)).join('-')),
-        new DataCtor(new Array(Math.floor(exceededCapacity / 2) + 1).join('-')),
+        new DataCtor(arrayWithLength(Math.floor(exceededCapacity / 2)).join('-')),
+        new DataCtor(arrayWithLength(Math.floor(exceededCapacity / 2) + 1).join('-')),
       ]
 
       t.notOk(

@@ -4,6 +4,7 @@ import * as QRCode from '#core/qrcode.js'
 import toSJIS from '#helper/to-sjis.js'
 
 import { test } from 'tap'
+import { arrayWithLength } from '#test/helpers.js'
 test('QRCode interface', function (t) {
   t.type(QRCode.create, 'function', 'Should have "create" function')
   t.throws(function () {
@@ -98,14 +99,14 @@ test('QRCode version', function (t) {
   t.equal(qr.errorCorrectionLevel, ECLevel.M, 'Should set correct EC level')
 
   t.throws(function () {
-    qr = QRCode.create(new Array(Version.getCapacity(2, ECLevel.H)).join('a'), {
+    qr = QRCode.create(arrayWithLength(Version.getCapacity(2, ECLevel.H)).join('a'), {
       version: 1,
       errorCorrectionLevel: ECLevel.H,
     })
   }, 'Should throw if data cannot be contained with chosen version')
 
   t.throws(function () {
-    qr = QRCode.create(new Array(Version.getCapacity(40, ECLevel.H) + 2).join('a'), {
+    qr = QRCode.create(arrayWithLength(Version.getCapacity(40, ECLevel.H) + 2).join('a'), {
       version: 40,
       errorCorrectionLevel: ECLevel.H,
     })
