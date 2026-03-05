@@ -1,5 +1,5 @@
 import sinon from 'sinon'
-import fs from 'fs'
+import fs, { WriteStream } from 'fs'
 import { PNG } from 'pngjs'
 import { test, expect } from 'vitest'
 import * as QRCode from '#core/qrcode.js'
@@ -68,8 +68,12 @@ test('PNG renderToDataURL', () => {
 test('PNG renderToFile', () => {
   const sampleQrData = QRCode.create('sample text', { version: 2 })
   const fileName = 'qrimage.png'
+  // IDEA: Maybe use `memfs` to mock the file system?
+  // This could improve the performance and reliability of tests
+  // https://vitest.dev/guide/mocking/file-system.html#example
   let fsStub = sinon.stub(fs, 'createWriteStream')
-  fsStub.returns(new StreamMock())
+  // TODO: Fix the type, or maybe typecast to ignore warning in the few places where its used.
+  fsStub.returns(new StreamMock() as unknown as WriteStream)
 
   PngRenderer.renderToFile(fileName, sampleQrData, (err) => {
     expect(err, 'Should not generate errors with only qrData param').toBeFalsy()
@@ -92,7 +96,7 @@ test('PNG renderToFile', () => {
 
   fsStub.restore()
   fsStub = sinon.stub(fs, 'createWriteStream')
-  fsStub.returns(new StreamMock().forceErrorOnWrite())
+  fsStub.returns(new StreamMock().forceErrorOnWrite() as unknown as WriteStream)
 
   PngRenderer.renderToFile(fileName, sampleQrData, (err) => {
     expect(err, 'Should fail if error occurs during save').toBeTruthy()
