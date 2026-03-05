@@ -32,7 +32,7 @@
   "scripts": {
     "lint": "standard --fix",
     "pretest": "pnpm lint",
-    "test": "tap test/**/*.test.js",
+    "test": "vitest",
     "build": "rollup -c",
     "prepublish": "pnpm build",
     "browser": "node examples/clientsideserver.js"
@@ -61,6 +61,8 @@
     "colors": "^1.4.0",
     "express": "^4.21.1",
     "htmlparser2": "^10.1.0",
+    "oxfmt": "^0.36.0",
+    "oxlint": "^1.51.0",
     "rollup": "^4.59.0",
     "sinon": "^21.0.2",
     "standard": "^17.1.2",
