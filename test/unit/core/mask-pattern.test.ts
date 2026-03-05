@@ -1,74 +1,71 @@
+import { test, expect } from 'vitest'
+
 import BitMatrix from '#core/bit-matrix.js'
 import * as MaskPattern from '#core/mask-pattern.js'
 import { arrayWithFill } from '#test/helpers.js'
 
-import { test } from 'tap'
-test('Mask pattern - Pattern references', function (t) {
+test('Mask pattern - Pattern references', () => {
   const patternsCount = Object.keys(MaskPattern.Patterns).length
-  t.equal(patternsCount, 8, 'Should return 8 patterns')
-
-  t.end()
+  expect(patternsCount, 'Should return 8 patterns').toEqual(8)
 })
 
-const expectedPattern000 = [
+const expectedPattern000 = new Uint8Array([
   1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0,
   1, 0, 1,
-]
+])
 
-const expectedPattern001 = [
+const expectedPattern001 = new Uint8Array([
   1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0,
   0, 0, 0,
-]
+])
 
-const expectedPattern010 = [
+const expectedPattern010 = new Uint8Array([
   1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
   1, 0, 0,
-]
+])
 
-const expectedPattern011 = [
+const expectedPattern011 = new Uint8Array([
   1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0,
   0, 1, 0,
-]
+])
 
-const expectedPattern100 = [
+const expectedPattern100 = new Uint8Array([
   1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1,
   0, 0, 0,
-]
+])
 
-const expectedPattern101 = [
+const expectedPattern101 = new Uint8Array([
   1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
   0, 0, 0,
-]
+])
 
-const expectedPattern110 = [
+const expectedPattern110 = new Uint8Array([
   1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0,
   0, 1, 1,
-]
+])
 
-const expectedPattern111 = [
+const expectedPattern111 = new Uint8Array([
   1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1,
   1, 0, 0,
-]
+])
 
-test('MaskPattern validity', function (t) {
-  t.notOk(MaskPattern.isValid(), 'Should return false if no input')
-  t.notOk(MaskPattern.isValid(''), 'Should return false if value is not a number')
-  t.notOk(MaskPattern.isValid(-1), 'Should return false if value is not in range')
-  t.notOk(MaskPattern.isValid(8), 'Should return false if value is not in range')
-
-  t.end()
+test('MaskPattern validity', () => {
+  // @ts-expect-error Testing invalid input
+  expect(MaskPattern.isValid(), 'Should return false if no input').toEqual(false)
+  // @ts-expect-error Testing invalid input
+  expect(MaskPattern.isValid(''), 'Should return false if value is not a number').toEqual(false)
+  expect(MaskPattern.isValid(-1), 'Should return false if value is not in range').toEqual(false)
+  expect(MaskPattern.isValid(8), 'Should return false if value is not in range').toEqual(false)
 })
 
-test('MaskPattern from value', function (t) {
-  t.equal(MaskPattern.from(5), 5, 'Should return correct mask pattern from a number')
-  t.equal(MaskPattern.from('5'), 5, 'Should return correct mask pattern from a string')
-  t.equal(MaskPattern.from(-1), undefined, 'Should return undefined if value is invalid')
-  t.equal(MaskPattern.from(null), undefined, 'Should return undefined if value is null')
-
-  t.end()
+test('MaskPattern from value', () => {
+  expect(MaskPattern.from(5), 'Should return correct mask pattern from a number').toEqual(5)
+  expect(MaskPattern.from('5'), 'Should return correct mask pattern from a string').toEqual(5)
+  expect(MaskPattern.from(-1), 'Should return undefined if value is invalid').toEqual(undefined)
+  expect(MaskPattern.from(null), 'Should return undefined if value is null').toEqual(undefined)
 })
 
-test('Mask pattern - Apply mask', function (t) {
+test('Mask pattern - Apply mask', () => {
   const patterns = Object.keys(MaskPattern.Patterns).length
   const expectedPatterns = [
     expectedPattern000,
@@ -84,7 +81,9 @@ test('Mask pattern - Apply mask', function (t) {
   for (let p = 0; p < patterns; p++) {
     const matrix = new BitMatrix(6)
     MaskPattern.applyMask(p, matrix)
-    t.same(matrix.data, new Uint8Array(expectedPatterns[p]), 'Should return correct pattern')
+    expect(matrix.data, 'Should return correct pattern').toStrictEqual(
+      new Uint8Array(expectedPatterns[p]),
+    )
   }
 
   const matrix = new BitMatrix(2)
@@ -94,130 +93,116 @@ test('Mask pattern - Apply mask', function (t) {
   matrix.set(1, 1, false, true)
   MaskPattern.applyMask(0, matrix)
 
-  t.same(
-    matrix.data,
-    new Uint8Array([false, false, false, false]),
-    'Should leave reserved bit unchanged',
+  expect(matrix.data, 'Should leave reserved bit unchanged').toStrictEqual(
+    new Uint8Array([0, 0, 0, 0]),
   )
 
-  t.throws(function () {
+  expect(() => {
     MaskPattern.applyMask(-1, new BitMatrix(1))
-  }, 'Should throw if pattern is invalid')
-
-  t.end()
+  }, 'Should throw if pattern is invalid').toThrow()
 })
 
-test('Mask pattern - Penalty N1', function (t) {
+test('Mask pattern - Penalty N1', () => {
   let matrix = new BitMatrix(11)
-  matrix.data = [
+  matrix.data = new Uint8Array([
     1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1,
     1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0,
     0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1,
     1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1,
-  ]
+  ])
 
-  t.equal(MaskPattern.getPenaltyN1(matrix), 59, 'Should return correct penalty points')
+  expect(MaskPattern.getPenaltyN1(matrix), 'Should return correct penalty points').toEqual(59)
 
   matrix = new BitMatrix(6)
   matrix.data = expectedPattern000
 
-  t.equal(MaskPattern.getPenaltyN1(matrix), 0, 'Should return correct penalty points')
+  expect(MaskPattern.getPenaltyN1(matrix), 'Should return correct penalty points').toEqual(0)
 
   matrix.data = expectedPattern001
 
-  t.equal(MaskPattern.getPenaltyN1(matrix), 24, 'Should return correct penalty points')
+  expect(MaskPattern.getPenaltyN1(matrix), 'Should return correct penalty points').toEqual(24)
 
   matrix.data = expectedPattern010
 
-  t.equal(MaskPattern.getPenaltyN1(matrix), 24, 'Should return correct penalty points')
+  expect(MaskPattern.getPenaltyN1(matrix), 'Should return correct penalty points').toEqual(24)
 
   matrix.data = expectedPattern101
 
-  t.equal(MaskPattern.getPenaltyN1(matrix), 20, 'Should return correct penalty points')
-
-  t.end()
+  expect(MaskPattern.getPenaltyN1(matrix), 'Should return correct penalty points').toEqual(20)
 })
 
-test('Mask pattern - Penalty N2', function (t) {
+test('Mask pattern - Penalty N2', () => {
   let matrix = new BitMatrix(8)
-  matrix.data = [
+  matrix.data = new Uint8Array([
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1,
     0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1,
-  ]
+  ])
 
-  t.equal(MaskPattern.getPenaltyN2(matrix), 45, 'Should return correct penalty points')
+  expect(MaskPattern.getPenaltyN2(matrix), 'Should return correct penalty points').toEqual(45)
 
   matrix = new BitMatrix(6)
   matrix.data = expectedPattern000
 
-  t.equal(MaskPattern.getPenaltyN2(matrix), 0, 'Should return correct penalty points')
+  expect(MaskPattern.getPenaltyN2(matrix), 'Should return correct penalty points').toEqual(0)
 
   matrix.data = expectedPattern010
 
-  t.equal(MaskPattern.getPenaltyN2(matrix), 30, 'Should return correct penalty points')
+  expect(MaskPattern.getPenaltyN2(matrix), 'Should return correct penalty points').toEqual(30)
 
   matrix.data = expectedPattern100
 
-  t.equal(MaskPattern.getPenaltyN2(matrix), 36, 'Should return correct penalty points')
-
-  t.end()
+  expect(MaskPattern.getPenaltyN2(matrix), 'Should return correct penalty points').toEqual(36)
 })
 
-test('Mask pattern - Penalty N3', function (t) {
+test('Mask pattern - Penalty N3', () => {
   const matrix = new BitMatrix(11)
-  matrix.data = [
+  matrix.data = new Uint8Array([
     0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0,
     1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1,
     1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
     0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0,
-  ]
+  ])
 
-  t.equal(MaskPattern.getPenaltyN3(matrix), 160, 'Should return correct penalty points')
+  expect(MaskPattern.getPenaltyN3(matrix), 'Should return correct penalty points').toEqual(160)
 
-  matrix.data = [
+  matrix.data = new Uint8Array([
     1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0,
     0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1,
     1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1,
     0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1,
-  ]
+  ])
 
-  t.equal(MaskPattern.getPenaltyN3(matrix), 280, 'Should return correct penalty points')
-
-  t.end()
+  expect(MaskPattern.getPenaltyN3(matrix), 'Should return correct penalty points').toEqual(280)
 })
 
-test('Mask pattern - Penalty N4', function (t) {
+test('Mask pattern - Penalty N4', () => {
   const matrix = new BitMatrix(10)
-  matrix.data = arrayWithFill(50, 1).concat(arrayWithFill(50, 0))
+  matrix.data = new Uint8Array(arrayWithFill(50, 1).concat(arrayWithFill(50, 0)))
 
-  t.equal(MaskPattern.getPenaltyN4(matrix), 0, 'Should return correct penalty points')
+  expect(MaskPattern.getPenaltyN4(matrix), 'Should return correct penalty points').toEqual(0)
 
   const matrix2 = new BitMatrix(21)
-  matrix2.data = arrayWithFill(190, 1).concat(arrayWithFill(251, 0))
+  matrix2.data = new Uint8Array(arrayWithFill(190, 1).concat(arrayWithFill(251, 0)))
 
-  t.equal(MaskPattern.getPenaltyN4(matrix2), 10, 'Should return correct penalty points')
+  expect(MaskPattern.getPenaltyN4(matrix2), 'Should return correct penalty points').toEqual(10)
 
   const matrix3 = new BitMatrix(10)
-  matrix3.data = arrayWithFill(22, 1).concat(arrayWithFill(78, 0))
+  matrix3.data = new Uint8Array(arrayWithFill(22, 1).concat(arrayWithFill(78, 0)))
 
-  t.equal(MaskPattern.getPenaltyN4(matrix3), 50, 'Should return correct penalty points')
-
-  t.end()
+  expect(MaskPattern.getPenaltyN4(matrix3), 'Should return correct penalty points').toEqual(50)
 })
 
-test('Mask pattern - Best mask', function (t) {
+test('Mask pattern - Best mask', () => {
   const matrix = new BitMatrix(11)
-  matrix.data = [
+  matrix.data = new Uint8Array([
     0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0,
     1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1,
     1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
     0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0,
-  ]
+  ])
 
-  const mask = MaskPattern.getBestMask(matrix, function () {})
-  t.ok(!isNaN(mask), 'Should return a number')
+  const mask = MaskPattern.getBestMask(matrix, () => {})
+  expect(Number.isInteger(mask), 'Should return a number').toEqual(true)
 
-  t.ok(mask >= 0 && mask < 8, 'Should return a number in range 0,7')
-
-  t.end()
+  expect(mask >= 0 && mask < 8, 'Should return a number in range 0,7').toBeTruthy()
 })
