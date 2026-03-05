@@ -294,7 +294,8 @@ effectHandlers.image = function (args, cb) {
               }
             }
           })
-        } catch (e) {
+        } catch (error) {
+          console.error(error)
           cb(err, false)
         }
 

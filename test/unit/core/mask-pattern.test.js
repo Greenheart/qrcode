@@ -1,5 +1,6 @@
 import BitMatrix from '#core/bit-matrix.js'
 import * as MaskPattern from '#core/mask-pattern.js'
+import { arrayWithFill } from '#test/helpers.js'
 
 import { test } from 'tap'
 test('Mask pattern - Pattern references', function (t) {
@@ -187,17 +188,17 @@ test('Mask pattern - Penalty N3', function (t) {
 
 test('Mask pattern - Penalty N4', function (t) {
   const matrix = new BitMatrix(10)
-  matrix.data = new Array(50).fill(1).concat(new Array(50).fill(0))
+  matrix.data = arrayWithFill(50, 1).concat(arrayWithFill(50, 0))
 
   t.equal(MaskPattern.getPenaltyN4(matrix), 0, 'Should return correct penalty points')
 
   const matrix2 = new BitMatrix(21)
-  matrix2.data = new Array(190).fill(1).concat(new Array(251).fill(0))
+  matrix2.data = arrayWithFill(190, 1).concat(arrayWithFill(251, 0))
 
   t.equal(MaskPattern.getPenaltyN4(matrix2), 10, 'Should return correct penalty points')
 
   const matrix3 = new BitMatrix(10)
-  matrix3.data = new Array(22).fill(1).concat(new Array(78).fill(0))
+  matrix3.data = arrayWithFill(22,1).concat(arrayWithFill(78,0))
 
   t.equal(MaskPattern.getPenaltyN4(matrix3), 50, 'Should return correct penalty points')
 

@@ -164,7 +164,7 @@ test('CanvasRenderer renderToBlob', function (t) {
   let imageBlob
 
   t.doesNotThrow(function () {
-    CanvasRenderer.renderToBlob((blob) => {}, sampleQrData)
+    CanvasRenderer.renderToBlob((_blob) => {}, sampleQrData)
   }, 'Should not throw if canvas is not provided')
 
   t.doesNotThrow(function () {
