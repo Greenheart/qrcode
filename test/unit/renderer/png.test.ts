@@ -17,124 +17,101 @@ test('PNG renderer interface', () => {
   )
 })
 
-// TODO: continue porting tests to vitest
+test('PNG render', () => {
+  const sampleQrData = QRCode.create('sample text', { version: 2 })
+  let png: PNG
 
-// test('PNG render', () => {
-//   const sampleQrData = QRCode.create('sample text', { version: 2 })
-//   let png: PNG
+  expect(() => {
+    png = PngRenderer.render(sampleQrData)
+  }, 'Should not throw with only qrData param').not.toThrow()
 
-//   t.doesNotThrow(function () { png = PngRenderer.render(sampleQrData) },
-//     'Should not throw with only qrData param')
+  expect(png, 'Should return an instance of PNG').toBeInstanceOf(PNG)
 
-//   t.ok(png instanceof PNG,
-//     'Should return an instance of PNG')
+  expect(png.width, 'Should be a square image').toEqual(png.height)
 
-//   t.equal(png.width, png.height,
-//     'Should be a square image')
+  // modules: 25, margins: 4 * 2, scale: 4
+  expect(png.width, 'Should have correct size').toEqual((25 + 4 * 2) * 4)
 
-//   // modules: 25, margins: 4 * 2, scale: 4
-//   t.equal(png.width, (25 + 4 * 2) * 4,
-//     'Should have correct size')
+  expect(() => {
+    png = PngRenderer.render(sampleQrData, {
+      margin: 10,
+      scale: 1,
+    })
+  }, 'Should not throw with options param').not.toThrow()
 
-//   t.doesNotThrow(function () {
-//     png = PngRenderer.render(sampleQrData, {
-//       margin: 10,
-//       scale: 1
-//     })
-//   }, 'Should not throw with options param')
+  expect(png.width, 'Should be a square image').toEqual(png.height)
 
-//   t.equal(png.width, png.height,
-//     'Should be a square image')
+  // modules: 25, margins: 10 * 2, scale: 1
+  expect(png.width, 'Should have correct size').toEqual(25 + 10 * 2)
+})
 
-//   // modules: 25, margins: 10 * 2, scale: 1
-//   t.equal(png.width, 25 + 10 * 2,
-//     'Should have correct size')
+test('PNG renderToDataURL', () => {
+  const sampleQrData = QRCode.create('sample text', { version: 2 })
 
-//   t.end()
-// })
+  PngRenderer.renderToDataURL(sampleQrData, (err, url) => {
+    expect(err, 'Should not generate errors with only qrData param').toBeFalsy()
+    expect(url, 'Should return a string').toBeTypeOf('string')
+  })
 
-// test('PNG renderToDataURL', function (t) {
-//   const sampleQrData = QRCode.create('sample text', { version: 2 })
+  PngRenderer.renderToDataURL(sampleQrData, { margin: 10, scale: 1 }, (err, url) => {
+    expect(err, 'Should not generate errors with options param').toBeFalsy()
 
-//   t.plan(6)
+    expect(url, 'Should return a string').toBeTypeOf('string')
 
-//   PngRenderer.renderToDataURL(sampleQrData, function (err, url) {
-//     t.ok(!err,
-//       'Should not generate errors with only qrData param')
+    expect(url.split(',')[0], 'Should have correct header').toEqual('data:image/png;base64')
 
-//     t.type(url, 'string',
-//       'Should return a string')
-//   })
+    const b64png = url.split(',')[1]
+    expect(b64png.length % 4, 'Should have a correct length').toEqual(0)
+  })
+})
 
-//   PngRenderer.renderToDataURL(sampleQrData, { margin: 10, scale: 1 },
-//     function (err, url) {
-//       t.ok(!err, 'Should not generate errors with options param')
+test('PNG renderToFile', () => {
+  const sampleQrData = QRCode.create('sample text', { version: 2 })
+  const fileName = 'qrimage.png'
+  let fsStub = sinon.stub(fs, 'createWriteStream')
+  fsStub.returns(new StreamMock())
 
-//       t.type(url, 'string',
-//         'Should return a string')
+  PngRenderer.renderToFile(fileName, sampleQrData, (err) => {
+    expect(err, 'Should not generate errors with only qrData param').toBeFalsy()
 
-//       t.equal(url.split(',')[0], 'data:image/png;base64',
-//         'Should have correct header')
+    expect(fsStub.getCall(0).args[0], 'Should save file with correct file name').toEqual(fileName)
+  })
 
-//       const b64png = url.split(',')[1]
-//       t.equal(b64png.length % 4, 0,
-//         'Should have a correct length')
-//     }
-//   )
-// })
+  PngRenderer.renderToFile(
+    fileName,
+    sampleQrData,
+    {
+      margin: 10,
+      scale: 1,
+    },
+    (err) => {
+      expect(err, 'Should not generate errors with options param').toBeFalsy()
+      expect(fsStub.getCall(0).args[0], 'Should save file with correct file name').toEqual(fileName)
+    },
+  )
 
-// test('PNG renderToFile', function (t) {
-//   const sampleQrData = QRCode.create('sample text', { version: 2 })
-//   const fileName = 'qrimage.png'
-//   let fsStub = sinon.stub(fs, 'createWriteStream')
-//   fsStub.returns(new StreamMock())
+  fsStub.restore()
+  fsStub = sinon.stub(fs, 'createWriteStream')
+  fsStub.returns(new StreamMock().forceErrorOnWrite())
 
-//   t.plan(5)
+  PngRenderer.renderToFile(fileName, sampleQrData, (err) => {
+    expect(err, 'Should fail if error occurs during save').toBeTruthy()
+  })
 
-//   PngRenderer.renderToFile(fileName, sampleQrData, function (err) {
-//     t.ok(!err,
-//       'Should not generate errors with only qrData param')
+  fsStub.restore()
+})
 
-//     t.equal(fsStub.getCall(0).args[0], fileName,
-//       'Should save file with correct file name')
-//   })
+test('PNG renderToFileStream', (t) => {
+  const sampleQrData = QRCode.create('sample text', { version: 2 })
 
-//   PngRenderer.renderToFile(fileName, sampleQrData, {
-//     margin: 10,
-//     scale: 1
-//   }, function (err) {
-//     t.ok(!err,
-//       'Should not generate errors with options param')
+  expect(() => {
+    PngRenderer.renderToFileStream(new StreamMock(), sampleQrData)
+  }, 'Should not throw with only qrData param').not.toThrow()
 
-//     t.equal(fsStub.getCall(0).args[0], fileName,
-//       'Should save file with correct file name')
-//   })
-
-//   fsStub.restore()
-//   fsStub = sinon.stub(fs, 'createWriteStream')
-//   fsStub.returns(new StreamMock().forceErrorOnWrite())
-
-//   PngRenderer.renderToFile(fileName, sampleQrData, function (err) {
-//     t.ok(err,
-//       'Should fail if error occurs during save')
-//   })
-
-//   fsStub.restore()
-// })
-
-// test('PNG renderToFileStream', function (t) {
-//   const sampleQrData = QRCode.create('sample text', { version: 2 })
-
-//   t.doesNotThrow(function () {
-//     PngRenderer.renderToFileStream(new StreamMock(), sampleQrData)
-//   }, 'Should not throw with only qrData param')
-
-//   t.doesNotThrow(function () {
-//     PngRenderer.renderToFileStream(new StreamMock(), sampleQrData, {
-//       margin: 10,
-//       scale: 1
-//     })
-//   }, 'Should not throw with options param')
-
-//   t.end()
-// })
+  expect(() => {
+    PngRenderer.renderToFileStream(new StreamMock(), sampleQrData, {
+      margin: 10,
+      scale: 1,
+    })
+  }, 'Should not throw with options param').not.toThrow()
+})
