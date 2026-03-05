@@ -4,11 +4,13 @@ import StreamMock from '../mocks/writable-stream.js'
 
 import { test } from 'tap'
 test('toFileStream png', function (t) {
-  t.throws(function () { QRCode.toFileStream('some text') },
-    'Should throw if stream is not provided')
+  t.throws(function () {
+    QRCode.toFileStream('some text')
+  }, 'Should throw if stream is not provided')
 
-  t.throws(function () { QRCode.toFileStream(new StreamMock()) },
-    'Should throw if text is not provided')
+  t.throws(function () {
+    QRCode.toFileStream(new StreamMock())
+  }, 'Should throw if text is not provided')
 
   const fstream = new StreamMock()
   const spy = sinon.spy(fstream, 'emit')
@@ -16,11 +18,10 @@ test('toFileStream png', function (t) {
   QRCode.toFileStream(fstream, 'i am a pony!')
 
   QRCode.toFileStream(fstream, 'i am a pony!', {
-    type: 'image/png'
+    type: 'image/png',
   })
 
-  t.ok(spy.neverCalledWith('error'),
-    'There should be no error')
+  t.ok(spy.neverCalledWith('error'), 'There should be no error')
 
   spy.restore()
   t.end()
@@ -50,6 +51,6 @@ test('toFileStream png with qrcode error', function (t) {
   QRCode.toFileStream(fstreamErr, bigString)
   QRCode.toFileStream(fstreamErr, 'i am a pony!', {
     version: 1, // force version=1 to trigger an error
-    errorCorrectionLevel: 'H'
+    errorCorrectionLevel: 'H',
   })
 })

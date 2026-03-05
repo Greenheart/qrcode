@@ -2,7 +2,6 @@
 
 Type definitions for qrcode library.
 
-
 ## License
 
 Type definitions are licensed under [MIT License](LICENSE).

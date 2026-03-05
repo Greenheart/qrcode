@@ -8,20 +8,20 @@ const testData = [
     data: 'A',
     length: 1,
     bitLength: 6,
-    dataBit: [40]
+    dataBit: [40],
   },
   {
     data: 'AB',
     length: 2,
     bitLength: 11,
-    dataBit: [57, 160]
+    dataBit: [57, 160],
   },
   {
     data: 'ABC12',
     length: 5,
     bitLength: 28,
-    dataBit: [57, 168, 116, 32]
-  }
+    dataBit: [57, 168, 116, 32],
+  },
 ]
 
 test('Alphanumeric Data', function (t) {

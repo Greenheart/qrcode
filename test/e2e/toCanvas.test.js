@@ -12,21 +12,25 @@ test('toCanvas - no promise available', function (t) {
       if (el === 'canvas') {
         return createCanvas(200, 200)
       }
-    }
+    },
   }
   const canvasEl = createCanvas(200, 200)
 
-  t.throws(function () { QRCode.toCanvas() },
-    'Should throw if no arguments are provided')
+  t.throws(function () {
+    QRCode.toCanvas()
+  }, 'Should throw if no arguments are provided')
 
-  t.throws(function () { QRCode.toCanvas('some text') },
-    'Should throw if a callback is not provided')
+  t.throws(function () {
+    QRCode.toCanvas('some text')
+  }, 'Should throw if a callback is not provided')
 
-  t.throws(function () { QRCode.toCanvas(canvasEl, 'some text') },
-    'Should throw if a callback is not provided')
+  t.throws(function () {
+    QRCode.toCanvas(canvasEl, 'some text')
+  }, 'Should throw if a callback is not provided')
 
-  t.throws(function () { QRCode.toCanvas(canvasEl, 'some text', {}) },
-    'Should throw if callback is not a function')
+  t.throws(function () {
+    QRCode.toCanvas(canvasEl, 'some text', {})
+  }, 'Should throw if callback is not a function')
 
   t.end()
 
@@ -41,38 +45,39 @@ test('toCanvas', function (t) {
       if (el === 'canvas') {
         return createCanvas(200, 200)
       }
-    }
+    },
   }
 
   t.plan(7)
 
-  t.throws(function () { QRCode.toCanvas() },
-    'Should throw if no arguments are provided')
+  t.throws(function () {
+    QRCode.toCanvas()
+  }, 'Should throw if no arguments are provided')
 
   QRCode.toCanvas('some text', function (err, canvasEl) {
     t.ok(!err, 'There should be no error')
-    t.ok(canvasEl instanceof Canvas,
-      'Should return a new canvas object')
+    t.ok(canvasEl instanceof Canvas, 'Should return a new canvas object')
   })
 
-  QRCode.toCanvas('some text', {
-    errorCorrectionLevel: 'H'
-  }, function (err, canvasEl) {
-    t.ok(!err, 'There should be no error')
-    t.ok(canvasEl instanceof Canvas,
-      'Should return a new canvas object')
-  })
+  QRCode.toCanvas(
+    'some text',
+    {
+      errorCorrectionLevel: 'H',
+    },
+    function (err, canvasEl) {
+      t.ok(!err, 'There should be no error')
+      t.ok(canvasEl instanceof Canvas, 'Should return a new canvas object')
+    },
+  )
 
   QRCode.toCanvas('some text').then(function (canvasEl) {
-    t.ok(canvasEl instanceof Canvas,
-      'Should return a new canvas object (promise)')
+    t.ok(canvasEl instanceof Canvas, 'Should return a new canvas object (promise)')
   })
 
   QRCode.toCanvas('some text', {
-    errorCorrectionLevel: 'H'
+    errorCorrectionLevel: 'H',
   }).then(function (canvasEl) {
-    t.ok(canvasEl instanceof Canvas,
-      'Should return a new canvas object (promise)')
+    t.ok(canvasEl instanceof Canvas, 'Should return a new canvas object (promise)')
   })
 
   global.document = undefined
@@ -85,27 +90,28 @@ test('toCanvas with specified canvas element', function (t) {
 
   QRCode.toCanvas(canvasEl, 'some text', function (err, canvasEl) {
     t.ok(!err, 'There should be no error')
-    t.ok(canvasEl instanceof Canvas,
-      'Should return a new canvas object')
+    t.ok(canvasEl instanceof Canvas, 'Should return a new canvas object')
   })
 
-  QRCode.toCanvas(canvasEl, 'some text', {
-    errorCorrectionLevel: 'H'
-  }, function (err, canvasEl) {
-    t.ok(!err, 'There should be no error')
-    t.ok(canvasEl instanceof Canvas,
-      'Should return a new canvas object')
-  })
+  QRCode.toCanvas(
+    canvasEl,
+    'some text',
+    {
+      errorCorrectionLevel: 'H',
+    },
+    function (err, canvasEl) {
+      t.ok(!err, 'There should be no error')
+      t.ok(canvasEl instanceof Canvas, 'Should return a new canvas object')
+    },
+  )
 
   QRCode.toCanvas(canvasEl, 'some text').then(function (canvasEl) {
-    t.ok(canvasEl instanceof Canvas,
-      'Should return a new canvas object (promise)')
+    t.ok(canvasEl instanceof Canvas, 'Should return a new canvas object (promise)')
   })
 
   QRCode.toCanvas(canvasEl, 'some text', {
-    errorCorrectionLevel: 'H'
+    errorCorrectionLevel: 'H',
   }).then(function (canvasEl) {
-    t.ok(canvasEl instanceof Canvas,
-      'Should return a new canvas object (promise)')
+    t.ok(canvasEl instanceof Canvas, 'Should return a new canvas object (promise)')
   })
 })

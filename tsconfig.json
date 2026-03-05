@@ -11,8 +11,8 @@
     "module": "nodenext",
     "noEmit": true,
     "lib": ["esnext", "dom", "dom.iterable"],
-    "moduleResolution": "nodenext",
+    "moduleResolution": "nodenext"
   },
   "include": ["**/*.js", "**/*.ts"],
-  "exclude": ["node_modules", "examples", "build", ".tap"],
+  "exclude": ["node_modules", "examples", "build", ".tap"]
 }

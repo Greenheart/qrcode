@@ -2,20 +2,15 @@ import * as Regex from '#core/regex.js'
 
 import { test } from 'tap'
 test('Regex', function (t) {
-  t.ok(Regex.NUMERIC instanceof RegExp,
-    'Should export a regex for NUMERIC')
+  t.ok(Regex.NUMERIC instanceof RegExp, 'Should export a regex for NUMERIC')
 
-  t.ok(Regex.ALPHANUMERIC instanceof RegExp,
-    'Should export a regex for ALPHANUMERIC')
+  t.ok(Regex.ALPHANUMERIC instanceof RegExp, 'Should export a regex for ALPHANUMERIC')
 
-  t.ok(Regex.BYTE instanceof RegExp,
-    'Should export a regex for BYTE')
+  t.ok(Regex.BYTE instanceof RegExp, 'Should export a regex for BYTE')
 
-  t.ok(Regex.KANJI instanceof RegExp,
-    'Should export a regex for KANJI')
+  t.ok(Regex.KANJI instanceof RegExp, 'Should export a regex for KANJI')
 
-  t.ok(Regex.BYTE_KANJI instanceof RegExp,
-    'Should export a regex for BYTE_KANJI')
+  t.ok(Regex.BYTE_KANJI instanceof RegExp, 'Should export a regex for BYTE_KANJI')
 
   t.end()
 })

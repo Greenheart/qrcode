@@ -1,5 +1,5 @@
-import { QRCodeToSJISFunc } from "..";
+import { QRCodeToSJISFunc } from '..'
 
-declare const toSJISFunc: QRCodeToSJISFunc;
+declare const toSJISFunc: QRCodeToSJISFunc
 
-export = toSJISFunc;
+export = toSJISFunc

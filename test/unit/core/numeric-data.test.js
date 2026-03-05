@@ -8,19 +8,19 @@ const testData = [
     data: 8,
     length: 1,
     bitLength: 4,
-    dataBit: [128]
+    dataBit: [128],
   },
   {
     data: 16,
     length: 2,
     bitLength: 7,
-    dataBit: [32]
+    dataBit: [32],
   },
   {
     data: 128,
     length: 3,
     bitLength: 10,
-    dataBit: [32, 0]
+    dataBit: [32, 0],
   },
   {
     data: 12345,
@@ -33,8 +33,8 @@ const testData = [
     //  (00011110)b -> (30)d
     //  (11010110)b -> (214)d
     //  (10000000)b -> (128)d
-    dataBit: [30, 214, 128]
-  }
+    dataBit: [30, 214, 128],
+  },
 ]
 
 test('Numeric Data', function (t) {

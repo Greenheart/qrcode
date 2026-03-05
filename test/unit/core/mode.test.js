@@ -7,7 +7,7 @@ test('Mode bits', function (t) {
     alphanumeric: 2,
     byte: 4,
     kanji: 8,
-    mixed: -1
+    mixed: -1,
   }
 
   t.equal(Mode.NUMERIC.bit, EXPECTED_BITS.numeric)
@@ -24,7 +24,7 @@ test('Char count bits', function (t) {
     numeric: [10, 12, 14],
     alphanumeric: [9, 11, 13],
     byte: [8, 16, 16],
-    kanji: [8, 10, 12]
+    kanji: [8, 10, 12],
   }
 
   let v
@@ -49,11 +49,13 @@ test('Char count bits', function (t) {
     t.equal(Mode.getCharCountIndicator(Mode.KANJI, v), EXPECTED_BITS.kanji[2])
   }
 
-  t.throws(function () { Mode.getCharCountIndicator({}, 1) },
-    'Should throw if mode is invalid')
+  t.throws(function () {
+    Mode.getCharCountIndicator({}, 1)
+  }, 'Should throw if mode is invalid')
 
-  t.throws(function () { Mode.getCharCountIndicator(Mode.BYTE, 0) },
-    'Should throw if version is invalid')
+  t.throws(function () {
+    Mode.getCharCountIndicator(Mode.BYTE, 0)
+  }, 'Should throw if version is invalid')
 
   t.end()
 })
@@ -61,20 +63,23 @@ test('Char count bits', function (t) {
 test('Best mode', function (t) {
   /* eslint-disable quote-props */
   const EXPECTED_MODE = {
-    '12345': Mode.NUMERIC,
-    'abcde': Mode.BYTE,
+    12345: Mode.NUMERIC,
+    abcde: Mode.BYTE,
     '1234a': Mode.BYTE,
-    'ABCDa': Mode.BYTE,
-    'ABCDE': Mode.ALPHANUMERIC,
+    ABCDa: Mode.BYTE,
+    ABCDE: Mode.ALPHANUMERIC,
     '12ABC': Mode.ALPHANUMERIC,
-    '乂ЁЖぞβ': Mode.KANJI,
-    'ΑΒΓψωЮЯабв': Mode.KANJI,
-    '皿a晒三': Mode.BYTE
+    乂ЁЖぞβ: Mode.KANJI,
+    ΑΒΓψωЮЯабв: Mode.KANJI,
+    皿a晒三: Mode.BYTE,
   }
 
   Object.keys(EXPECTED_MODE).forEach(function (data) {
-    t.equal(Mode.getBestModeForData(data), EXPECTED_MODE[data],
-      'Should return mode ' + Mode.toString(EXPECTED_MODE[data]) + ' for data: ' + data)
+    t.equal(
+      Mode.getBestModeForData(data),
+      EXPECTED_MODE[data],
+      'Should return mode ' + Mode.toString(EXPECTED_MODE[data]) + ' for data: ' + data,
+    )
   })
 
   t.end()
@@ -98,7 +103,7 @@ test('From value', function (t) {
     { name: 'numeric', mode: Mode.NUMERIC },
     { name: 'alphanumeric', mode: Mode.ALPHANUMERIC },
     { name: 'kanji', mode: Mode.KANJI },
-    { name: 'byte', mode: Mode.BYTE }
+    { name: 'byte', mode: Mode.BYTE },
   ]
 
   for (let m = 0; m < modes.length; m++) {
@@ -107,11 +112,17 @@ test('From value', function (t) {
     t.equal(Mode.from(modes[m].mode), modes[m].mode)
   }
 
-  t.equal(Mode.from('', Mode.NUMERIC), Mode.NUMERIC,
-    'Should return default value if mode is invalid')
+  t.equal(
+    Mode.from('', Mode.NUMERIC),
+    Mode.NUMERIC,
+    'Should return default value if mode is invalid',
+  )
 
-  t.equal(Mode.from(null, Mode.NUMERIC), Mode.NUMERIC,
-    'Should return default value if mode undefined')
+  t.equal(
+    Mode.from(null, Mode.NUMERIC),
+    Mode.NUMERIC,
+    'Should return default value if mode undefined',
+  )
 
   t.end()
 })
@@ -122,7 +133,9 @@ test('To string', function (t) {
   t.equal(Mode.toString(Mode.BYTE), 'Byte')
   t.equal(Mode.toString(Mode.KANJI), 'Kanji')
 
-  t.throws(function () { Mode.toString({}) }, 'Should throw if mode is invalid')
+  t.throws(function () {
+    Mode.toString({})
+  }, 'Should throw if mode is invalid')
 
   t.end()
 })

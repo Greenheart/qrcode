@@ -47,7 +47,7 @@ const EXPECTED_POSITION_TABLE = [
   [6, 28, 54, 80, 106, 132, 158],
   [6, 32, 58, 84, 110, 136, 162],
   [6, 26, 54, 82, 110, 138, 166],
-  [6, 30, 58, 86, 114, 142, 170]
+  [6, 30, 58, 86, 114, 142, 170],
 ]
 
 test('Alignment pattern - Row/Col coords', function (t) {

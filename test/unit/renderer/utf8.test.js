@@ -3,8 +3,7 @@ import * as Utf8Renderer from '#renderer/utf8.js'
 
 import { test } from 'tap'
 test('Utf8Renderer interface', function (t) {
-  t.type(Utf8Renderer.render, 'function',
-    'Should have render function')
+  t.type(Utf8Renderer.render, 'function', 'Should have render function')
 
   t.end()
 })
@@ -13,18 +12,18 @@ test('Utf8Renderer render', function (t) {
   const sampleQrData = QRCode.create('sample text', { version: 2 })
   let str
 
-  t.doesNotThrow(function () { str = Utf8Renderer.render(sampleQrData) },
-    'Should not throw with only qrData param')
+  t.doesNotThrow(function () {
+    str = Utf8Renderer.render(sampleQrData)
+  }, 'Should not throw with only qrData param')
 
   t.doesNotThrow(function () {
     str = Utf8Renderer.render(sampleQrData, {
       margin: 10,
-      scale: 1
+      scale: 1,
     })
   }, 'Should not throw with options param')
 
-  t.type(str, 'string',
-    'Should return a string')
+  t.type(str, 'string', 'Should return a string')
 
   t.end()
 })

@@ -17,13 +17,19 @@ test('Error correction codewords', function (t) {
 
       const expectedCodewords = totalCodewords - dataCodewords
 
-      t.equal(ECCode.getTotalCodewordsCount(v, levels[l]), expectedCodewords,
-        'Should return correct codewords number')
+      t.equal(
+        ECCode.getTotalCodewordsCount(v, levels[l]),
+        expectedCodewords,
+        'Should return correct codewords number',
+      )
     }
   }
 
-  t.equal(ECCode.getTotalCodewordsCount(1), undefined,
-    'Should return undefined if EC level is not specified')
+  t.equal(
+    ECCode.getTotalCodewordsCount(1),
+    undefined,
+    'Should return undefined if EC level is not specified',
+  )
 
   t.end()
 })
@@ -37,8 +43,11 @@ test('Error correction blocks', function (t) {
     }
   }
 
-  t.equal(ECCode.getBlocksCount(1), undefined,
-    'Should return undefined if EC level is not specified')
+  t.equal(
+    ECCode.getBlocksCount(1),
+    undefined,
+    'Should return undefined if EC level is not specified',
+  )
 
   t.end()
 })

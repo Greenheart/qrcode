@@ -1,25 +1,28 @@
 {
   "name": "@slidoapp/qrcode",
-  "description": "Generate Quick Response (QR) codes using JavaScript in a browser, server side code, or using a command line tool.",
   "version": "2.1.0",
+  "description": "Generate Quick Response (QR) codes using JavaScript in a browser, server side code, or using a command line tool.",
+  "keywords": [
+    "canvas",
+    "code",
+    "qr",
+    "qrcode"
+  ],
+  "homepage": "https://github.com/slidoapp/node-qrcode",
+  "license": "MIT",
   "author": "Ryan Day <soldair@gmail.com>",
   "contributors": [
     "Vincenzo Greco <greco.vincenzo@gmail.com>",
     "Linus Unnebäck <linus@folkdatorn.se>",
     "Jozef Izso <izso@cisco.com>"
   ],
-  "keywords": [
-    "qr",
-    "code",
-    "canvas",
-    "qrcode"
-  ],
-  "main": "./lib/index.js",
-  "browser": {
-    "./lib/index.js": "./lib/browser.js",
-    "fs": false
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/slidoapp/node-qrcode.git"
   },
-  "types": "./types/index.d.ts",
+  "bin": {
+    "qrcode": "./bin/qrcode"
+  },
   "files": [
     "bin",
     "build",
@@ -27,18 +30,29 @@
     "helper",
     "types"
   ],
-  "homepage": "https://github.com/slidoapp/node-qrcode",
-  "license": "MIT",
+  "type": "module",
+  "main": "./lib/index.js",
+  "browser": {
+    "./lib/index.js": "./lib/browser.js",
+    "fs": false
+  },
+  "types": "./types/index.d.ts",
+  "imports": {
+    "#renderer/*": "./lib/renderer/*",
+    "#lib/*": "./lib/*",
+    "#core/*": "./lib/core/*",
+    "#test/*": "./test/*",
+    "#helper/*": "./helper/*"
+  },
   "scripts": {
-    "lint": "standard --fix",
+    "lint:old": "standard --fix",
+    "lint": "oxlint",
+    "format": "oxfmt --write",
     "pretest": "pnpm lint",
     "test": "vitest",
     "build": "rollup -c",
     "prepublish": "pnpm build",
     "browser": "node examples/clientsideserver.js"
-  },
-  "bin": {
-    "qrcode": "./bin/qrcode"
   },
   "dependencies": {
     "@types/pngjs": "^6.0.5",
@@ -70,20 +84,6 @@
     "typescript": "^5.9.3",
     "vitest": "^4.0.18"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/slidoapp/node-qrcode.git"
-  },
-  "imports": {
-    "#renderer/*": "./lib/renderer/*",
-    "#lib/*": "./lib/*",
-    "#core/*": "./lib/core/*",
-    "#test/*": "./test/*",
-    "#helper/*": "./helper/*"
-  },
-  "engines": {
-    "node": ">=18"
-  },
   "standard": {
     "ignore": [
       "build/",
@@ -91,5 +91,7 @@
       "lib/core/regex.js"
     ]
   },
-  "type": "module"
+  "engines": {
+    "node": ">=18"
+  }
 }

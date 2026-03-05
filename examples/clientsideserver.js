@@ -1,5 +1,5 @@
 const express = require('express')
-const app = express()// .createServer()
+const app = express() // .createServer()
 const http = require('http')
 const fs = require('fs')
 const QRCode = require('../lib')
@@ -140,18 +140,23 @@ effectHandlers.rounded = function (args, cb) {
         l = leftPx ? luma709Only(left[0], left[1], left[2]) : 0
         d = downPx ? luma709Only(down[0], down[1], down[2]) : 0
 
-        if (l > pixelCore.threshold) { // if left is light and i am dark
-          if (t > pixelCore.threshold) { // if top is light and i am dark
+        if (l > pixelCore.threshold) {
+          // if left is light and i am dark
+          if (t > pixelCore.threshold) {
+            // if top is light and i am dark
             corner = 1
             pixels[rightPx + 4] = 100
-          } else if (d > pixelCore.threshold) { // if bottom is light and i am dark
+          } else if (d > pixelCore.threshold) {
+            // if bottom is light and i am dark
             pixels[rightPx + 4] = 100
             corner = 1
           }
         } else if (r > pixelCore.threshold) {
-          if (t > pixelCore.threshold) { // if top is light and i am dark
+          if (t > pixelCore.threshold) {
+            // if top is light and i am dark
             corner = 1
-          } else if (d > pixelCore.threshold) { // if bottom is light and i am dark
+          } else if (d > pixelCore.threshold) {
+            // if bottom is light and i am dark
             corner = 1
           }
         }
@@ -191,7 +196,7 @@ effectHandlers.remoteImage = function (args, cb) {
     host: domain,
     port: 80,
     path: uri,
-    method: 'GET'
+    method: 'GET',
   }
 
   const req = http.request(options, function (res) {
@@ -222,77 +227,84 @@ effectHandlers.remoteImage = function (args, cb) {
 }
 
 effectHandlers.image = function (args, cb) {
-  loadImage(args.src || '').then((img) => {
-    const convert = canvasutil.conversionLib
-    const canvas = createCanvas(200, 200)
-    QRCode.toCanvas(canvas, args.text || '', function (err) {
-      if (err) {
-        cb(err, false)
-        return
-      }
+  loadImage(args.src || '').then(
+    (img) => {
+      const convert = canvasutil.conversionLib
+      const canvas = createCanvas(200, 200)
+      QRCode.toCanvas(canvas, args.text || '', function (err) {
+        if (err) {
+          cb(err, false)
+          return
+        }
 
-      const codeCtx = canvas.getContext('2d')
-      const frame = codeCtx.getImageData(0, 0, canvas.width, canvas.width)
-      const tpx = new canvasutil.PixelCore()
-      const baconCanvas = createCanvas(canvas.width, canvas.width)
-      const ctx = baconCanvas.getContext('2d')
-      const topThreshold = args.darkThreshold || 25
-      const bottomThreshold = args.lightThreshold || 75
+        const codeCtx = canvas.getContext('2d')
+        const frame = codeCtx.getImageData(0, 0, canvas.width, canvas.width)
+        const tpx = new canvasutil.PixelCore()
+        const baconCanvas = createCanvas(canvas.width, canvas.width)
+        const ctx = baconCanvas.getContext('2d')
+        const topThreshold = args.darkThreshold || 25
+        const bottomThreshold = args.lightThreshold || 75
 
-      tpx.threshold = 50
+        tpx.threshold = 50
 
-      // scale image
-      let w = canvas.width
-      let h = canvas.height
+        // scale image
+        let w = canvas.width
+        let h = canvas.height
 
-      if (img.width > img.height) {
-        w = w * (canvas.height / h)
-        h = canvas.height
-      } else {
-        h = h * (canvas.height / w)
-        w = canvas.width
-      }
-      ctx.drawImage(img, 0, 0, w, h)
+        if (img.width > img.height) {
+          w = w * (canvas.height / h)
+          h = canvas.height
+        } else {
+          h = h * (canvas.height / w)
+          w = canvas.width
+        }
+        ctx.drawImage(img, 0, 0, w, h)
 
-      try {
-        tpx.iterate(baconCanvas, function (px, i, l, pixels, w, h, pixelCore) {
-          const luma = (0.2125 * px.r + 0.7154 * px.g + 0.0721 * px.b)
-          const codeLuma = convert.luma709Only(frame.data[i * 4], frame.data[i * 4 + 1], frame.data[i * 4 + 2])
-          let yuv
-          let rgb
+        try {
+          tpx.iterate(baconCanvas, function (px, i, l, pixels, w, h, pixelCore) {
+            const luma = 0.2125 * px.r + 0.7154 * px.g + 0.0721 * px.b
+            const codeLuma = convert.luma709Only(
+              frame.data[i * 4],
+              frame.data[i * 4 + 1],
+              frame.data[i * 4 + 2],
+            )
+            let yuv
+            let rgb
 
-          if (codeLuma > pixelCore.threshold) {
-            if (luma < bottomThreshold) {
-              yuv = convert.rgbToYuv(px.r, px.g, px.b)
+            if (codeLuma > pixelCore.threshold) {
+              if (luma < bottomThreshold) {
+                yuv = convert.rgbToYuv(px.r, px.g, px.b)
 
-              rgb = convert.yuvToRgb(bottomThreshold, yuv[1], yuv[2])
+                rgb = convert.yuvToRgb(bottomThreshold, yuv[1], yuv[2])
 
-              px.r = rgb[0]
-              px.g = rgb[1]
-              px.b = rgb[2]
-              px.a = 255
+                px.r = rgb[0]
+                px.g = rgb[1]
+                px.b = rgb[2]
+                px.a = 255
+              }
+            } else {
+              if (luma > topThreshold) {
+                yuv = convert.rgbToYuv(px.r, px.g, px.b)
+
+                rgb = convert.yuvToRgb(topThreshold, yuv[1], yuv[2])
+
+                px.r = rgb[0]
+                px.g = rgb[1]
+                px.b = rgb[2]
+              }
             }
-          } else {
-            if (luma > topThreshold) {
-              yuv = convert.rgbToYuv(px.r, px.g, px.b)
+          })
+        } catch (e) {
+          cb(err, false)
+        }
 
-              rgb = convert.yuvToRgb(topThreshold, yuv[1], yuv[2])
-
-              px.r = rgb[0]
-              px.g = rgb[1]
-              px.b = rgb[2]
-            }
-          }
-        })
-      } catch (e) {
-        cb(err, false)
-      }
-
-      cb(null, baconCanvas)
-    })
-  }, (error) => {
-    cb(error, null)
-  })
+        cb(null, baconCanvas)
+      })
+    },
+    (error) => {
+      cb(error, null)
+    },
+  )
 }
 
 effectHandlers.plain = function (args, cb) {

@@ -4,7 +4,12 @@ import { test } from 'tap'
 const EC_LEVELS = [ECLevel.L, ECLevel.M, ECLevel.Q, ECLevel.H]
 
 test('Error level from input value', function (t) {
-  const values = [['l', 'low'], ['m', 'medium'], ['q', 'quartile'], ['h', 'high']]
+  const values = [
+    ['l', 'low'],
+    ['m', 'medium'],
+    ['q', 'quartile'],
+    ['h', 'high'],
+  ]
 
   for (let l = 0; l < values.length; l++) {
     for (let i = 0; i < values[l].length; i++) {
@@ -14,7 +19,11 @@ test('Error level from input value', function (t) {
   }
 
   t.equal(ECLevel.from(ECLevel.L), ECLevel.L, 'Should return passed level if value is valid')
-  t.equal(ECLevel.from(undefined, ECLevel.M), ECLevel.M, 'Should return default level if value is undefined')
+  t.equal(
+    ECLevel.from(undefined, ECLevel.M),
+    ECLevel.M,
+    'Should return default level if value is undefined',
+  )
   t.equal(ECLevel.from('', ECLevel.Q), ECLevel.Q, 'Should return default level if value is invalid')
 
   t.end()

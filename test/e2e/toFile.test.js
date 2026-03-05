@@ -11,11 +11,13 @@ test('toFile - no promise available', function (t) {
   Helpers.removeNativePromise()
   const fileName = path.join(os.tmpdir(), 'qrimage.png')
 
-  t.throws(function () { QRCode.toFile(fileName, 'some text') },
-    'Should throw if a callback is not provided')
+  t.throws(function () {
+    QRCode.toFile(fileName, 'some text')
+  }, 'Should throw if a callback is not provided')
 
-  t.throws(function () { QRCode.toFile(fileName, 'some text', {}) },
-    'Should throw if a callback is not a function')
+  t.throws(function () {
+    QRCode.toFile(fileName, 'some text', {})
+  }, 'Should throw if a callback is not a function')
 
   t.end()
 
@@ -25,14 +27,15 @@ test('toFile - no promise available', function (t) {
 test('toFile', function (t) {
   const fileName = path.join(os.tmpdir(), 'qrimage.png')
 
-  t.throws(function () { QRCode.toFile('some text', function () {}) },
-    'Should throw if path is not provided')
+  t.throws(function () {
+    QRCode.toFile('some text', function () {})
+  }, 'Should throw if path is not provided')
 
-  t.throws(function () { QRCode.toFile(fileName) },
-    'Should throw if text is not provided')
+  t.throws(function () {
+    QRCode.toFile(fileName)
+  }, 'Should throw if text is not provided')
 
-  t.equal(typeof QRCode.toFile(fileName, 'some text').then, 'function',
-    'Should return a promise')
+  t.equal(typeof QRCode.toFile(fileName, 'some text').then, 'function', 'Should return a promise')
 
   t.end()
 })
@@ -54,62 +57,78 @@ test('toFile png', function (t) {
     'qlWKMUa5SLL6fSJaFLwhNJeCIJP6lYoxRrlGKNcvHlknCicpKEE5UuCSdJOFHpktCpPFGs',
     'UYo1SrFGufgwlZ+k0iWhU+lUnlDpktCpdEnoVN5UrFGKNUqxRrl4WRL+EpU7ktCpdCpdEj',
     'qVO5LQqTxRrFGKNUqxRon/scYo1ijFGqVYoxRrlGKNUqxRijVKsUYp1ijFGqVYoxRrlGKN',
-    'UqxRijXKP0OHEepgrecVAAAAAElFTkSuQmCC'].join('')
+    'UqxRijXKP0OHEepgrecVAAAAAElFTkSuQmCC',
+  ].join('')
 
   t.plan(8)
 
-  QRCode.toFile(fileName, 'i am a pony!', {
-    errorCorrectionLevel: 'L'
-  }, function (err) {
-    t.ok(!err, 'There should be no error')
+  QRCode.toFile(
+    fileName,
+    'i am a pony!',
+    {
+      errorCorrectionLevel: 'L',
+    },
+    function (err) {
+      t.ok(!err, 'There should be no error')
 
-    fs.stat(fileName, function (err) {
-      t.ok(!err,
-        'Should save file with correct file name')
-    })
+      fs.stat(fileName, function (err) {
+        t.ok(!err, 'Should save file with correct file name')
+      })
 
-    fs.readFile(fileName, function (err, buffer) {
-      if (err) throw err
+      fs.readFile(fileName, function (err, buffer) {
+        if (err) throw err
 
-      t.equal(buffer.toString('base64'), expectedBase64Output,
-        'Should write correct content')
-    })
-  })
+        t.equal(buffer.toString('base64'), expectedBase64Output, 'Should write correct content')
+      })
+    },
+  )
+
+  QRCode.toFile(
+    fileName,
+    'i am a pony!',
+    {
+      errorCorrectionLevel: 'L',
+      type: 'png',
+    },
+    function (err) {
+      t.ok(!err, 'There should be no errors if file type is specified')
+    },
+  )
 
   QRCode.toFile(fileName, 'i am a pony!', {
     errorCorrectionLevel: 'L',
-    type: 'png'
-  }, function (err) {
-    t.ok(!err, 'There should be no errors if file type is specified')
-  })
-
-  QRCode.toFile(fileName, 'i am a pony!', {
-    errorCorrectionLevel: 'L'
   }).then(function () {
     fs.stat(fileName, function (err) {
-      t.ok(!err,
-        'Should save file with correct file name (promise)')
+      t.ok(!err, 'Should save file with correct file name (promise)')
     })
 
     fs.readFile(fileName, function (err, buffer) {
       if (err) throw err
 
-      t.equal(buffer.toString('base64'), expectedBase64Output,
-        'Should write correct content (promise)')
+      t.equal(
+        buffer.toString('base64'),
+        expectedBase64Output,
+        'Should write correct content (promise)',
+      )
     })
   })
 
   const fsStub = sinon.stub(fs, 'createWriteStream')
   fsStub.returns(new StreamMock().forceErrorOnWrite())
 
-  QRCode.toFile(fileName, 'i am a pony!', {
-    errorCorrectionLevel: 'L'
-  }, function (err) {
-    t.ok(err, 'There should be an error')
-  })
+  QRCode.toFile(
+    fileName,
+    'i am a pony!',
+    {
+      errorCorrectionLevel: 'L',
+    },
+    function (err) {
+      t.ok(err, 'There should be an error')
+    },
+  )
 
   QRCode.toFile(fileName, 'i am a pony!', {
-    errorCorrectionLevel: 'L'
+    errorCorrectionLevel: 'L',
   }).catch(function (err) {
     t.ok(err, 'Should catch an error (promise)')
   })
@@ -120,46 +139,54 @@ test('toFile png', function (t) {
 test('toFile svg', function (t) {
   const fileName = path.join(os.tmpdir(), 'qrimage.svg')
   const expectedOutput = fs.readFileSync(
-    path.join(import.meta.dirname, '/svg.expected.out'), 'UTF-8')
+    path.join(import.meta.dirname, '/svg.expected.out'),
+    'UTF-8',
+  )
 
   t.plan(6)
 
-  QRCode.toFile(fileName, 'http://www.google.com', {
-    errorCorrectionLevel: 'H'
-  }, function (err) {
-    t.ok(!err, 'There should be no error')
+  QRCode.toFile(
+    fileName,
+    'http://www.google.com',
+    {
+      errorCorrectionLevel: 'H',
+    },
+    function (err) {
+      t.ok(!err, 'There should be no error')
 
-    fs.stat(fileName, function (err) {
-      t.ok(!err,
-        'Should save file with correct file name')
-    })
+      fs.stat(fileName, function (err) {
+        t.ok(!err, 'Should save file with correct file name')
+      })
 
-    fs.readFile(fileName, 'utf8', function (err, content) {
-      if (err) throw err
-      t.equal(content, expectedOutput,
-        'Should write correct content')
-    })
-  })
+      fs.readFile(fileName, 'utf8', function (err, content) {
+        if (err) throw err
+        t.equal(content, expectedOutput, 'Should write correct content')
+      })
+    },
+  )
+
+  QRCode.toFile(
+    fileName,
+    'http://www.google.com',
+    {
+      errorCorrectionLevel: 'H',
+      type: 'svg',
+    },
+    function (err) {
+      t.ok(!err, 'There should be no errors if file type is specified')
+    },
+  )
 
   QRCode.toFile(fileName, 'http://www.google.com', {
     errorCorrectionLevel: 'H',
-    type: 'svg'
-  }, function (err) {
-    t.ok(!err, 'There should be no errors if file type is specified')
-  })
-
-  QRCode.toFile(fileName, 'http://www.google.com', {
-    errorCorrectionLevel: 'H'
   }).then(function () {
     fs.stat(fileName, function (err) {
-      t.ok(!err,
-        'Should save file with correct file name (promise)')
+      t.ok(!err, 'Should save file with correct file name (promise)')
     })
 
     fs.readFile(fileName, 'utf8', function (err, content) {
       if (err) throw err
-      t.equal(content, expectedOutput,
-        'Should write correct content (promise)')
+      t.equal(content, expectedOutput, 'Should write correct content (promise)')
     })
   })
 })
@@ -183,7 +210,8 @@ test('toFile utf8', function (t) {
     '    █ ▀▀▀ █  █▀ ▀ █ ▀▀▄██ ███    ',
     '    ▀▀▀▀▀▀▀ ▀▀▀  ▀▀ ▀    ▀  ▀    ',
     '                                 ',
-    '                                 '].join('\n')
+    '                                 ',
+  ].join('\n')
 
   t.plan(6)
 
@@ -191,44 +219,44 @@ test('toFile utf8', function (t) {
     t.ok(!err, 'There should be no error')
 
     fs.stat(fileName, function (err) {
-      t.ok(!err,
-        'Should save file with correct file name')
+      t.ok(!err, 'Should save file with correct file name')
     })
 
     fs.readFile(fileName, 'utf8', function (err, content) {
       if (err) throw err
-      t.equal(content, expectedOutput,
-        'Should write correct content')
+      t.equal(content, expectedOutput, 'Should write correct content')
     })
   })
 
-  QRCode.toFile(fileName, 'http://www.google.com', {
-    errorCorrectionLevel: 'M',
-    type: 'utf8'
-  }, function (err) {
-    t.ok(!err, 'There should be no errors if file type is specified')
-  })
+  QRCode.toFile(
+    fileName,
+    'http://www.google.com',
+    {
+      errorCorrectionLevel: 'M',
+      type: 'utf8',
+    },
+    function (err) {
+      t.ok(!err, 'There should be no errors if file type is specified')
+    },
+  )
 
-  QRCode.toFile(fileName, 'http://www.google.com')
-    .then(function () {
-      fs.stat(fileName, function (err) {
-        t.ok(!err,
-          'Should save file with correct file name (promise)')
-      })
-
-      fs.readFile(fileName, 'utf8', function (err, content) {
-        if (err) throw err
-        t.equal(content, expectedOutput,
-          'Should write correct content (promise)')
-      })
+  QRCode.toFile(fileName, 'http://www.google.com').then(function () {
+    fs.stat(fileName, function (err) {
+      t.ok(!err, 'Should save file with correct file name (promise)')
     })
+
+    fs.readFile(fileName, 'utf8', function (err, content) {
+      if (err) throw err
+      t.equal(content, expectedOutput, 'Should write correct content (promise)')
+    })
+  })
 })
 
 test('toFile manual segments', function (t) {
   const fileName = path.join(os.tmpdir(), 'qrimage.txt')
   const segs = [
     { data: 'ABCDEFG', mode: 'alphanumeric' },
-    { data: '0123456', mode: 'numeric' }
+    { data: '0123456', mode: 'numeric' },
   ]
   const expectedOutput = [
     '                             ',
@@ -245,23 +273,27 @@ test('toFile manual segments', function (t) {
     '    █ ▀▀▀ █ ██  ▄▀▀▀▀▄▀▀█    ',
     '    ▀▀▀▀▀▀▀ ▀    ▀▀▀▀ ▀▀▀    ',
     '                             ',
-    '                             '].join('\n')
+    '                             ',
+  ].join('\n')
   t.plan(3)
 
-  QRCode.toFile(fileName, segs, {
-    errorCorrectionLevel: 'L'
-  }, function (err) {
-    t.ok(!err, 'There should be no errors if text is not string')
+  QRCode.toFile(
+    fileName,
+    segs,
+    {
+      errorCorrectionLevel: 'L',
+    },
+    function (err) {
+      t.ok(!err, 'There should be no errors if text is not string')
 
-    fs.stat(fileName, function (err) {
-      t.ok(!err,
-        'Should save file with correct file name')
-    })
+      fs.stat(fileName, function (err) {
+        t.ok(!err, 'Should save file with correct file name')
+      })
 
-    fs.readFile(fileName, 'utf8', function (err, content) {
-      if (err) throw err
-      t.equal(content, expectedOutput,
-        'Should write correct content')
-    })
-  })
+      fs.readFile(fileName, 'utf8', function (err, content) {
+        if (err) throw err
+        t.equal(content, expectedOutput, 'Should write correct content')
+      })
+    },
+  )
 })

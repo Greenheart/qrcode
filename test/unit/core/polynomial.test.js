@@ -7,7 +7,11 @@ test('Generator polynomial', function (t) {
   t.same(result, new Uint8Array([1]), 'Should return coeff [1] for polynomial of degree 0')
 
   for (let e = 2; e <= 68; e++) {
-    t.equal(Poly.generateECPolynomial(e).length, e + 1, 'Should return a number of coefficients equal to (degree + 1)')
+    t.equal(
+      Poly.generateECPolynomial(e).length,
+      e + 1,
+      'Should return a number of coefficients equal to (degree + 1)',
+    )
   }
 
   t.end()

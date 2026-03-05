@@ -6,7 +6,7 @@ import resolve from '@rollup/plugin-node-resolve'
 const babelConfig = {
   babelHelpers: 'bundled',
   babelrc: false,
-  presets: [['@babel/preset-env']]
+  presets: [['@babel/preset-env']],
 }
 
 export default [
@@ -16,9 +16,9 @@ export default [
       file: 'build/qrcode.js',
       format: 'iife',
       name: 'QRCode',
-      exports: 'named'
+      exports: 'named',
     },
-    plugins: [commonjs(), resolve(), babel(babelConfig), terser()]
+    plugins: [commonjs(), resolve(), babel(babelConfig), terser()],
   },
   {
     input: 'helper/to-sjis-browser.js',
@@ -26,8 +26,8 @@ export default [
       file: 'build/qrcode.tosjis.js',
       format: 'iife',
       name: 'QRCode',
-      exports: 'named'
+      exports: 'named',
     },
-    plugins: [commonjs(), resolve(), babel(babelConfig), terser()]
-  }
+    plugins: [commonjs(), resolve(), babel(babelConfig), terser()],
+  },
 ]

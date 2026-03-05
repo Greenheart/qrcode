@@ -1,7 +1,7 @@
 import stream from 'stream'
 import util from 'util'
 
-function WritableStream () {
+function WritableStream() {
   stream.Writable.call(this)
   this.forceError = false
 

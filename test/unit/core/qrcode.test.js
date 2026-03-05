@@ -6,13 +6,17 @@ import toSJIS from '#helper/to-sjis.js'
 import { test } from 'tap'
 test('QRCode interface', function (t) {
   t.type(QRCode.create, 'function', 'Should have "create" function')
-  t.throws(function () { QRCode.create() }, 'Should throw if no data is provided')
-  t.doesNotThrow(function () { QRCode.create('1234567') }, 'Should not throw')
+  t.throws(function () {
+    QRCode.create()
+  }, 'Should throw if no data is provided')
+  t.doesNotThrow(function () {
+    QRCode.create('1234567')
+  }, 'Should not throw')
 
   let qr = QRCode.create('a123456A', {
     version: 1,
     maskPattern: 1,
-    errorCorrectionLevel: 'H'
+    errorCorrectionLevel: 'H',
   })
   t.equal(qr.modules.size, 21, 'Should return correct modules count')
   t.equal(qr.maskPattern, 1, 'Should return correct mask pattern')
@@ -29,12 +33,15 @@ test('QRCode interface', function (t) {
   }, 'Should accept data as string')
 
   t.doesNotThrow(function () {
-    qr = QRCode.create([
-      { data: 'ABCDEFG', mode: 'alphanumeric' },
-      { data: 'abcdefg' },
-      { data: '晒三', mode: 'kanji' },
-      { data: '0123456', mode: 'numeric' }
-    ], { toSJISFunc: toSJIS })
+    qr = QRCode.create(
+      [
+        { data: 'ABCDEFG', mode: 'alphanumeric' },
+        { data: 'abcdefg' },
+        { data: '晒三', mode: 'kanji' },
+        { data: '0123456', mode: 'numeric' },
+      ],
+      { toSJISFunc: toSJIS },
+    )
   }, 'Should accept data as array of objects')
 
   t.doesNotThrow(function () {
@@ -51,7 +58,7 @@ test('QRCode error correction', function (t) {
     { name: ['l', 'low'], level: ECLevel.L },
     { name: ['m', 'medium'], level: ECLevel.M },
     { name: ['q', 'quartile'], level: ECLevel.Q },
-    { name: ['h', 'high'], level: ECLevel.H }
+    { name: ['h', 'high'], level: ECLevel.H },
   ]
 
   for (let l = 0; l < ecValues.length; l++) {
@@ -60,15 +67,21 @@ test('QRCode error correction', function (t) {
         qr = QRCode.create('ABCDEFG', { errorCorrectionLevel: ecValues[l].name[i] })
       }, 'Should accept errorCorrectionLevel value: ' + ecValues[l].name[i])
 
-      t.same(qr.errorCorrectionLevel, ecValues[l].level,
-        'Should have correct errorCorrectionLevel value')
+      t.same(
+        qr.errorCorrectionLevel,
+        ecValues[l].level,
+        'Should have correct errorCorrectionLevel value',
+      )
 
       t.doesNotThrow(function () {
         qr = QRCode.create('ABCDEFG', { errorCorrectionLevel: ecValues[l].name[i].toUpperCase() })
       }, 'Should accept errorCorrectionLevel value: ' + ecValues[l].name[i].toUpperCase())
 
-      t.same(qr.errorCorrectionLevel, ecValues[l].level,
-        'Should have correct errorCorrectionLevel value')
+      t.same(
+        qr.errorCorrectionLevel,
+        ecValues[l].level,
+        'Should have correct errorCorrectionLevel value',
+      )
     }
   }
 
@@ -85,13 +98,17 @@ test('QRCode version', function (t) {
   t.equal(qr.errorCorrectionLevel, ECLevel.M, 'Should set correct EC level')
 
   t.throws(function () {
-    qr = QRCode.create(new Array(Version.getCapacity(2, ECLevel.H)).join('a'),
-      { version: 1, errorCorrectionLevel: ECLevel.H })
+    qr = QRCode.create(new Array(Version.getCapacity(2, ECLevel.H)).join('a'), {
+      version: 1,
+      errorCorrectionLevel: ECLevel.H,
+    })
   }, 'Should throw if data cannot be contained with chosen version')
 
   t.throws(function () {
-    qr = QRCode.create(new Array(Version.getCapacity(40, ECLevel.H) + 2).join('a'),
-      { version: 40, errorCorrectionLevel: ECLevel.H })
+    qr = QRCode.create(new Array(Version.getCapacity(40, ECLevel.H) + 2).join('a'), {
+      version: 40,
+      errorCorrectionLevel: ECLevel.H,
+    })
   }, 'Should throw if data cannot be contained in a qr code')
 
   t.doesNotThrow(function () {
@@ -113,8 +130,7 @@ test('QRCode capacity', function (t) {
   qr = QRCode.create([{ data: 'ABCDEFGHIL', mode: 'alphanumeric' }])
   t.equal(qr.version, 1, 'Should contain 10 alphanumeric characters')
 
-  qr = QRCode.create([{ data: 'ＡＩぐサ', mode: 'kanji' }],
-    { toSJISFunc: toSJIS })
+  qr = QRCode.create([{ data: 'ＡＩぐサ', mode: 'kanji' }], { toSJISFunc: toSJIS })
   t.equal(qr.version, 1, 'Should contain 4 kanji characters')
 
   t.end()

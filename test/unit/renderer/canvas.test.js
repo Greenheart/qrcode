@@ -4,11 +4,9 @@ import * as CanvasRenderer from '#renderer/canvas.js'
 
 import { test } from 'tap'
 test('CanvasRenderer interface', function (t) {
-  t.type(CanvasRenderer.render, 'function',
-    'Should have render function')
+  t.type(CanvasRenderer.render, 'function', 'Should have render function')
 
-  t.type(CanvasRenderer.renderToDataURL, 'function',
-    'Should have renderToDataURL function')
+  t.type(CanvasRenderer.renderToDataURL, 'function', 'Should have renderToDataURL function')
 
   t.end()
 })
@@ -20,36 +18,35 @@ test('CanvasRenderer render', function (t) {
       if (el === 'canvas') {
         return createCanvas(200, 200)
       }
-    }
+    },
   }
 
   const sampleQrData = QRCode.create('sample text', { version: 2 })
   let canvasEl
 
-  t.doesNotThrow(function () { canvasEl = CanvasRenderer.render(sampleQrData) },
-    'Should not throw if canvas is not provided')
+  t.doesNotThrow(function () {
+    canvasEl = CanvasRenderer.render(sampleQrData)
+  }, 'Should not throw if canvas is not provided')
 
-  t.ok(canvasEl instanceof Canvas,
-    'Should return a new canvas object')
+  t.ok(canvasEl instanceof Canvas, 'Should return a new canvas object')
 
   t.doesNotThrow(function () {
     canvasEl = CanvasRenderer.render(sampleQrData, {
       margin: 10,
-      scale: 1
+      scale: 1,
     })
   }, 'Should not throw with options param')
 
   // modules: 25, margins: 10 * 2, scale: 1
-  t.equal(canvasEl.width, 25 + 10 * 2,
-    'Should have correct size')
+  t.equal(canvasEl.width, 25 + 10 * 2, 'Should have correct size')
 
-  t.equal(canvasEl.width, canvasEl.height,
-    'Should be a square image')
+  t.equal(canvasEl.width, canvasEl.height, 'Should be a square image')
 
   global.document = undefined
 
-  t.throws(function () { canvasEl = CanvasRenderer.render(sampleQrData) },
-    'Should throw if canvas cannot be created')
+  t.throws(function () {
+    canvasEl = CanvasRenderer.render(sampleQrData)
+  }, 'Should throw if canvas cannot be created')
 
   t.end()
 })
@@ -58,22 +55,21 @@ test('CanvasRenderer render to provided canvas', function (t) {
   const sampleQrData = QRCode.create('sample text', { version: 2 })
   const canvasEl = createCanvas(200, 200)
 
-  t.doesNotThrow(function () { CanvasRenderer.render(sampleQrData, canvasEl) },
-    'Should not throw with only qrData and canvas param')
+  t.doesNotThrow(function () {
+    CanvasRenderer.render(sampleQrData, canvasEl)
+  }, 'Should not throw with only qrData and canvas param')
 
   t.doesNotThrow(function () {
     CanvasRenderer.render(sampleQrData, canvasEl, {
       margin: 10,
-      scale: 1
+      scale: 1,
     })
   }, 'Should not throw with options param')
 
   // modules: 25, margins: 10 * 2, scale: 1
-  t.equal(canvasEl.width, 25 + 10 * 2,
-    'Should have correct size')
+  t.equal(canvasEl.width, 25 + 10 * 2, 'Should have correct size')
 
-  t.equal(canvasEl.width, canvasEl.height,
-    'Should be a square image')
+  t.equal(canvasEl.width, canvasEl.height, 'Should be a square image')
 
   t.end()
 })
@@ -85,32 +81,30 @@ test('CanvasRenderer renderToDataURL', function (t) {
       if (el === 'canvas') {
         return createCanvas(200, 200)
       }
-    }
+    },
   }
 
   const sampleQrData = QRCode.create('sample text', { version: 2 })
   let url
 
-  t.doesNotThrow(function () { url = CanvasRenderer.renderToDataURL(sampleQrData) },
-    'Should not throw if canvas is not provided')
+  t.doesNotThrow(function () {
+    url = CanvasRenderer.renderToDataURL(sampleQrData)
+  }, 'Should not throw if canvas is not provided')
 
   t.doesNotThrow(function () {
     url = CanvasRenderer.renderToDataURL(sampleQrData, {
       margin: 10,
       scale: 1,
-      type: 'image/png'
+      type: 'image/png',
     })
   }, 'Should not throw with options param')
 
-  t.type(url, 'string',
-    'Should return a string')
+  t.type(url, 'string', 'Should return a string')
 
-  t.equal(url.split(',')[0], 'data:image/png;base64',
-    'Should have correct header')
+  t.equal(url.split(',')[0], 'data:image/png;base64', 'Should have correct header')
 
   const b64png = url.split(',')[1]
-  t.equal(b64png.length % 4, 0,
-    'Should have a correct length')
+  t.equal(b64png.length % 4, 0, 'Should have a correct length')
 
   global.document = undefined
   t.end()
@@ -129,19 +123,16 @@ test('CanvasRenderer renderToDataURL to provided canvas', function (t) {
     url = CanvasRenderer.renderToDataURL(sampleQrData, canvasEl, {
       margin: 10,
       scale: 1,
-      type: 'image/png'
+      type: 'image/png',
     })
   }, 'Should not throw with options param')
 
-  t.type(url, 'string',
-    'Should return a string')
+  t.type(url, 'string', 'Should return a string')
 
-  t.equal(url.split(',')[0], 'data:image/png;base64',
-    'Should have correct header')
+  t.equal(url.split(',')[0], 'data:image/png;base64', 'Should have correct header')
 
   const b64png = url.split(',')[1]
-  t.equal(b64png.length % 4, 0,
-    'Should have a correct length')
+  t.equal(b64png.length % 4, 0, 'Should have a correct length')
 
   t.end()
 })
@@ -164,7 +155,7 @@ test('CanvasRenderer renderToBlob', function (t) {
 
         return canvas
       }
-    }
+    },
   }
 
   t.plan(5)
@@ -172,30 +163,36 @@ test('CanvasRenderer renderToBlob', function (t) {
   const sampleQrData = QRCode.create('sample text', { version: 2 })
   let imageBlob
 
-  t.doesNotThrow(function () { CanvasRenderer.renderToBlob((blob) => {}, sampleQrData) },
-    'Should not throw if canvas is not provided')
+  t.doesNotThrow(function () {
+    CanvasRenderer.renderToBlob((blob) => {}, sampleQrData)
+  }, 'Should not throw if canvas is not provided')
 
   t.doesNotThrow(function () {
-    CanvasRenderer.renderToBlob((blob) => {
-      imageBlob = blob
+    CanvasRenderer.renderToBlob(
+      (blob) => {
+        imageBlob = blob
 
-      t.type(imageBlob, 'Blob',
-        'Should return a Blob object')
+        t.type(imageBlob, 'Blob', 'Should return a Blob object')
 
-      t.equal(imageBlob.toString('base64'), '[object Blob]',
-        'Blob data cannot be converted to base64 econding')
+        t.equal(
+          imageBlob.toString('base64'),
+          '[object Blob]',
+          'Blob data cannot be converted to base64 econding',
+        )
 
-      // TODO: This test is broken for some reson with Node.js 24 and `canvas@3.2.1`. Might be a breaking change of some sort.
-      // t.equal(imageBlob.size % 4, 0,
-      //   'Should have a correct size')
+        // TODO: This test is broken for some reson with Node.js 24 and `canvas@3.2.1`. Might be a breaking change of some sort.
+        // t.equal(imageBlob.size % 4, 0,
+        //   'Should have a correct size')
 
-      t.equal(imageBlob.type, 'image/png',
-        'Should have a correct type value')
-    }, sampleQrData, {
-      margin: 10,
-      scale: 1,
-      type: 'image/png'
-    })
+        t.equal(imageBlob.type, 'image/png', 'Should have a correct type value')
+      },
+      sampleQrData,
+      {
+        margin: 10,
+        scale: 1,
+        type: 'image/png',
+      },
+    )
   }, 'Should not throw with options param')
 
   global.document = undefined
