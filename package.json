@@ -49,6 +49,7 @@
     "format": "oxfmt --write",
     "pretest": "pnpm lint",
     "test": "vitest",
+    "test:coverage": "vitest --run --coverage",
     "build": "rollup -c",
     "prepublish": "pnpm build",
     "browser": "node examples/clientsideserver.js"
@@ -68,6 +69,7 @@
     "@rollup/plugin-terser": "^1.0.0",
     "@types/node": "^25.3.3",
     "@types/sinon": "^21.0.0",
+    "@vitest/coverage-v8": "4.0.18",
     "browserify": "^17.0.1",
     "canvas": "^3.0.0-rc2",
     "canvasutil": "0.0.4",
