@@ -1,16 +1,16 @@
+import { test, expect } from 'vitest'
 import sinon from 'sinon'
 import QRCode from '#lib/index.js'
 import StreamMock from '../mocks/writable-stream.js'
 
-import { test } from 'tap'
-test('toFileStream png', function (t) {
-  t.throws(function () {
+test('toFileStream png', () => {
+  expect(() => {
     QRCode.toFileStream('some text')
-  }, 'Should throw if stream is not provided')
+  }, 'Should throw if stream is not provided').toThrow()
 
-  t.throws(function () {
+  expect(() => {
     QRCode.toFileStream(new StreamMock())
-  }, 'Should throw if text is not provided')
+  }, 'Should throw if text is not provided').toThrow()
 
   const fstream = new StreamMock()
   const spy = sinon.spy(fstream, 'emit')
@@ -21,31 +21,26 @@ test('toFileStream png', function (t) {
     type: 'image/png',
   })
 
-  t.ok(spy.neverCalledWith('error'), 'There should be no error')
+  expect(spy.neverCalledWith('error'), 'There should be no error')
 
   spy.restore()
-  t.end()
 })
 
-test('toFileStream png with write error', function (t) {
+test('toFileStream png with write error', () => {
   const fstreamErr = new StreamMock().forceErrorOnWrite()
   QRCode.toFileStream(fstreamErr, 'i am a pony!')
 
-  t.plan(2)
-
-  fstreamErr.on('error', function (e) {
-    t.ok(e, 'Should return an error')
+  fstreamErr.on('error', (e) => {
+    expect(e, 'Should return an error').toBeTruthy()
   })
 })
 
-test('toFileStream png with qrcode error', function (t) {
+test('toFileStream png with qrcode error', () => {
   const fstreamErr = new StreamMock()
   const bigString = Array(200).join('i am a pony!')
 
-  t.plan(2)
-
-  fstreamErr.on('error', function (e) {
-    t.ok(e, 'Should return an error')
+  fstreamErr.on('error', (e) => {
+    expect(e, 'Should return an error').toBeTruthy()
   })
 
   QRCode.toFileStream(fstreamErr, bigString)
