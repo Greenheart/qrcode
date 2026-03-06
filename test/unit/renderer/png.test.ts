@@ -71,6 +71,7 @@ test('PNG renderToFile', () => {
   // IDEA: Maybe use `memfs` to mock the file system?
   // This could improve the performance and reliability of tests
   // https://vitest.dev/guide/mocking/file-system.html#example
+  // IDEA: Or just use function mocking like https://vitest.dev/guide/features.html#mocking
   let fsStub = sinon.stub(fs, 'createWriteStream')
   // TODO: Fix the type, or maybe typecast to ignore warning in the few places where its used.
   fsStub.returns(new StreamMock() as unknown as WriteStream)

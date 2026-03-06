@@ -1,4 +1,5 @@
-import fs from 'fs'
+import { test, expect } from 'vitest'
+import fs, { WriteStream } from 'fs'
 import path from 'path'
 import os from 'os'
 import sinon from 'sinon'
@@ -6,41 +7,38 @@ import QRCode from '#lib/index.js'
 import * as Helpers from '#test/helpers.js'
 import StreamMock from '#test/mocks/writable-stream.js'
 
-import { test } from 'tap'
-test('toFile - no promise available', function (t) {
+test('toFile - no promise available', () => {
   Helpers.removeNativePromise()
   const fileName = path.join(os.tmpdir(), 'qrimage.png')
 
-  t.throws(function () {
+  expect(() => {
     QRCode.toFile(fileName, 'some text')
-  }, 'Should throw if a callback is not provided')
+  }, 'Should throw if a callback is not provided').toThrow()
 
-  t.throws(function () {
+  expect(() => {
     QRCode.toFile(fileName, 'some text', {})
-  }, 'Should throw if a callback is not a function')
-
-  t.end()
+  }, 'Should throw if a callback is not a function').toThrow()
 
   Helpers.restoreNativePromise()
 })
 
-test('toFile', function (t) {
+test('toFile', () => {
   const fileName = path.join(os.tmpdir(), 'qrimage.png')
 
-  t.throws(function () {
-    QRCode.toFile('some text', function () {})
-  }, 'Should throw if path is not provided')
+  expect(() => {
+    QRCode.toFile('some text', () => {})
+  }, 'Should throw if path is not provided').toThrow()
 
-  t.throws(function () {
+  expect(() => {
     QRCode.toFile(fileName)
-  }, 'Should throw if text is not provided')
+  }, 'Should throw if text is not provided').toThrow()
 
-  t.equal(typeof QRCode.toFile(fileName, 'some text').then, 'function', 'Should return a promise')
-
-  t.end()
+  expect(QRCode.toFile(fileName, 'some text').then, 'Should return a promise').toBeTypeOf(
+    'function',
+  )
 })
 
-test('toFile png', function (t) {
+test('toFile png', () => {
   const fileName = path.join(os.tmpdir(), 'qrimage.png')
   const expectedBase64Output = [
     'iVBORw0KGgoAAAANSUhEUgAAAHQAAAB0CAYAAABUmhYnAAAAAklEQVR4AewaftIAAAKzSU',
@@ -60,25 +58,25 @@ test('toFile png', function (t) {
     'UqxRijXKP0OHEepgrecVAAAAAElFTkSuQmCC',
   ].join('')
 
-  t.plan(8)
-
   QRCode.toFile(
     fileName,
     'i am a pony!',
     {
       errorCorrectionLevel: 'L',
     },
-    function (err) {
-      t.ok(!err, 'There should be no error')
+    (err) => {
+      expect(err, 'There should be no error').toBeFalsy()
 
-      fs.stat(fileName, function (err) {
-        t.ok(!err, 'Should save file with correct file name')
+      fs.stat(fileName, (err) => {
+        expect(err, 'Should save file with correct file name').toBeFalsy()
       })
 
-      fs.readFile(fileName, function (err, buffer) {
+      fs.readFile(fileName, (err, buffer) => {
         if (err) throw err
 
-        t.equal(buffer.toString('base64'), expectedBase64Output, 'Should write correct content')
+        expect(buffer.toString('base64'), 'Should write correct content').toEqual(
+          expectedBase64Output,
+        )
       })
     },
   )
@@ -90,31 +88,29 @@ test('toFile png', function (t) {
       errorCorrectionLevel: 'L',
       type: 'png',
     },
-    function (err) {
-      t.ok(!err, 'There should be no errors if file type is specified')
+    (err) => {
+      expect(err, 'There should be no errors if file type is specified').toBeFalsy()
     },
   )
 
   QRCode.toFile(fileName, 'i am a pony!', {
     errorCorrectionLevel: 'L',
-  }).then(function () {
-    fs.stat(fileName, function (err) {
-      t.ok(!err, 'Should save file with correct file name (promise)')
+  }).then(() => {
+    fs.stat(fileName, (err) => {
+      expect(err, 'Should save file with correct file name (promise)').toBeFalsy()
     })
 
-    fs.readFile(fileName, function (err, buffer) {
+    fs.readFile(fileName, (err, buffer) => {
       if (err) throw err
 
-      t.equal(
-        buffer.toString('base64'),
+      expect(buffer.toString('base64'), 'Should write correct content (promise)').toEqual(
         expectedBase64Output,
-        'Should write correct content (promise)',
       )
     })
   })
 
   const fsStub = sinon.stub(fs, 'createWriteStream')
-  fsStub.returns(new StreamMock().forceErrorOnWrite())
+  fsStub.returns(new StreamMock().forceErrorOnWrite() as unknown as WriteStream)
 
   QRCode.toFile(
     fileName,
@@ -122,28 +118,26 @@ test('toFile png', function (t) {
     {
       errorCorrectionLevel: 'L',
     },
-    function (err) {
-      t.ok(err, 'There should be an error')
+    (err) => {
+      expect(err, 'There should be an error').toBeTruthy()
     },
   )
 
   QRCode.toFile(fileName, 'i am a pony!', {
     errorCorrectionLevel: 'L',
-  }).catch(function (err) {
-    t.ok(err, 'Should catch an error (promise)')
+  }).catch((err) => {
+    expect(err, 'Should catch an error (promise)').toBeTruthy()
   })
 
   fsStub.restore()
 })
 
-test('toFile svg', function (t) {
+test('toFile svg', () => {
   const fileName = path.join(os.tmpdir(), 'qrimage.svg')
   const expectedOutput = fs.readFileSync(
     path.join(import.meta.dirname, '/svg.expected.out'),
-    'UTF-8',
+    'utf-8',
   )
-
-  t.plan(6)
 
   QRCode.toFile(
     fileName,
@@ -151,16 +145,16 @@ test('toFile svg', function (t) {
     {
       errorCorrectionLevel: 'H',
     },
-    function (err) {
-      t.ok(!err, 'There should be no error')
+    (err) => {
+      expect(err, 'There should be no error').toBeFalsy()
 
-      fs.stat(fileName, function (err) {
-        t.ok(!err, 'Should save file with correct file name')
+      fs.stat(fileName, (err) => {
+        expect(err, 'Should save file with correct file name').toBeFalsy()
       })
 
-      fs.readFile(fileName, 'utf8', function (err, content) {
+      fs.readFile(fileName, 'utf8', (err, content) => {
         if (err) throw err
-        t.equal(content, expectedOutput, 'Should write correct content')
+        expect(content, 'Should write correct content').toEqual(expectedOutput)
       })
     },
   )
@@ -172,26 +166,26 @@ test('toFile svg', function (t) {
       errorCorrectionLevel: 'H',
       type: 'svg',
     },
-    function (err) {
-      t.ok(!err, 'There should be no errors if file type is specified')
+    (err) => {
+      expect(err, 'There should be no errors if file type is specified').toBeFalsy()
     },
   )
 
   QRCode.toFile(fileName, 'http://www.google.com', {
     errorCorrectionLevel: 'H',
-  }).then(function () {
-    fs.stat(fileName, function (err) {
-      t.ok(!err, 'Should save file with correct file name (promise)')
+  }).then(() => {
+    fs.stat(fileName, (err) => {
+      expect(err, 'Should save file with correct file name (promise)').toBeFalsy()
     })
 
-    fs.readFile(fileName, 'utf8', function (err, content) {
+    fs.readFile(fileName, 'utf8', (err, content) => {
       if (err) throw err
-      t.equal(content, expectedOutput, 'Should write correct content (promise)')
+      expect(content, 'Should write correct content (promise)').toEqual(expectedOutput)
     })
   })
 })
 
-test('toFile utf8', function (t) {
+test('toFile utf8', () => {
   const fileName = path.join(os.tmpdir(), 'qrimage.txt')
   const expectedOutput = [
     '                                 ',
@@ -213,18 +207,16 @@ test('toFile utf8', function (t) {
     '                                 ',
   ].join('\n')
 
-  t.plan(6)
+  QRCode.toFile(fileName, 'http://www.google.com', (err) => {
+    expect(err, 'There should be no error').toBeFalsy()
 
-  QRCode.toFile(fileName, 'http://www.google.com', function (err) {
-    t.ok(!err, 'There should be no error')
-
-    fs.stat(fileName, function (err) {
-      t.ok(!err, 'Should save file with correct file name')
+    fs.stat(fileName, (err) => {
+      expect(err, 'Should save file with correct file name').toBeFalsy()
     })
 
-    fs.readFile(fileName, 'utf8', function (err, content) {
+    fs.readFile(fileName, 'utf8', (err, content) => {
       if (err) throw err
-      t.equal(content, expectedOutput, 'Should write correct content')
+      expect(content, 'Should write correct content').toEqual(expectedOutput)
     })
   })
 
@@ -235,24 +227,24 @@ test('toFile utf8', function (t) {
       errorCorrectionLevel: 'M',
       type: 'utf8',
     },
-    function (err) {
-      t.ok(!err, 'There should be no errors if file type is specified')
+    (err) => {
+      expect(err, 'There should be no errors if file type is specified').toBeFalsy()
     },
   )
 
-  QRCode.toFile(fileName, 'http://www.google.com').then(function () {
-    fs.stat(fileName, function (err) {
-      t.ok(!err, 'Should save file with correct file name (promise)')
+  QRCode.toFile(fileName, 'http://www.google.com').then(() => {
+    fs.stat(fileName, (err) => {
+      expect(err, 'Should save file with correct file name (promise)').toBeFalsy()
     })
 
-    fs.readFile(fileName, 'utf8', function (err, content) {
+    fs.readFile(fileName, 'utf8', (err, content) => {
       if (err) throw err
-      t.equal(content, expectedOutput, 'Should write correct content (promise)')
+      expect(content, 'Should write correct content (promise)').toEqual(expectedOutput)
     })
   })
 })
 
-test('toFile manual segments', function (t) {
+test('toFile manual segments', () => {
   const fileName = path.join(os.tmpdir(), 'qrimage.txt')
   const segs = [
     { data: 'ABCDEFG', mode: 'alphanumeric' },
@@ -275,7 +267,6 @@ test('toFile manual segments', function (t) {
     '                             ',
     '                             ',
   ].join('\n')
-  t.plan(3)
 
   QRCode.toFile(
     fileName,
@@ -283,16 +274,16 @@ test('toFile manual segments', function (t) {
     {
       errorCorrectionLevel: 'L',
     },
-    function (err) {
-      t.ok(!err, 'There should be no errors if text is not string')
+    (err) => {
+      expect(err, 'There should be no errors if text is not string').toBeFalsy()
 
-      fs.stat(fileName, function (err) {
-        t.ok(!err, 'Should save file with correct file name')
+      fs.stat(fileName, (err) => {
+        expect(err, 'Should save file with correct file name').toBeFalsy()
       })
 
-      fs.readFile(fileName, 'utf8', function (err, content) {
+      fs.readFile(fileName, 'utf8', (err, content) => {
         if (err) throw err
-        t.equal(content, expectedOutput, 'Should write correct content')
+        expect(content, 'Should write correct content').toEqual(expectedOutput)
       })
     },
   )
