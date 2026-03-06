@@ -283,6 +283,8 @@ test('toFile manual segments', () => {
 
       fs.readFile(fileName, 'utf8', (err, content) => {
         if (err) throw err
+        // NOTE: This is flaky between test runs.
+        // IDEA: Maybe using `memfs` would help solve this?
         expect(content, 'Should write correct content').toEqual(expectedOutput)
       })
     },
