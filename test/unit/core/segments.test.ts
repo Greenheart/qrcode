@@ -1,3 +1,4 @@
+import { test, expect } from 'vitest'
 import * as Mode from '#core/mode.js'
 import * as Segments from '#core/segments.js'
 import NumericData from '#core/numeric-data.js'
@@ -6,7 +7,6 @@ import ByteData from '#core/byte-data.js'
 import toSJIS from '#helper/to-sjis.js'
 import * as Utils from '#core/utils.js'
 
-import { test } from 'tap'
 let testData = [
   {
     input: '1A1',
@@ -158,71 +158,61 @@ const kanjiTestData = [
 
 testData = testData.concat(kanjiTestData)
 
-test('Segments from array', function (t) {
-  t.same(
+test('Segments from array', () => {
+  expect(
     Segments.fromArray(['abcdef', '12345']),
-    [new ByteData('abcdef'), new NumericData('12345')],
-    'Should return correct segment from array of string',
-  )
 
-  t.same(
+    'Should return correct segment from array of string',
+  ).toStrictEqual([new ByteData('abcdef'), new NumericData('12345')])
+
+  expect(
     Segments.fromArray([
       { data: 'abcdef', mode: Mode.BYTE },
       { data: '12345', mode: Mode.NUMERIC },
     ]),
-    [new ByteData('abcdef'), new NumericData('12345')],
     'Should return correct segment from array of objects',
-  )
+  ).toStrictEqual([new ByteData('abcdef'), new NumericData('12345')])
 
-  t.same(
+  expect(
     Segments.fromArray([
       { data: 'abcdef', mode: 'byte' },
       { data: '12345', mode: 'numeric' },
     ]),
-    [new ByteData('abcdef'), new NumericData('12345')],
+
     'Should return correct segment from array of objects if mode is specified as string',
-  )
+  ).toStrictEqual([new ByteData('abcdef'), new NumericData('12345')])
 
-  t.same(
+  expect(
     Segments.fromArray([{ data: 'abcdef' }, { data: '12345' }]),
-    [new ByteData('abcdef'), new NumericData('12345')],
     'Should return correct segment from array of objects if mode is not specified',
-  )
+  ).toStrictEqual([new ByteData('abcdef'), new NumericData('12345')])
 
-  t.same(Segments.fromArray([{}]), [], 'Should return an empty array')
+  expect(Segments.fromArray([{}]), 'Should return an empty array').toStrictEqual([])
 
-  t.throws(function () {
+  expect(() => {
     Segments.fromArray([{ data: 'ABCDE', mode: 'numeric' }])
-  }, 'Should throw if segment cannot be encoded with specified mode')
+  }, 'Should throw if segment cannot be encoded with specified mode').toThrow()
 
-  t.same(
+  expect(
     Segments.fromArray([{ data: '０１２３', mode: Mode.KANJI }]),
-    [new ByteData('０１２３')],
     'Should use Byte mode if kanji support is disabled',
-  )
-
-  t.end()
+  ).toStrictEqual([new ByteData('０１２３')])
 })
 
-test('Segments optimization', function (t) {
-  t.same(
+test('Segments optimization', () => {
+  expect(
     Segments.fromString('乂ЁЖ', 1),
-    Segments.fromArray([{ data: '乂ЁЖ', mode: 'byte' }]),
     'Should use Byte mode if Kanji support is disabled',
-  )
+  ).toStrictEqual(Segments.fromArray([{ data: '乂ЁЖ', mode: 'byte' }]))
 
   Utils.setToSJISFunction(toSJIS)
-  testData.forEach(function (data) {
-    t.same(Segments.fromString(data.input, 1), Segments.fromArray(data.result))
+  testData.forEach((data) => {
+    expect(Segments.fromString(data.input, 1)).toStrictEqual(Segments.fromArray(data.result))
   })
-
-  t.end()
 })
 
-test('Segments raw split', function (t) {
+test('Segments raw split', () => {
   const splitted = [new ByteData('abc'), new AlphanumericData('DEF'), new NumericData('123')]
 
-  t.same(Segments.rawSplit('abcDEF123'), splitted)
-
-  t.end()
+  expect(Segments.rawSplit('abcDEF123')).toStrictEqual(splitted)
 })
