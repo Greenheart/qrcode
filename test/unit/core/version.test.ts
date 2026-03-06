@@ -1,3 +1,4 @@
+import { test, expect } from 'vitest'
 import * as Version from '#core/version.js'
 import * as VersionCheck from '#core/version-check.js'
 import * as ECLevel from '#core/error-correction-level.js'
@@ -7,7 +8,6 @@ import AlphanumericData from '#core/alphanumeric-data.js'
 import KanjiData from '#core/kanji-data.js'
 import ByteData from '#core/byte-data.js'
 
-import { test } from 'tap'
 import { arrayWithLength } from '#test/helpers.js'
 const EC_LEVELS = [ECLevel.L, ECLevel.M, ECLevel.Q, ECLevel.H]
 
@@ -190,104 +190,96 @@ const EXPECTED_VERSION_BITS = [
   0x28c69,
 ]
 
-test('Version validity', function (t) {
-  t.notOk(VersionCheck.isValid(), 'Should return false if no input')
-  t.notOk(VersionCheck.isValid(''), 'Should return false if version is not a number')
-  t.notOk(VersionCheck.isValid(0), 'Should return false if version is not in range')
-  t.notOk(VersionCheck.isValid(41), 'Should return false if version is not in range')
-
-  t.end()
+test('Version validity', () => {
+  // @ts-expect-error Testing invalid input
+  expect(VersionCheck.isValid(), 'Should return false if no input').toEqual(false)
+  // @ts-expect-error Testing invalid input
+  expect(VersionCheck.isValid(''), 'Should return false if version is not a number').toEqual(false)
+  expect(VersionCheck.isValid(0), 'Should return false if version is not in range').toEqual(false)
+  expect(VersionCheck.isValid(41), 'Should return false if version is not in range').toEqual(false)
 })
 
-test('Version from value', function (t) {
-  t.equal(Version.from(5), 5, 'Should return correct version from a number')
-  t.equal(Version.from('5'), 5, 'Should return correct version from a string')
-  t.equal(Version.from(0, 1), 1, 'Should return default value if version is invalid')
-  t.equal(Version.from(null, 1), 1, 'Should return default value if version is undefined')
-
-  t.end()
+test('Version from value', () => {
+  // TODO: Improve type for Version.from() - or improve how versions are parsed (similar to ECLevel and similar)
+  expect(Version.from(5), 'Should return correct version from a number').toEqual(5)
+  expect(Version.from('5'), 'Should return correct version from a string').toEqual(5)
+  expect(Version.from(0, 1), 'Should return default value if version is invalid').toEqual(1)
+  expect(Version.from(null, 1), 'Should return default value if version is undefined').toEqual(1)
 })
 
-test('Version capacity', function (t) {
-  t.throws(function () {
+test('Version capacity', () => {
+  expect(() => {
+    // @ts-expect-error Testing invalid arguments
     Version.getCapacity()
-  }, 'Should throw if version is undefined')
-  t.throws(function () {
+  }, 'Should throw if version is undefined').toThrow()
+  expect(() => {
+    // @ts-expect-error Testing invalid arguments
     Version.getCapacity('')
-  }, 'Should throw if version is not a number')
-  t.throws(function () {
+  }, 'Should throw if version is not a number').toThrow()
+  expect(() => {
+    // @ts-expect-error Testing invalid arguments
     Version.getCapacity(0)
-  }, 'Should throw if version is not in range')
-  t.throws(function () {
+  }, 'Should throw if version is not in range').toThrow()
+  expect(() => {
+    // @ts-expect-error Testing invalid arguments
     Version.getCapacity(41)
-  }, 'Should throw if version is not in range')
+  }, 'Should throw if version is not in range').toThrow()
 
   for (let l = 0; l < EC_LEVELS.length; l++) {
     for (let i = 1; i <= 40; i++) {
-      t.equal(
+      expect(
         Version.getCapacity(i, EC_LEVELS[l], Mode.NUMERIC),
-        EXPECTED_NUMERIC_CAPACITY[i - 1][l],
         'Should return correct numeric mode capacity',
-      )
+      ).toEqual(EXPECTED_NUMERIC_CAPACITY[i - 1][l])
 
-      t.equal(
+      expect(
         Version.getCapacity(i, EC_LEVELS[l], Mode.ALPHANUMERIC),
-        EXPECTED_ALPHANUMERIC_CAPACITY[i - 1][l],
         'Should return correct alphanumeric mode capacity',
-      )
+      ).toEqual(EXPECTED_ALPHANUMERIC_CAPACITY[i - 1][l])
 
-      t.equal(
+      expect(
         Version.getCapacity(i, EC_LEVELS[l], Mode.KANJI),
-        EXPECTED_KANJI_CAPACITY[i - 1][l],
         'Should return correct kanji mode capacity',
-      )
+      ).toEqual(EXPECTED_KANJI_CAPACITY[i - 1][l])
 
-      t.equal(
+      expect(
         Version.getCapacity(i, EC_LEVELS[l], Mode.BYTE),
-        EXPECTED_BYTE_CAPACITY[i - 1][l],
         'Should return correct byte mode capacity',
-      )
+      ).toEqual(EXPECTED_BYTE_CAPACITY[i - 1][l])
 
-      t.equal(
+      expect(
         Version.getCapacity(i, EC_LEVELS[l]),
-        EXPECTED_BYTE_CAPACITY[i - 1][l],
         'Should return correct byte mode capacity',
-      )
+      ).toEqual(EXPECTED_BYTE_CAPACITY[i - 1][l])
     }
   }
-
-  t.end()
 })
 
-test('Version best match', function (t) {
+test('Version best match', () => {
   function testBestVersionForCapacity(expectedCapacity, DataCtor) {
     for (let v = 0; v < 40; v++) {
       for (let l = 0; l < EC_LEVELS.length; l++) {
         const capacity = expectedCapacity[v][l]
         const data = new DataCtor(arrayWithLength(capacity + 1).join('-'))
 
-        t.equal(
+        expect(
           Version.getBestVersionForData(data, EC_LEVELS[l]),
-          v + 1,
           'Should return best version',
-        )
-        t.equal(
+        ).toEqual(v + 1)
+        expect(
           Version.getBestVersionForData([data], EC_LEVELS[l]),
-          v + 1,
           'Should return best version',
-        )
+        ).toEqual(v + 1)
 
         if (l === 1) {
-          t.equal(
+          expect(
             Version.getBestVersionForData(data, null),
-            v + 1,
             'Should return best version for ECLevel.M if error level is undefined',
-          )
-          t.equal(
+          ).toEqual(v + 1)
+          expect(
             Version.getBestVersionForData([data], null),
-            v + 1,
             'Should return best version for ECLevel.M if error level is undefined',
-          )
+          ).toEqual(v + 1)
         }
       }
     }
@@ -300,18 +292,18 @@ test('Version best match', function (t) {
         new DataCtor(arrayWithLength(Math.floor(exceededCapacity / 2) + 1).join('-')),
       ]
 
-      t.notOk(
+      expect(
         Version.getBestVersionForData(tooBigData, EC_LEVELS[i]),
         'Should return undefined if data is too big',
-      )
-      t.notOk(
+      ).toBeUndefined()
+      expect(
         Version.getBestVersionForData([tooBigData], EC_LEVELS[i]),
         'Should return undefined if data is too big',
-      )
-      t.notOk(
+      ).toBeUndefined()
+      expect(
         Version.getBestVersionForData(tooBigDataArray, EC_LEVELS[i]),
         'Should return undefined if data is too big',
-      )
+      ).toBeUndefined()
     }
   }
 
@@ -320,29 +312,24 @@ test('Version best match', function (t) {
   testBestVersionForCapacity(EXPECTED_KANJI_CAPACITY, KanjiData)
   testBestVersionForCapacity(EXPECTED_BYTE_CAPACITY, ByteData)
 
-  t.ok(
-    Version.getBestVersionForData([new ByteData('abc'), new NumericData('1234')]),
+  const version = Version.getBestVersionForData([new ByteData('abc'), new NumericData('1234')])
+  expect(
+    1 <= version && version <= 40,
     'Should return a version number if input array is valid',
-  )
+  ).toEqual(true)
 
-  t.equal(Version.getBestVersionForData([]), 1, 'Should return 1 if array is empty')
-
-  t.end()
+  expect(Version.getBestVersionForData([]), 'Should return 1 if array is empty').toEqual(1)
 })
 
-test('Version encoded info', function (t) {
-  let v
-
-  for (v = 0; v < 7; v++) {
-    t.throws(function () {
+test('Version encoded info', () => {
+  for (let v = 0; v < 7; v++) {
+    expect(() => {
       Version.getEncodedBits(v)
-    }, 'Should throw if version is invalid or less than 7')
+    }, 'Should throw if version is invalid or less than 7').toThrow()
   }
 
-  for (v = 7; v <= 40; v++) {
+  for (let v = 7; v <= 40; v++) {
     const bch = Version.getEncodedBits(v)
-    t.equal(bch, EXPECTED_VERSION_BITS[v - 7], 'Should return correct bits')
+    expect(bch, 'Should return correct bits').toEqual(EXPECTED_VERSION_BITS[v - 7])
   }
-
-  t.end()
 })
