@@ -14,9 +14,9 @@ importers:
       '@types/pngjs':
         specifier: ^6.0.5
         version: 6.0.5
-      dijkstrajs:
-        specifier: ^1.0.3
-        version: 1.0.3
+      dijkstra-find-path:
+        specifier: ^2.0.0
+        version: 2.0.0
       pngjs:
         specifier: ^7.0.0
         version: 7.0.0
@@ -1699,8 +1699,8 @@ packages:
   diffie-hellman@5.0.3:
     resolution: {integrity: sha512-kqag/Nl+f3GwyK25fhUMYj81BUOrZ9IuJsjIcDE5icNM9FJHAVm3VcUDxdLPoQtTuUylWm6ZIknYJwwaPxsUzg==}
 
-  dijkstrajs@1.0.3:
-    resolution: {integrity: sha512-qiSlmBq9+BCdCA/L46dw8Uy93mloxsPSbwnm5yrKn2vMPiy8KyAskTF6zuV/j5BMsmOGZDPs7KjU+mjb670kfA==}
+  dijkstra-find-path@2.0.0:
+    resolution: {integrity: sha512-LXsjyPmbQ+NeOu5Ndse3O4IfSLL7GLFr/OC5c1fuEHN2Awhkll8it0M7Yi3foTuzN5UMUKpvuyKYjRpuBQ+SYA==}
 
   dom-serializer@2.0.0:
     resolution: {integrity: sha512-wIkAryiqt/nV5EQKqQpo3SToSOV9J0DnbJqwK7Wv/Trc92zIAYZ4FlMu+JPFW1DfGFt81ZTCGgDEabffXeLyJg==}
@@ -4444,7 +4444,7 @@ snapshots:
       miller-rabin: 4.0.1
       randombytes: 2.1.0
 
-  dijkstrajs@1.0.3: {}
+  dijkstra-find-path@2.0.0: {}
 
   dom-serializer@2.0.0:
     dependencies:

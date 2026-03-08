@@ -56,7 +56,7 @@
   },
   "dependencies": {
     "@types/pngjs": "^6.0.5",
-    "dijkstrajs": "^1.0.3",
+    "dijkstra-find-path": "^2.0.0",
     "pngjs": "^7.0.0",
     "yargs": "^18.0.0"
   },
