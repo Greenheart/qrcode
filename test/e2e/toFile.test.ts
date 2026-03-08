@@ -245,7 +245,7 @@ test('toFile utf8', () => {
 })
 
 test('toFile manual segments', () => {
-  const fileName = path.join(os.tmpdir(), 'qrimage.txt')
+  const fileName = path.join(os.tmpdir(), 'qrimage-manual-segments.txt')
   const segs = [
     { data: 'ABCDEFG', mode: 'alphanumeric' },
     { data: '0123456', mode: 'numeric' },
@@ -283,8 +283,6 @@ test('toFile manual segments', () => {
 
       fs.readFile(fileName, 'utf8', (err, content) => {
         if (err) throw err
-        // NOTE: This is flaky between test runs.
-        // IDEA: Maybe using `memfs` would help solve this?
         expect(content, 'Should write correct content').toEqual(expectedOutput)
       })
     },
