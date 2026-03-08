@@ -1,6 +1,6 @@
 import { test, expect } from 'vitest'
 import * as Version from '#core/version.js'
-import * as VersionCheck from '#core/version-check.js'
+import * as VersionCheck from '#core/version-check.ts'
 import * as ECLevel from '#core/error-correction-level.ts'
 import * as Mode from '#core/mode.js'
 import NumericData from '#core/numeric-data.js'
