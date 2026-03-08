@@ -14,6 +14,9 @@ importers:
       '@types/pngjs':
         specifier: ^6.0.5
         version: 6.0.5
+      commander:
+        specifier: 15.0.0-0
+        version: 15.0.0-0
       dijkstra-find-path:
         specifier: ^2.0.0
         version: 2.0.0
@@ -1647,6 +1650,10 @@ packages:
 
   combine-source-map@0.8.0:
     resolution: {integrity: sha512-UlxQ9Vw0b/Bt/KYwCFqdEwsQ1eL8d1gibiFb7lxQJFdvTgc2hIZi6ugsg+kyhzhPV+QEpUiEIwInIAIrgoEkrg==}
+
+  commander@15.0.0-0:
+    resolution: {integrity: sha512-R2Kbbun8cjOe1aTbX4elymOwNvIdWenwSZl++AeuCu8nBGvJO5qCEwZ8Wa/8GMg5TXj/dBcPiQm/l1T9DO+Ryg==}
+    engines: {node: '>=22.12.0'}
 
   commander@2.20.3:
     resolution: {integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==}
@@ -4647,6 +4654,8 @@ snapshots:
       inline-source-map: 0.6.3
       lodash.memoize: 3.0.4
       source-map: 0.5.7
+
+  commander@15.0.0-0: {}
 
   commander@2.20.3: {}
 
