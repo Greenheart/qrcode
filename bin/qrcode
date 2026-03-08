@@ -2,10 +2,10 @@
 import yargs from 'yargs'
 import QRCode from '#lib/index.js'
 
-var y = yargs(process.argv.slice(2))
+const y = yargs(process.argv.slice(2))
 
-function save (file, text, options) {
-  QRCode.toFile(file, text, options, function (err, _data) {
+function save(file, text, options) {
+  QRCode.toFile(file, text, options, (err, _data) => {
     if (err) {
       console.error('Error:', err.message)
       process.exit(1)
@@ -15,9 +15,9 @@ function save (file, text, options) {
   })
 }
 
-function print (text, options) {
+function print(text, options) {
   options.type = 'terminal'
-  QRCode.toString(text, options, function (err, text) {
+  QRCode.toString(text, options, (err, text) => {
     if (err) {
       console.error('Error:', err.message)
       process.exit(1)
@@ -27,7 +27,7 @@ function print (text, options) {
   })
 }
 
-function parseOptions (args) {
+function parseOptions(args) {
   return {
     version: args.qversion,
     errorCorrectionLevel: args.error,
@@ -45,7 +45,7 @@ function parseOptions (args) {
   }
 }
 
-function processInputs (text, opts) {
+function processInputs(text, opts) {
   if (!text.length) {
     y.showHelp()
     process.exit(1)
@@ -58,7 +58,7 @@ function processInputs (text, opts) {
   }
 }
 
-var argv = y
+const argv = y
   .detectLocale(false)
   .usage('Usage: $0 [options] <input string>')
   .option('v', {
@@ -144,16 +144,16 @@ var argv = y
 if (process.stdin.isTTY) {
   processInputs(argv._.join(' '), argv)
 } else {
-  var text = ''
+  let text = ''
   process.stdin.setEncoding('utf8')
-  process.stdin.on('readable', function () {
-    var chunk = process.stdin.read()
+  process.stdin.on('readable', () => {
+    const chunk = process.stdin.read()
     if (chunk !== null) {
       text += chunk
     }
   })
 
-  process.stdin.on('end', function () {
+  process.stdin.on('end', () => {
     // this process can be run as a command outside of a tty so if there was no
     // data on stdin read from argv
     processInputs(text.length ? text : argv._.join(' '), argv)
