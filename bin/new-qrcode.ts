@@ -30,8 +30,9 @@ Options:
 
 program
   .name('qrcode')
-  .option('-v, --qversion <number>', 'QR Code symbol version (1 - 40)', integer)
+  .option('-v, --qversion <number>', 'QR Code symbol version (1 - 40)', integerBetween(1, 40))
   .addOption(new Option('-e, --error <number>', 'Error correction level').choices(ALL_EC_LEVELS))
+  .option('-m, --mask <number>', 'Mask pattern (0 - 7)', integerBetween(0, 7))
   .argument('<input string>')
   .showHelpAfterError()
 
@@ -46,4 +47,16 @@ function integer(value: string) {
   }
 
   throw new InvalidArgumentError('Must be an integer')
+}
+
+function integerBetween(min: number, max: number = Number.MAX_SAFE_INTEGER) {
+  return (value: string) => {
+    const n = integer(value)
+
+    if (min <= n && n <= max) {
+      return n
+    }
+
+    throw new InvalidArgumentError(`Must be between ${min} and ${max}`)
+  }
 }
