@@ -1,9 +1,22 @@
-export const L = { bit: 1 }
-export const M = { bit: 0 }
-export const Q = { bit: 3 }
-export const H = { bit: 2 }
+// NOTE: The benefit of this definition is that it allows
+// generating a TS union for all valid string values
+const EC_LEVELS = {
+  L: { bit: 1 },
+  M: { bit: 0 },
+  Q: { bit: 3 },
+  H: { bit: 2 },
+} as const
 
-function fromString(string) {
+export const ALL_EC_LEVELS = Object.keys(EC_LEVELS) as (keyof typeof EC_LEVELS)[]
+
+// NOTE: For backwards compatibility.
+// Maybe simplify how the levels are defined to improve type safety
+export const L = EC_LEVELS.L
+export const M = EC_LEVELS.M
+export const Q = EC_LEVELS.Q
+export const H = EC_LEVELS.H
+
+function fromString(string: string) {
   if (typeof string !== 'string') {
     throw new Error('Param is not a string')
   }

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
-import { program, InvalidArgumentError } from 'commander'
+import { program, InvalidArgumentError, Option } from 'commander'
 import QRCode from '#lib/index.js'
+import { ALL_EC_LEVELS } from '#core/error-correction-level.js'
 
 // IDEA: Create this help message based on the actual options
 const HELP_MESSAGE = `
@@ -30,15 +31,13 @@ Options:
 program
   .name('qrcode')
   .option('-v, --qversion <number>', 'QR Code symbol version (1 - 40)', integer)
+  .addOption(new Option('-e, --error <number>', 'Error correction level').choices(ALL_EC_LEVELS))
   .argument('<input string>')
   .showHelpAfterError()
 
 program.parse()
 
-const options = program.opts()
-const args = program.args
-
-console.dir({options, args}, { depth: 4 })
+console.dir({options: program.opts(), args: program.args}, { depth: 4 })
 
 function integer(value: string) {
   const parsedValue = parseInt(value, 10)
