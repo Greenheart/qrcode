@@ -10,8 +10,7 @@
     "verbatimModuleSyntax": true,
     "module": "nodenext",
     "noEmit": true,
-    "lib": ["esnext", "dom", "dom.iterable"],
-    "moduleResolution": "bundler"
+    "lib": ["esnext", "dom", "dom.iterable"]
   },
   "include": ["**/*.js", "**/*.ts"],
   "exclude": ["node_modules", "examples", "build"]
