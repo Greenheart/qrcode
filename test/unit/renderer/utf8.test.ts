@@ -27,7 +27,6 @@ test('Utf8Renderer render', () => {
   expect(str, 'Should return a string').toBeTypeOf('string')
 })
 
-
 test.skip('Utf8 renderToFile', () => {
   // TODO: Broken test due to mixed Node.js and non-Node.js environment in the UTF-8 renderer.
   // See the renderToFile() method for suggested resolution.
