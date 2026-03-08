@@ -99,13 +99,13 @@ The `@slidoapp/qrcode` can be used in browser through module bundlers like [Brow
 
 ```javascript
 // index.js -> bundle.js
-var QRCode = require("@slidoapp/qrcode");
-var canvas = document.getElementById("canvas");
+var QRCode = require('@slidoapp/qrcode')
+var canvas = document.getElementById('canvas')
 
-QRCode.toCanvas(canvas, "sample text", function (error) {
-  if (error) console.error(error);
-  console.log("success!");
-});
+QRCode.toCanvas(canvas, 'sample text', function (error) {
+  if (error) console.error(error)
+  console.log('success!')
+})
 ```
 
 #### Precompiled bundle
@@ -115,14 +115,10 @@ QRCode.toCanvas(canvas, "sample text", function (error) {
 
 <script src="/build/qrcode.js"></script>
 <script>
-  QRCode.toCanvas(
-    document.getElementById("canvas"),
-    "sample text",
-    function (error) {
-      if (error) console.error(error);
-      console.log("success!");
-    },
-  );
+  QRCode.toCanvas(document.getElementById('canvas'), 'sample text', function (error) {
+    if (error) console.error(error)
+    console.log('success!')
+  })
 </script>
 ```
 
@@ -135,21 +131,21 @@ The precompiled bundle have support for [Internet Explorer 10+, Safari 5.1+, and
 Require the module `@slidoapp/qrcode`
 
 ```javascript
-var QRCode = require("@slidoapp/qrcode");
+var QRCode = require('@slidoapp/qrcode')
 
-QRCode.toDataURL("I am a pony!", function (err, url) {
-  console.log(url);
-});
+QRCode.toDataURL('I am a pony!', function (err, url) {
+  console.log(url)
+})
 ```
 
 render a qrcode for the terminal
 
 ```js
-var QRCode = require("@slidoapp/qrcode");
+var QRCode = require('@slidoapp/qrcode')
 
-QRCode.toString("I am a pony!", { type: "terminal" }, function (err, url) {
-  console.log(url);
-});
+QRCode.toString('I am a pony!', { type: 'terminal' }, function (err, url) {
+  console.log(url)
+})
 ```
 
 ### ES6/ES7
@@ -157,25 +153,25 @@ QRCode.toString("I am a pony!", { type: "terminal" }, function (err, url) {
 Promises and Async/Await can be used in place of callback function.
 
 ```javascript
-import QRCode from "@slidoapp/qrcode";
+import QRCode from '@slidoapp/qrcode'
 
 // With promises
-QRCode.toDataURL("I am a pony!")
+QRCode.toDataURL('I am a pony!')
   .then((url) => {
-    console.log(url);
+    console.log(url)
   })
   .catch((err) => {
-    console.error(err);
-  });
+    console.error(err)
+  })
 
 // With async/await
 const generateQR = async (text) => {
   try {
-    console.log(await QRCode.toDataURL(text));
+    console.log(await QRCode.toDataURL(text))
   } catch (err) {
-    console.error(err);
+    console.error(err)
   }
-};
+}
 ```
 
 ## Error correction level
@@ -202,13 +198,9 @@ Error level can be set through `options.errorCorrectionLevel` property.
 If not specified, the default value is `M`.
 
 ```javascript
-QRCode.toDataURL(
-  "some text",
-  { errorCorrectionLevel: "H" },
-  function (err, url) {
-    console.log(url);
-  },
-);
+QRCode.toDataURL('some text', { errorCorrectionLevel: 'H' }, function (err, url) {
+  console.log(url)
+})
 ```
 
 ## QR Code capacity
@@ -236,9 +228,9 @@ QR Code version can be set through `options.version` property.
 If no version is specified, the most suitable value will be used. Unless a specific version is required, this option is not needed.
 
 ```javascript
-QRCode.toDataURL("some text", { version: 2 }, function (err, url) {
-  console.log(url);
-});
+QRCode.toDataURL('some text', { version: 2 }, function (err, url) {
+  console.log(url)
+})
 ```
 
 ## Encoding modes
@@ -288,16 +280,16 @@ In this way no segment optimizations will be applied under the hood.
 Segments list can be passed as an array of object:
 
 ```javascript
-var QRCode = require("@slidoapp/qrcode");
+var QRCode = require('@slidoapp/qrcode')
 
 var segs = [
-  { data: "ABCDEFG", mode: "alphanumeric" },
-  { data: "0123456", mode: "numeric" },
-];
+  { data: 'ABCDEFG', mode: 'alphanumeric' },
+  { data: '0123456', mode: 'numeric' },
+]
 
 QRCode.toDataURL(segs, function (err, url) {
-  console.log(url);
-});
+  console.log(url)
+})
 ```
 
 ### Kanji mode
@@ -313,12 +305,12 @@ An helper method is provided by the lib through an optional file that you can in
 **Note:** Support for Kanji mode is only needed if you want to benefit of the data compression, otherwise is still possible to encode kanji using Byte mode (See [Multibyte characters](#multibyte-characters)).
 
 ```javascript
-var QRCode = require("@slidoapp/qrcode");
-var toSJIS = require("@slidoapp/qrcode/helper/to-sjis");
+var QRCode = require('@slidoapp/qrcode')
+var toSJIS = require('@slidoapp/qrcode/helper/to-sjis')
 
 QRCode.toDataURL(kanjiString, { toSJISFunc: toSJIS }, function (err, url) {
-  console.log(url);
-});
+  console.log(url)
+})
 ```
 
 With precompiled bundle:
@@ -330,14 +322,14 @@ With precompiled bundle:
 <script src="/build/qrcode.tosjis.min.js"></script>
 <script>
   QRCode.toCanvas(
-    document.getElementById("canvas"),
-    "sample text",
+    document.getElementById('canvas'),
+    'sample text',
     { toSJISFunc: QRCode.toSJIS },
     function (error) {
-      if (error) console.error(error);
-      console.log("success!");
+      if (error) console.error(error)
+      console.log('success!')
     },
-  );
+  )
 </script>
 ```
 
@@ -435,11 +427,11 @@ Type: `Object`
 ```javascript
 // QRCode object
 {
-  (modules, // Bitmatrix class with modules data
+  ;(modules, // Bitmatrix class with modules data
     version, // Calculated QR Code version
     errorCorrectionLevel, // Error Correction Level
     maskPattern, // Calculated Mask pattern
-    segments); // Generated segments
+    segments) // Generated segments
 }
 ```
 
@@ -475,12 +467,12 @@ Callback function called on finish.
 ##### Example
 
 ```javascript
-QRCode.toCanvas("text", { errorCorrectionLevel: "H" }, function (err, canvas) {
-  if (err) throw err;
+QRCode.toCanvas('text', { errorCorrectionLevel: 'H' }, function (err, canvas) {
+  if (err) throw err
 
-  var container = document.getElementById("container");
-  container.appendChild(canvas);
-});
+  var container = document.getElementById('container')
+  container.appendChild(canvas)
+})
 ```
 
 #### `toDataURL(text, [options], [cb(error, url)])`
@@ -531,22 +523,22 @@ Callback function called on finish.
 
 ```javascript
 var opts = {
-  errorCorrectionLevel: "H",
-  type: "image/jpeg",
+  errorCorrectionLevel: 'H',
+  type: 'image/jpeg',
   quality: 0.3,
   margin: 1,
   color: {
-    dark: "#010599FF",
-    light: "#FFBF60FF",
+    dark: '#010599FF',
+    light: '#FFBF60FF',
   },
-};
+}
 
-QRCode.toDataURL("text", opts, function (err, url) {
-  if (err) throw err;
+QRCode.toDataURL('text', opts, function (err, url) {
+  if (err) throw err
 
-  var img = document.getElementById("image");
-  img.src = url;
-});
+  var img = document.getElementById('image')
+  img.src = url
+})
 ```
 
 #### `toString(text, [options], [cb(error, string)])`
@@ -580,10 +572,10 @@ Callback function called on finish.
 ##### Example
 
 ```javascript
-QRCode.toString("http://www.google.com", function (err, string) {
-  if (err) throw err;
-  console.log(string);
-});
+QRCode.toString('http://www.google.com', function (err, string) {
+  if (err) throw err
+  console.log(string)
+})
 ```
 
 ### Server API
@@ -665,10 +657,10 @@ Callback function called on finish.
 ##### Example
 
 ```javascript
-QRCode.toString("http://www.google.com", function (err, string) {
-  if (err) throw err;
-  console.log(string);
-});
+QRCode.toString('http://www.google.com', function (err, string) {
+  if (err) throw err
+  console.log(string)
+})
 ```
 
 #### `toFile(path, text, [options], [cb(error)])`
@@ -725,19 +717,19 @@ Callback function called on finish.
 
 ```javascript
 QRCode.toFile(
-  "path/to/filename.png",
-  "Some text",
+  'path/to/filename.png',
+  'Some text',
   {
     color: {
-      dark: "#00F", // Blue dots
-      light: "#0000", // Transparent background
+      dark: '#00F', // Blue dots
+      light: '#0000', // Transparent background
     },
   },
   function (err) {
-    if (err) throw err;
-    console.log("done");
+    if (err) throw err
+    console.log('done')
   },
-);
+)
 ```
 
 #### `toFileStream(stream, text, [options])`
