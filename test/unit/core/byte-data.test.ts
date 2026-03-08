@@ -32,5 +32,5 @@ test('Byte Data: Byte Input', () => {
 
   const bitBuffer = new BitBuffer()
   byteData.write(bitBuffer)
-  expect(bitBuffer.buffer, 'Should write correct data to buffer').toEqual(Array.from(bytes))
+  expect(bitBuffer.buffer, 'Should write correct data to buffer').toEqual([...bytes])
 })

@@ -177,17 +177,17 @@ test('Mask pattern - Penalty N3', () => {
 
 test('Mask pattern - Penalty N4', () => {
   const matrix = new BitMatrix(10)
-  matrix.data = new Uint8Array(arrayWithFill(50, 1).concat(arrayWithFill(50, 0)))
+  matrix.data = new Uint8Array([...arrayWithFill(50, 1), ...arrayWithFill(50, 0)])
 
   expect(MaskPattern.getPenaltyN4(matrix), 'Should return correct penalty points').toEqual(0)
 
   const matrix2 = new BitMatrix(21)
-  matrix2.data = new Uint8Array(arrayWithFill(190, 1).concat(arrayWithFill(251, 0)))
+  matrix2.data = new Uint8Array([...arrayWithFill(190, 1), ...arrayWithFill(251, 0)])
 
   expect(MaskPattern.getPenaltyN4(matrix2), 'Should return correct penalty points').toEqual(10)
 
   const matrix3 = new BitMatrix(10)
-  matrix3.data = new Uint8Array(arrayWithFill(22, 1).concat(arrayWithFill(78, 0)))
+  matrix3.data = new Uint8Array([...arrayWithFill(22, 1), ...arrayWithFill(78, 0)])
 
   expect(MaskPattern.getPenaltyN4(matrix3), 'Should return correct penalty points').toEqual(50)
 })

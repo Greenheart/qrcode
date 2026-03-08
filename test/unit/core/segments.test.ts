@@ -156,7 +156,7 @@ const kanjiTestData = [
   },
 ]
 
-testData = testData.concat(kanjiTestData)
+testData = [...testData, ...kanjiTestData]
 
 test('Segments from array', () => {
   expect(

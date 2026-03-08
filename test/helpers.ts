@@ -14,7 +14,7 @@ export function arrayWithLength(length: number) {
  * @param fillValue The value to fill the array with
  */
 export function arrayWithFill<T>(length: number, fillValue: T) {
-  return Array.from({ length }, () => fillValue)
+  return Array.from({ length }).fill(fillValue)
 }
 
 export function removeNativePromise() {
