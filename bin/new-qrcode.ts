@@ -2,6 +2,7 @@
 import { program, InvalidArgumentError, Option } from 'commander'
 import QRCode from '#lib/index.js'
 import { ALL_EC_LEVELS } from '#core/error-correction-level.ts'
+import pkg from '../package.json' with { type: 'json' }
 
 // IDEA: Create this help message based on the actual options
 const HELP_MESSAGE = `
@@ -30,9 +31,23 @@ Options:
 
 program
   .name('qrcode')
+  .version(pkg.version, '--version', 'Show version number')
+  .optionsGroup('QR Code options:')
   .option('-v, --qversion <number>', 'QR Code symbol version (1 - 40)', integerBetween(1, 40))
   .addOption(new Option('-e, --error <number>', 'Error correction level').choices(ALL_EC_LEVELS))
   .option('-m, --mask <number>', 'Mask pattern (0 - 7)', integerBetween(0, 7))
+  .optionsGroup('Renderer options:')
+  // IDEA: Maybe use a shared constant for valid renderers
+  .addOption(new Option('-t, --type <type>', 'Output type').choices(['png', 'svg', 'utf8']))
+  .option('-i, --inverse', 'Invert colors')
+  .option('-w, --width <number>', 'Image width (px)', integerBetween(0))
+  .option('-s, --scale <number>', 'Scale factor', integer)
+  .option('-q, --qzone <number>', 'Quiet zone size', integerBetween(0))
+  .option('-l, --lightcolor <color>', 'Light RGBA hex color')
+  .option('-d, --darkcolor <color>', 'Dark RGBA hex color')
+  .option('--small', 'Output smaller QR code to terminal')
+  .optionsGroup('Options:')
+  .option('-o, --output <path>', 'Output file')
   .argument('<input string>')
   .showHelpAfterError()
 
