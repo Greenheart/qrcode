@@ -71,7 +71,7 @@
     "@types/sinon": "^21.0.0",
     "@vitest/coverage-v8": "4.0.18",
     "browserify": "^17.0.1",
-    "canvas": "^3.0.0-rc2",
+    "canvas": "^3.2.1",
     "canvasutil": "0.0.4",
     "colors": "^1.4.0",
     "express": "^4.21.1",

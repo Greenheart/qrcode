@@ -55,7 +55,7 @@ importers:
         specifier: ^17.0.1
         version: 17.0.1
       canvas:
-        specifier: ^3.0.0-rc2
+        specifier: ^3.2.1
         version: 3.2.1
       canvasutil:
         specifier: 0.0.4
