@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { program, InvalidArgumentError, Option } from 'commander'
 import QRCode from '#lib/index.js'
-import { ALL_EC_LEVELS } from '#core/error-correction-level.js'
+import { ALL_EC_LEVELS } from '#core/error-correction-level.ts'
 
 // IDEA: Create this help message based on the actual options
 const HELP_MESSAGE = `

@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest'
-import * as ECLevel from '#core/error-correction-level.js'
+import * as ECLevel from '#core/error-correction-level.ts'
 import * as Version from '#core/version.js'
 import * as QRCode from '#core/qrcode.js'
 import toSJIS from '#helper/to-sjis.js'

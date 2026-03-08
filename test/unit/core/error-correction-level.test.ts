@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest'
-import * as ECLevel from '#core/error-correction-level.js'
+import * as ECLevel from '#core/error-correction-level.ts'
 
 const EC_LEVELS = [ECLevel.L, ECLevel.M, ECLevel.Q, ECLevel.H]
 
