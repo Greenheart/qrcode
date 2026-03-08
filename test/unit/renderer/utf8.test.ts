@@ -1,6 +1,6 @@
 import { test, expect } from 'vitest'
-// import sinon from 'sinon'
-// import fs from 'fs'
+import sinon from 'sinon'
+import fs from 'fs'
 
 import * as QRCode from '#core/qrcode.js'
 import * as Utf8Renderer from '#renderer/utf8.js'
@@ -27,41 +27,42 @@ test('Utf8Renderer render', () => {
   expect(str, 'Should return a string').toBeTypeOf('string')
 })
 
-// TODO: Broken test due to mixed Node.js and non-Node.js environment in the UTF-8 renderer.
-// See the renderToFile() method for suggested resolution.
-// NOTE: This might be possible to solve with better mocking of the file system calls
 
-// test('Utf8 renderToFile', () => {
-//   const sampleQrData = QRCode.create('sample text', { version: 2 })
-//   const fileName = 'qrimage.txt'
-//   let fsStub = sinon.stub(fs, 'writeFile').callsArg(2)
+test.skip('Utf8 renderToFile', () => {
+  // TODO: Broken test due to mixed Node.js and non-Node.js environment in the UTF-8 renderer.
+  // See the renderToFile() method for suggested resolution.
+  // NOTE: This might be possible to solve with better mocking of the file system calls
 
-//   Utf8Renderer.renderToFile(fileName, sampleQrData, (err) => {
-//     expect(err, 'Should not generate errors with only qrData param').toBeFalsy()
+  const sampleQrData = QRCode.create('sample text', { version: 2 })
+  const fileName = 'qrimage.txt'
+  let fsStub = sinon.stub(fs, 'writeFile').callsArg(2)
 
-//     expect(fsStub.getCall(0).args[0], 'Should save file with correct file name').toEqual(fileName)
-//   })
+  Utf8Renderer.renderToFile(fileName, sampleQrData, (err) => {
+    expect(err, 'Should not generate errors with only qrData param').toBeFalsy()
 
-//   Utf8Renderer.renderToFile(
-//     fileName,
-//     sampleQrData,
-//     {
-//       margin: 10,
-//       scale: 1,
-//     },
-//     (err) => {
-//       expect(err, 'Should not generate errors with options param').toBeFalsy()
+    expect(fsStub.getCall(0).args[0], 'Should save file with correct file name').toEqual(fileName)
+  })
 
-//       expect(fsStub.getCall(0).args[0], 'Should save file with correct file name').toEqual(fileName)
-//     },
-//   )
+  Utf8Renderer.renderToFile(
+    fileName,
+    sampleQrData,
+    {
+      margin: 10,
+      scale: 1,
+    },
+    (err) => {
+      expect(err, 'Should not generate errors with options param').toBeFalsy()
 
-//   fsStub.restore()
-//   fsStub = sinon.stub(fs, 'writeFile').callsArgWith(2, new Error())
+      expect(fsStub.getCall(0).args[0], 'Should save file with correct file name').toEqual(fileName)
+    },
+  )
 
-//   Utf8Renderer.renderToFile(fileName, sampleQrData, (err) => {
-//     expect(err, 'Should fail if error occurs during save').toBeTruthy()
-//   })
+  fsStub.restore()
+  fsStub = sinon.stub(fs, 'writeFile').callsArgWith(2, new Error())
 
-//   fsStub.restore()
-// })
+  Utf8Renderer.renderToFile(fileName, sampleQrData, (err) => {
+    expect(err, 'Should fail if error occurs during save').toBeTruthy()
+  })
+
+  fsStub.restore()
+})

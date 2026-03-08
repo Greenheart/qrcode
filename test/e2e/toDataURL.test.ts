@@ -112,8 +112,9 @@ test('toDataURL - image/png', () => {
 })
 
 // TODO: This test is broken due to the `canvas@3.2.1` library.
-// Maybe vitest browser mode could help with the browser tests?
-test.todo('Canvas toDataURL - image/png', () => {
+// Maybe vitest browser mode could be used instead to run this in
+// an actual browser rather than emulated Node canvas?
+test.skip('Canvas toDataURL - image/png', () => {
   // const expectedDataURL = [
   //   'data:image/png;base64,',
   //   'iVBORw0KGgoAAAANSUhEUgAAAIQAAACECAYAAABRRIOnAAAABmJLR0QA/wD/AP+gvaeTAA',
