@@ -1,7 +1,7 @@
 import { test, expect } from 'vitest'
 import * as FormatInfo from '#core/format-info.js'
 import * as ECLevel from '#core/error-correction-level.ts'
-import * as MaskPattern from '#core/mask-pattern.js'
+import * as MaskPattern from '#core/mask-pattern.ts'
 
 const EXPECTED_FORMAT_BITS = [
   [0x77c4, 0x72f3, 0x7daa, 0x789d, 0x662f, 0x6318, 0x6c41, 0x6976],

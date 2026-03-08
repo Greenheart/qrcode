@@ -1,7 +1,7 @@
 import { test, expect } from 'vitest'
 
 import BitMatrix from '#core/bit-matrix.js'
-import * as MaskPattern from '#core/mask-pattern.js'
+import * as MaskPattern from '#core/mask-pattern.ts'
 import { arrayWithFill } from '#test/helpers.js'
 
 test('Mask pattern - Pattern references', () => {

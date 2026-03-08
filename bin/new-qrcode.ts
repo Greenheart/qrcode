@@ -1,12 +1,10 @@
 #!/usr/bin/env node
-import { program, InvalidArgumentError, Option } from 'commander'
-import QRCode from '#lib/index.js'
+import { program, Option, InvalidArgumentError } from 'commander'
+// import QRCode from '#lib/index.js'
 import { ALL_EC_LEVELS } from '#core/error-correction-level.ts'
 import { QR_VERSION_RANGE } from '#core/version-check.ts'
+import { QR_MASK_RANGE } from '#core/mask-pattern.ts'
 import pkg from '../package.json' with { type: 'json' }
-
-// NOTE: Maybe get these constants from the QR version and QR Mask modules instead?
-const QR_MASK_RANGE = [0, 7] as const
 
 function range([min, max]: readonly [number, number]) {
   return `(${min} - ${max})`

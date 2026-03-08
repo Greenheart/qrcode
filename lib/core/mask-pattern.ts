@@ -7,27 +7,30 @@ export const Patterns = {
   PATTERN101: 5,
   PATTERN110: 6,
   PATTERN111: 7,
-}
+} as const
+
+const MIN = Patterns.PATTERN000
+const MAX = Patterns.PATTERN111
+export const QR_MASK_RANGE = [MIN, MAX] as const
 
 /**
  * Weighted penalty scores for the undesirable features
- * @type {Object}
  */
 const PenaltyScores = {
   N1: 3,
   N2: 3,
   N3: 40,
   N4: 10,
-}
+} as const
 
 /**
  * Check if mask pattern value is valid
  *
- * @param  {Number}  mask    Mask pattern
- * @return {Boolean}         true if valid, false otherwise
+ * @param mask Mask pattern
+ * @return true if valid, false otherwise
  */
-export function isValid(mask) {
-  return mask != null && mask !== '' && !isNaN(mask) && mask >= 0 && mask <= 7
+export function isValid(mask: number) {
+  return mask != null && mask !== '' && !isNaN(mask) && MIN <= mask && mask <= MAX
 }
 
 /**
