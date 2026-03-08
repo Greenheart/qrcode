@@ -36,6 +36,11 @@ function parseArgs(): Command {
     // The input string is a variadic argument that will include any remaining input after parsing options
     // In commander, this is indicated by the `...` suffix
     .argument('[input string...]', 'Content of the QR code')
+    .addHelpText('after', `
+$ qrcode "some text"                      Draw in terminal window
+$ qrcode -o out.png "some text"           Save as png image
+$ qrcode -d F00 -o out.png "some text"    Use red as foreground color
+`)
     .showHelpAfterError()
     .parse()
 }
