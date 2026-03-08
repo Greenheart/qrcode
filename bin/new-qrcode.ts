@@ -4,40 +4,23 @@ import QRCode from '#lib/index.js'
 import { ALL_EC_LEVELS } from '#core/error-correction-level.ts'
 import pkg from '../package.json' with { type: 'json' }
 
-// IDEA: Create this help message based on the actual options
-const HELP_MESSAGE = `
-Usage: qrcode [options] <input string>
+// NOTE: Maybe get these constants from the QR version and QR Mask modules instead?
+const QR_VERSION_RANGE = [1, 40] as const
+const QR_MASK_RANGE = [0, 7] as const
 
-QR Code options:
-  -v, --qversion  QR Code symbol version (1 - 40)                       [number]
-  -e, --error     Error correction level           [choices: "L", "M", "Q", "H"]
-  -m, --mask      Mask pattern (0 - 7)                                  [number]
-
-Renderer options:
-  -t, --type        Output type                  [choices: "png", "svg", "utf8"]
-  -i, --inverse     Invert colors                                      [boolean]
-  -w, --width       Image width (px)                                    [number]
-  -s, --scale       Scale factor                                        [number]
-  -q, --qzone       Quiet zone size                                     [number]
-  -l, --lightcolor  Light RGBA hex color
-  -d, --darkcolor   Dark RGBA hex color
-      --small       Output smaller QR code to terminal                 [boolean]
-
-Options:
-  -o, --output   Output file
-  -h, --help     Show help                                             [boolean]
-      --version  Show version number                                   [boolean]
-`
+function range([min, max]: readonly [number, number]) {
+  return `(${min} - ${max})`
+}
 
 program
   .name('qrcode')
   .version(pkg.version, '--version', 'Show version number')
   .optionsGroup('QR Code options:')
-  .option('-v, --qversion <number>', 'QR Code symbol version (1 - 40)', integerBetween(1, 40))
-  .addOption(new Option('-e, --error <number>', 'Error correction level').choices(ALL_EC_LEVELS))
-  .option('-m, --mask <number>', 'Mask pattern (0 - 7)', integerBetween(0, 7))
+  .option('-v, --qversion <number>', `QR Code symbol version ${range(QR_VERSION_RANGE)}`, integerBetween(...QR_VERSION_RANGE))
+  .addOption(new Option('-e, --error <level>', 'Error correction level').choices(ALL_EC_LEVELS))
+  .option('-m, --mask <number>', `Mask pattern ${range(QR_MASK_RANGE)}`, integerBetween(...QR_MASK_RANGE))
   .optionsGroup('Renderer options:')
-  // IDEA: Maybe use a shared constant for valid renderers
+  // IDEA: Maybe use a shared constant for valid renderers, defined by the renderers themselves
   .addOption(new Option('-t, --type <type>', 'Output type').choices(['png', 'svg', 'utf8']))
   .option('-i, --inverse', 'Invert colors')
   .option('-w, --width <number>', 'Image width (px)', integerBetween(0))
@@ -47,6 +30,7 @@ program
   .option('-d, --darkcolor <color>', 'Dark RGBA hex color')
   .option('--small', 'Output smaller QR code to terminal')
   .optionsGroup('Options:')
+  .helpOption('-h, --help', 'Show help')
   .option('-o, --output <path>', 'Output file')
   .argument('<input string>')
   .showHelpAfterError()
