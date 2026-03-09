@@ -33,13 +33,18 @@ function parseArgs(): Command {
     .optionsGroup('Options:')
     .helpOption('-h, --help', 'Show help')
     .option('-o, --output <path>', 'Output file')
-    // The input string is a variadic argument that will include any remaining input after parsing options
-    // In commander, this is indicated by the `...` suffix
+    // The input string is a variadic argument that will include any remaining
+    // input after parsing options In commander, this is indicated by the `...`
+    // suffix.
+    // The wrapping [] makes the input string arguments optional.
+    // This allows executing the CLI and reading from stdin, useful in scripts.
+    // By making the arguments optional, the help can be printed by default.
     .argument('[input string...]', 'Content of the QR code')
     .addHelpText('after', `
-$ qrcode "some text"                      Draw in terminal window
-$ qrcode -o out.png "some text"           Save as png image
-$ qrcode -d F00 -o out.png "some text"    Use red as foreground color
+Examples:
+  qrcode "some text"                      Draw in terminal window
+  qrcode -o out.png "some text"           Save as png image
+  qrcode -d F00 -o out.png "some text"    Use red as foreground color
 `)
     .showHelpAfterError()
     .parse()
