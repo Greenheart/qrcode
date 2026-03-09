@@ -1,3 +1,4 @@
+import type { QRVersion } from '#lib/types.ts'
 import { getSymbolSize } from './utils.ts'
 const FINDER_PATTERN_SIZE = 7
 
@@ -5,10 +6,10 @@ const FINDER_PATTERN_SIZE = 7
  * Returns an array containing the positions of each finder pattern.
  * Each array's element represent the top-left point of the pattern as (x, y) coordinates
  *
- * @param  {Number} version QR Code version
- * @return {Array}          Array of coordinates
+ * @param version QR Code version
+ * @return Array of coordinates
  */
-export function getPositions(version) {
+export function getPositions(version: QRVersion) {
   const size = getSymbolSize(version)
 
   return [

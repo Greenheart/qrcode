@@ -8,6 +8,7 @@ import KanjiData from '#core/kanji-data.ts'
 import ByteData from '#core/byte-data.ts'
 
 import { arrayWithLength } from '#test/helpers.js'
+import type { QRVersion } from '#lib/types.ts'
 const EC_LEVELS = [ECLevel.L, ECLevel.M, ECLevel.Q, ECLevel.H]
 
 const EXPECTED_NUMERIC_CAPACITY = [
@@ -262,7 +263,7 @@ test('Version capacity', () => {
 
 test('Version best match', () => {
   function testBestVersionForCapacity(expectedCapacity, DataCtor) {
-    for (let v = 0; v < 40; v++) {
+    for (let v = 0; v < Version.MAX; v++) {
       for (let l = 0; l < EC_LEVELS.length; l++) {
         const capacity = expectedCapacity[v][l]
         const data = new DataCtor(arrayWithLength(capacity + 1).join('-'))
@@ -319,7 +320,7 @@ test('Version best match', () => {
 
   const version = Version.getBestVersionForData([new ByteData('abc'), new NumericData('1234')])
   expect(
-    1 <= version && version <= 40,
+    Version.MIN <= version && version <= Version.MAX,
     'Should return a version number if input array is valid',
   ).toEqual(true)
 
@@ -329,12 +330,12 @@ test('Version best match', () => {
 test('Version encoded info', () => {
   for (let v = 0; v < 7; v++) {
     expect(() => {
-      Version.getEncodedBits(v)
+      Version.getEncodedBits(v as QRVersion)
     }, 'Should throw if version is invalid or less than 7').toThrow()
   }
 
-  for (let v = 7; v <= 40; v++) {
-    const bch = Version.getEncodedBits(v)
+  for (let v = 7; v <= Version.MAX; v++) {
+    const bch = Version.getEncodedBits(v as QRVersion)
     expect(bch, 'Should return correct bits').toEqual(EXPECTED_VERSION_BITS[v - 7])
   }
 })

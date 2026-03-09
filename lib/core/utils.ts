@@ -1,4 +1,5 @@
-import type { QRCodeToSJISFunc, QRVersion } from "#lib/types.ts"
+import type { QRCodeToSJISFunc, QRVersion } from '#lib/types.ts'
+import * as Version from '#core/version.ts'
 
 let toSJISFunction: QRCodeToSJISFunc
 const CODEWORDS_COUNT = [
@@ -54,7 +55,7 @@ const CODEWORDS_COUNT = [
 export function getSymbolSize(version: QRVersion) {
   // IDEA: Maybe change the errors to tests instead? Unless the code depends on throwing and catching exceptions of course.
   if (!version) throw new Error('"version" cannot be null or undefined')
-  if (version < 1 || version > 40) throw new Error('"version" should be in range from 1 to 40')
+  if (version < Version.MIN || version > Version.MAX) throw new Error('"version" should be in range from 1 to 40')
   return version * 4 + 17
 }
 

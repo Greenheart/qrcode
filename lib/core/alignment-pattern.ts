@@ -8,6 +8,7 @@
  * and their number depends on the symbol version.
  */
 
+import type { QRVersion } from '#lib/types.ts'
 import { getSymbolSize } from './utils.ts'
 
 /**
@@ -21,10 +22,10 @@ import { getSymbolSize } from './utils.ts'
  * Each item of the array will represent in turn the x and y coordinate.
  * @see {@link getPositions}
  *
- * @param  {Number} version QR Code version
- * @return {Array}          Array of coordinate
+ * @param version QR Code version
+ * @return Array of coordinates
  */
-export function getRowColCoords(version) {
+export function getRowColCoords(version: QRVersion) {
   if (version === 1) return []
 
   const posCount = Math.floor(version / 7) + 2
@@ -58,10 +59,10 @@ export function getRowColCoords(version) {
  * let pos = getPositions(7)
  * // [[6,22], [22,6], [22,22], [22,38], [38,22], [38,38]]
  *
- * @param  {Number} version QR Code version
- * @return {Array}          Array of coordinates
+ * @param version QR Code version
+ * @return Array of coordinates
  */
-export function getPositions(version) {
+export function getPositions(version: QRVersion) {
   const coords = []
   const pos = getRowColCoords(version)
   const posLength = pos.length

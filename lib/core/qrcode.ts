@@ -221,12 +221,12 @@ function setupData(matrix, data) {
 /**
  * Create encoded codewords from data input
  *
- * @param  {Number}   version              QR Code version
+ * @param version QR Code version
  * @param  {ErrorCorrectionLevel}   errorCorrectionLevel Error correction level
  * @param  {ByteData} data                 Data input
  * @return {Uint8Array}                    Buffer containing encoded codewords
  */
-function createData(version, errorCorrectionLevel, segments) {
+function createData(version: QRVersion, errorCorrectionLevel, segments) {
   // Prepare data buffer
   const buffer = new BitBuffer()
 
@@ -287,11 +287,11 @@ function createData(version, errorCorrectionLevel, segments) {
  * relative error correction bits
  *
  * @param  {BitBuffer} bitBuffer            Data to encode
- * @param  {Number}    version              QR Code version
+ * @param version QR Code version
  * @param  {ErrorCorrectionLevel} errorCorrectionLevel Error correction level
  * @return {Uint8Array}                     Buffer containing encoded codewords
  */
-function createCodewords(bitBuffer, version, errorCorrectionLevel) {
+function createCodewords(bitBuffer, version: QRVersion, errorCorrectionLevel) {
   // Total codewords for this QR code version (Data + Error correction)
   const totalCodewords = Utils.getSymbolTotalCodewords(version)
 
@@ -367,13 +367,15 @@ function createCodewords(bitBuffer, version, errorCorrectionLevel) {
 /**
  * Build QR Code symbol
  *
- * @param  {String} data                 Input string
- * @param  {Number} version              QR Code version
- * @param  {ErrorCorretionLevel} errorCorrectionLevel Error level
- * @param  {MaskPattern} maskPattern     Mask pattern
- * @return {Object}                      Object containing symbol data
+ * @param data Input string
+ * @param version QR Code version
+ * @param {ErrorCorretionLevel} errorCorrectionLevel Error level
+ * @param maskPattern Mask pattern
+ * @return {Object} Object containing symbol data
+ *
+ * TODO: Use correct return type for QRCodeSymbol
  */
-function createSymbol(data, version, errorCorrectionLevel, maskPattern) {
+function createSymbol(data: string, version: QRVersion, errorCorrectionLevel, maskPattern: QRCodeMaskPattern) {
   let segments
 
   if (Array.isArray(data)) {
@@ -390,7 +392,7 @@ function createSymbol(data, version, errorCorrectionLevel, maskPattern) {
 
     // Build optimized segments
     // If estimated version is undefined, try with the highest version
-    segments = Segments.fromString(data, estimatedVersion || 40)
+    segments = Segments.fromString(data, estimatedVersion || Version.MAX)
   } else {
     throw new Error('Invalid data')
   }

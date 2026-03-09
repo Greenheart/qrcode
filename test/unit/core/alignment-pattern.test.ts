@@ -1,5 +1,6 @@
 import { test, expect } from 'vitest'
 import * as pattern from '#core/alignment-pattern.ts'
+import * as Version from '#core/version.ts'
 
 /**
  * Row/column coordinates of the center module of each alignment pattern.
@@ -49,14 +50,14 @@ const EXPECTED_POSITION_TABLE = [
 ]
 
 test('Alignment pattern - Row/Col coords', () => {
-  for (let i = 1; i <= 40; i++) {
+  for (let i = Version.MIN; i <= Version.MAX; i++) {
     const pos = pattern.getRowColCoords(i)
     expect(pos, 'Should return correct coords').toStrictEqual(EXPECTED_POSITION_TABLE[i - 1])
   }
 })
 
 test('Alignment pattern - Positions', () => {
-  for (let i = 1; i <= 40; i++) {
+  for (let i = Version.MIN; i <= Version.MAX; i++) {
     const pos = pattern.getPositions(i)
     const expectedPos = EXPECTED_POSITION_TABLE[i - 1]
     const expectedLength = (Math.pow(expectedPos.length, 2) || 3) - 3

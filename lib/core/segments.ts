@@ -8,14 +8,17 @@ import ByteData from './byte-data.ts'
 import KanjiData from './kanji-data.ts'
 import * as Regex from './regex.ts'
 import * as Utils from './utils.ts'
+import type { QRVersion } from '#lib/types.ts'
 
 /**
  * Returns UTF8 byte length
  *
- * @param  {String} str Input string
- * @return {Number}     Number of byte
+ * @param str Input string
+ * @return Number of bytes
+ *
+ * NOTE: See if there's a better alternative to unescape?
  */
-function getStringByteLength(str) {
+function getStringByteLength(str: string) {
   return unescape(encodeURIComponent(str)).length
 }
 
@@ -173,11 +176,13 @@ function buildNodes(segs) {
  * At each connection will be assigned a weight depending on the
  * segment's byte length.
  *
- * @param  {Array} nodes    Array of object with segments data
- * @param  {Number} version QR Code version
- * @return {Object}         Graph of all possible segments
+ * @param {Array} nodes Array of object with segments data
+ * @param version QR Code version
+ * @return {Object} Graph of all possible segments.
+ *
+ * TODO: Create a Graph type to clearly define the properties and types
  */
-function buildGraph(nodes, version) {
+function buildGraph(nodes, version: QRVersion) {
   const table = {}
   const graph = { start: {} }
   let prevNodeIds = ['start']
@@ -302,11 +307,13 @@ export function fromArray(array) {
  * Builds an optimized sequence of segments from a string,
  * which will produce the shortest possible bitstream.
  *
- * @param  {String} data    Input string
- * @param  {Number} version QR Code version
- * @return {Array}          Array of segments
+ * @param data Input string
+ * @param version QR Code version
+ * @return {Array} Array of segments
+ *
+ * TODO: Improve return type
  */
-export function fromString(data, version) {
+export function fromString(data: string, version: QRVersion) {
   const segs = getSegmentsFromString(data, Utils.isKanjiModeEnabled())
 
   const nodes = buildNodes(segs)

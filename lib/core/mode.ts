@@ -63,8 +63,6 @@ export const MIXED = {
  * according to QR Code specifications.
  *
  * @param {Mode} mode Data mode
- * @param version QR Code version
- * @return Number of bits
  */
 export function getCharCountIndicator(mode, version: QRVersion): number {
   if (!mode.ccBits) throw new Error('Invalid mode: ' + mode)

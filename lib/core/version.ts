@@ -4,8 +4,8 @@ import * as ECLevel from './error-correction-level.ts'
 import * as Mode from './mode.ts'
 import type { QRVersion } from '#lib/types.ts'
 
-const MIN = 1
-const MAX = 40
+export const MIN = 1
+export const MAX = 40
 export const QR_VERSION_RANGE = [MIN, MAX] as const
 
 /**
@@ -36,10 +36,10 @@ const G18_BCH = Utils.getBCHDigit(G18)
 
 // TODO: Move check-version into this module and update all imports
 // TODO: Use the min and max version constants instead of numbers
-function getBestVersionForDataLength(mode, length, errorCorrectionLevel) {
-  for (let currentVersion = 1; currentVersion <= 40; currentVersion++) {
+function getBestVersionForDataLength(mode, length, errorCorrectionLevel): QRVersion | undefined {
+  for (let currentVersion = MIN; currentVersion <= MAX; currentVersion++) {
     if (length <= getCapacity(currentVersion as QRVersion, errorCorrectionLevel, mode)) {
-      return currentVersion
+      return currentVersion as QRVersion
     }
   }
 
@@ -62,7 +62,7 @@ function getTotalBitsFromDataArray(segments, version: QRVersion) {
 }
 
 function getBestVersionForMixedData(segments, errorCorrectionLevel) {
-  for (let currentVersion = 1; currentVersion <= 40; currentVersion++) {
+  for (let currentVersion = MIN; currentVersion <= MAX; currentVersion++) {
     const length = getTotalBitsFromDataArray(segments, currentVersion as QRVersion)
     if (length <= getCapacity(currentVersion as QRVersion, errorCorrectionLevel, Mode.MIXED)) {
       return currentVersion as QRVersion
@@ -76,9 +76,9 @@ function getBestVersionForMixedData(segments, errorCorrectionLevel) {
  * Returns how much data can be stored with the specified QR code version
  * and error correction level
  *
- * @param  {Number} version              QR Code version (1-40)
- * @param  {Number} errorCorrectionLevel Error correction level
- * @param  {Mode}   mode                 Data mode
+ * @param version QR Code version (1-40)
+ * @param {Number} errorCorrectionLevel Error correction level
+ * @param {Mode} mode Data mode
  */
 export function getCapacity(
   version: QRVersion,
@@ -89,7 +89,7 @@ export function getCapacity(
     | { readonly bit: 0 }
     | { readonly bit: 3 }
     | { readonly bit: 2 },
-    // TODO: Improve this type based on the Mode class/type
+  // TODO: Improve this type based on the Mode class/type
   mode: { bit: number; id?: string; ccBits?: number[] },
 ) {
   // IDEA: Maybe remove this check and always guard calls to this function with parsing the QR version or using a default value?
@@ -135,9 +135,8 @@ export function getCapacity(
  *
  * @param  {Segment} data                    Segment of data
  * @param  {Number} [errorCorrectionLevel=H] Error correction level
- * @return {Number}                          QR Code version
  */
-export function getBestVersionForData(data, errorCorrectionLevel) {
+export function getBestVersionForData(data, errorCorrectionLevel): QRVersion | undefined {
   let seg
 
   const ecl = ECLevel.from(errorCorrectionLevel, ECLevel.M)
