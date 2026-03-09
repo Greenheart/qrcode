@@ -1,5 +1,5 @@
 import * as VersionCheck from './version-check.ts'
-import * as Regex from './regex.js'
+import * as Regex from './regex.ts'
 /**
  * Numeric mode encodes data from the decimal digit set (0 - 9)
  * (byte values 30HEX to 39HEX).

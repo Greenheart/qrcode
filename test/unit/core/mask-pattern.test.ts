@@ -1,6 +1,6 @@
 import { test, expect } from 'vitest'
 
-import BitMatrix from '#core/bit-matrix.js'
+import BitMatrix from '#core/bit-matrix.ts'
 import * as MaskPattern from '#core/mask-pattern.ts'
 import { arrayWithFill } from '#test/helpers.js'
 

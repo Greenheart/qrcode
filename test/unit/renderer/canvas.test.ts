@@ -1,6 +1,6 @@
 import { Canvas, createCanvas } from 'canvas'
-import * as QRCode from '#core/qrcode.js'
-import * as CanvasRenderer from '#renderer/canvas.js'
+import * as QRCode from '#core/qrcode.ts'
+import * as CanvasRenderer from '#renderer/canvas.ts'
 import { test, expect } from 'vitest'
 
 test('CanvasRenderer interface', () => {

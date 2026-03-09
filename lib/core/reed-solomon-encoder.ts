@@ -1,4 +1,4 @@
-import * as Polynomial from './polynomial.js'
+import * as Polynomial from './polynomial.ts'
 
 function ReedSolomonEncoder(degree) {
   this.genPoly = undefined

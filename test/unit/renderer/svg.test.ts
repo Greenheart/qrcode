@@ -3,8 +3,8 @@ import sinon from 'sinon'
 import fs from 'fs'
 import { Parser } from 'htmlparser2'
 
-import * as QRCode from '#core/qrcode.js'
-import * as SvgRenderer from '#renderer/svg.js'
+import * as QRCode from '#core/qrcode.ts'
+import * as SvgRenderer from '#renderer/svg.ts'
 
 function getExpectedViewbox(size: number, margin: number) {
   const expectedQrCodeSize = size + margin * 2

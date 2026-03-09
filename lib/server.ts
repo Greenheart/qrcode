@@ -1,9 +1,9 @@
 import canPromise from './can-promise.ts'
-import * as QRCode from './core/qrcode.js'
-import * as PngRenderer from './renderer/png.js'
-import * as Utf8Renderer from './renderer/utf8.js'
-import * as TerminalRenderer from './renderer/terminal.js'
-import * as SvgRenderer from './renderer/svg.js'
+import * as QRCode from './core/qrcode.ts'
+import * as PngRenderer from './renderer/png.ts'
+import * as Utf8Renderer from './renderer/utf8.ts'
+import * as TerminalRenderer from './renderer/terminal.ts'
+import * as SvgRenderer from './renderer/svg.ts'
 
 function checkParams(text, opts, cb) {
   if (typeof text === 'undefined') {
@@ -83,7 +83,7 @@ function render(renderFunc, text, params) {
 }
 
 export const create = QRCode.create
-export { toCanvas } from './browser.js'
+export { toCanvas } from './browser.ts'
 
 export function toString(text, opts, cb) {
   const params = checkParams(text, opts, cb)

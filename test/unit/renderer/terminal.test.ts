@@ -1,5 +1,5 @@
-import * as QRCode from '#core/qrcode.js'
-import * as TerminalRenderer from '#renderer/terminal.js'
+import * as QRCode from '#core/qrcode.ts'
+import * as TerminalRenderer from '#renderer/terminal.ts'
 import { test, expect } from 'vitest'
 
 test('TerminalRenderer interface', () => {

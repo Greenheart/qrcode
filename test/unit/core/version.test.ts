@@ -1,12 +1,12 @@
 import { test, expect } from 'vitest'
-import * as Version from '#core/version.js'
+import * as Version from '#core/version.ts'
 import * as VersionCheck from '#core/version-check.ts'
 import * as ECLevel from '#core/error-correction-level.ts'
-import * as Mode from '#core/mode.js'
-import NumericData from '#core/numeric-data.js'
-import AlphanumericData from '#core/alphanumeric-data.js'
-import KanjiData from '#core/kanji-data.js'
-import ByteData from '#core/byte-data.js'
+import * as Mode from '#core/mode.ts'
+import NumericData from '#core/numeric-data.ts'
+import AlphanumericData from '#core/alphanumeric-data.ts'
+import KanjiData from '#core/kanji-data.ts'
+import ByteData from '#core/byte-data.ts'
 
 import { arrayWithLength } from '#test/helpers.js'
 const EC_LEVELS = [ECLevel.L, ECLevel.M, ECLevel.Q, ECLevel.H]

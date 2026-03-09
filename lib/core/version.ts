@@ -1,7 +1,7 @@
-import * as Utils from './utils.js'
-import * as ECCode from './error-correction-code.js'
+import * as Utils from './utils.ts'
+import * as ECCode from './error-correction-code.ts'
 import * as ECLevel from './error-correction-level.ts'
-import * as Mode from './mode.js'
+import * as Mode from './mode.ts'
 import * as VersionCheck from './version-check.ts'
 // Generator polynomial used to encode version information
 const G18 = (1 << 12) | (1 << 11) | (1 << 10) | (1 << 9) | (1 << 8) | (1 << 5) | (1 << 2) | (1 << 0)

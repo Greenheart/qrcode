@@ -1,13 +1,13 @@
 import { test, expect } from 'vitest'
 import { findPath } from 'dijkstra-find-path'
 
-import * as Mode from './mode.js'
-import NumericData from './numeric-data.js'
-import AlphanumericData from './alphanumeric-data.js'
-import ByteData from './byte-data.js'
-import KanjiData from './kanji-data.js'
-import * as Regex from './regex.js'
-import * as Utils from './utils.js'
+import * as Mode from './mode.ts'
+import NumericData from './numeric-data.ts'
+import AlphanumericData from './alphanumeric-data.ts'
+import ByteData from './byte-data.ts'
+import KanjiData from './kanji-data.ts'
+import * as Regex from './regex.ts'
+import * as Utils from './utils.ts'
 
 /**
  * Returns UTF8 byte length

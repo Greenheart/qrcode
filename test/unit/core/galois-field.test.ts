@@ -1,4 +1,4 @@
-import * as GF from '#core/galois-field.js'
+import * as GF from '#core/galois-field.ts'
 import { expect, test } from 'vitest'
 
 test('Galois Field', () => {

@@ -11,9 +11,9 @@ const babelConfig = {
 
 export default [
   {
-    input: 'lib/browser.js',
+    input: 'lib/browser.ts',
     output: {
-      file: 'build/qrcode.js',
+      file: 'build/qrcode.ts',
       format: 'iife',
       name: 'QRCode',
       exports: 'named',

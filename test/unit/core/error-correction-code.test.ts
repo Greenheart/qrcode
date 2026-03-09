@@ -1,9 +1,9 @@
 import { test, expect } from 'vitest'
-import * as Utils from '#core/utils.js'
-import * as Version from '#core/version.js'
+import * as Utils from '#core/utils.ts'
+import * as Version from '#core/version.ts'
 import * as ECLevel from '#core/error-correction-level.ts'
-import * as ECCode from '#core/error-correction-code.js'
-import * as Mode from '#core/mode.js'
+import * as ECCode from '#core/error-correction-code.ts'
+import * as Mode from '#core/mode.ts'
 
 test('Error correction codewords', () => {
   const levels = [ECLevel.L, ECLevel.M, ECLevel.Q, ECLevel.H]

@@ -1,10 +1,10 @@
 import { test, expect } from 'vitest'
 
-import BitBuffer from '#core/bit-buffer.js'
-import KanjiData from '#core/kanji-data.js'
-import * as Mode from '#core/mode.js'
+import BitBuffer from '#core/bit-buffer.ts'
+import KanjiData from '#core/kanji-data.ts'
+import * as Mode from '#core/mode.ts'
 import toSJIS from '#helper/to-sjis.ts'
-import { setToSJISFunction } from '#lib/core/utils.js'
+import { setToSJISFunction } from '#lib/core/utils.ts'
 
 setToSJISFunction(toSJIS)
 

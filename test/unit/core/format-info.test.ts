@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest'
-import * as FormatInfo from '#core/format-info.js'
+import * as FormatInfo from '#core/format-info.ts'
 import * as ECLevel from '#core/error-correction-level.ts'
 import * as MaskPattern from '#core/mask-pattern.ts'
 

@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest'
-import RS from '#core/reed-solomon-encoder.js'
+import RS from '#core/reed-solomon-encoder.ts'
 
 test('Reed-Solomon encoder', () => {
   let enc = new RS()

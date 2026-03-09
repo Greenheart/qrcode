@@ -1,4 +1,4 @@
-import * as Utils from './utils.js'
+import * as Utils from './utils.ts'
 
 function getColorAttrib(color, attrib) {
   const alpha = color.a / 255

@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest'
-import * as Mode from '#core/mode.js'
+import * as Mode from '#core/mode.ts'
 
 test('Mode bits', () => {
   const EXPECTED_BITS = {

@@ -1,4 +1,4 @@
-import * as Utils from './utils.js'
+import * as Utils from './utils.ts'
 
 function clearCanvas(ctx, canvas, size) {
   ctx.clearRect(0, 0, canvas.width, canvas.height)

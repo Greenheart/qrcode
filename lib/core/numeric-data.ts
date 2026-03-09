@@ -1,4 +1,4 @@
-import * as Mode from './mode.js'
+import * as Mode from './mode.ts'
 
 function NumericData(data) {
   this.mode = Mode.NUMERIC

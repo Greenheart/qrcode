@@ -2,8 +2,8 @@ import sinon from 'sinon'
 import fs, { WriteStream } from 'fs'
 import { PNG } from 'pngjs'
 import { test, expect } from 'vitest'
-import * as QRCode from '#core/qrcode.js'
-import * as PngRenderer from '#renderer/png.js'
+import * as QRCode from '#core/qrcode.ts'
+import * as PngRenderer from '#renderer/png.ts'
 import StreamMock from '../../mocks/writable-stream.js'
 
 test('PNG renderer interface', () => {

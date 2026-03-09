@@ -1,4 +1,4 @@
-import * as Utils from './utils.js'
+import * as Utils from './utils.ts'
 const BLOCK_CHAR = {
   WW: ' ',
   WB: '▄',

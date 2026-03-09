@@ -1,7 +1,7 @@
 import canPromise from './can-promise.ts'
-import * as QRCode from './core/qrcode.js'
-import * as CanvasRenderer from './renderer/canvas.js'
-import * as SvgRenderer from './renderer/svg-tag.js'
+import * as QRCode from './core/qrcode.ts'
+import * as CanvasRenderer from './renderer/canvas.ts'
+import * as SvgRenderer from './renderer/svg-tag.ts'
 
 function renderCanvas(renderFunc, canvas, text, opts, cb) {
   const args = [].slice.call(arguments, 1)

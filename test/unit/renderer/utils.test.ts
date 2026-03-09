@@ -1,4 +1,4 @@
-import * as Utils from '#renderer/utils.js'
+import * as Utils from '#renderer/utils.ts'
 import { test, expect } from 'vitest'
 
 test('Utils getOptions', () => {

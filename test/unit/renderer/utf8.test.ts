@@ -2,8 +2,8 @@ import { test, expect } from 'vitest'
 import sinon from 'sinon'
 import fs from 'fs'
 
-import * as QRCode from '#core/qrcode.js'
-import * as Utf8Renderer from '#renderer/utf8.js'
+import * as QRCode from '#core/qrcode.ts'
+import * as Utf8Renderer from '#renderer/utf8.ts'
 
 test('Utf8Renderer interface', () => {
   expect(Utf8Renderer.render, 'Should have render function').toBeTypeOf('function')

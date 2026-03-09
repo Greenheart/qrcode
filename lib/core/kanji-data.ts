@@ -1,5 +1,5 @@
-import * as Mode from './mode.js'
-import * as Utils from './utils.js'
+import * as Mode from './mode.ts'
+import * as Utils from './utils.ts'
 
 function KanjiData(data) {
   this.mode = Mode.KANJI

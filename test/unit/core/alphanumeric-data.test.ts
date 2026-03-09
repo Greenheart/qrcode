@@ -1,8 +1,8 @@
 import { test, expect } from 'vitest'
 
-import BitBuffer from '#core/bit-buffer.js'
-import AlphanumericData from '#core/alphanumeric-data.js'
-import * as Mode from '#core/mode.js'
+import BitBuffer from '#core/bit-buffer.ts'
+import AlphanumericData from '#core/alphanumeric-data.ts'
+import * as Mode from '#core/mode.ts'
 
 const testData = [
   {

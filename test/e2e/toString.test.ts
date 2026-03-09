@@ -2,7 +2,7 @@ import { test, expect } from 'vitest'
 import fs from 'fs'
 import path from 'path'
 import QRCode from '#lib/index.ts'
-import * as browser from '#lib/browser.js'
+import * as browser from '#lib/browser.ts'
 import * as Helpers from '#test/helpers.js'
 
 test('toString - no promise available', () => {

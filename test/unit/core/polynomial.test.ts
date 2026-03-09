@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest'
-import * as Poly from '#core/polynomial.js'
+import * as Poly from '#core/polynomial.ts'
 
 test('Generator polynomial', () => {
   const result = Poly.generateECPolynomial(0)

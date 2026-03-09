@@ -1,4 +1,4 @@
-import * as GF from './galois-field.js'
+import * as GF from './galois-field.ts'
 /**
  * Multiplies two polynomials inside Galois Field
  *

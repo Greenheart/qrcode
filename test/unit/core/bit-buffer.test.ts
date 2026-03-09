@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest'
-import BitBuffer from '#core/bit-buffer.js'
+import BitBuffer from '#core/bit-buffer.ts'
 
 test('Bit Buffer', () => {
   const testData = 0x41 // 'A'

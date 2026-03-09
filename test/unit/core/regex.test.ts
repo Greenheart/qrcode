@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest'
-import * as Regex from '#core/regex.js'
+import * as Regex from '#core/regex.ts'
 
 test('Regex', () => {
   expect(Regex.NUMERIC, 'Should export a regex for NUMERIC').toBeInstanceOf(RegExp)

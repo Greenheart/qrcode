@@ -1,4 +1,4 @@
-import * as Mode from './mode.js'
+import * as Mode from './mode.ts'
 
 function ByteData(data) {
   this.mode = Mode.BYTE

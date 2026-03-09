@@ -1,6 +1,6 @@
-import { render } from './svg-tag.js'
+import { render } from './svg-tag.ts'
 import fs from 'node:fs'
-export { render } from './svg-tag.js'
+
 
 export function renderToFile(path, qrData, options, cb) {
   if (typeof cb === 'undefined') {
@@ -17,3 +17,5 @@ export function renderToFile(path, qrData, options, cb) {
 
   fs.writeFile(path, xmlStr, cb)
 }
+
+export { render }

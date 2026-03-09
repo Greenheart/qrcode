@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest'
-import BitMatrix from '#core/bit-matrix.js'
+import BitMatrix from '#core/bit-matrix.ts'
 
 test('Bit Matrix', () => {
   expect(() => {

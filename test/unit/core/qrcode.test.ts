@@ -1,7 +1,7 @@
 import { test, expect } from 'vitest'
 import * as ECLevel from '#core/error-correction-level.ts'
-import * as Version from '#core/version.js'
-import * as QRCode from '#core/qrcode.js'
+import * as Version from '#core/version.ts'
+import * as QRCode from '#core/qrcode.ts'
 import toSJIS from '#helper/to-sjis.ts'
 import { arrayWithLength } from '#test/helpers.js'
 

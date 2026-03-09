@@ -1,4 +1,4 @@
-import { getSymbolSize } from './utils.js'
+import { getSymbolSize } from './utils.ts'
 const FINDER_PATTERN_SIZE = 7
 
 /**

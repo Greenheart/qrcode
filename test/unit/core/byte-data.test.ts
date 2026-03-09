@@ -1,7 +1,7 @@
 import { test, expect } from 'vitest'
-import BitBuffer from '#core/bit-buffer.js'
-import ByteData from '#core/byte-data.js'
-import * as Mode from '#core/mode.js'
+import BitBuffer from '#core/bit-buffer.ts'
+import ByteData from '#core/byte-data.ts'
+import * as Mode from '#core/mode.ts'
 
 test('Byte Data: String Input', () => {
   const text = '1234'

@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest'
-import * as pattern from '#core/alignment-pattern.js'
+import * as pattern from '#core/alignment-pattern.ts'
 
 /**
  * Row/column coordinates of the center module of each alignment pattern.
