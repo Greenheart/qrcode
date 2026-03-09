@@ -64,9 +64,9 @@ function setupFinderPattern(matrix: BitMatrix, version: number) {
           (c >= 0 && c <= 6 && (r === 0 || r === 6)) ||
           (r >= 2 && r <= 4 && c >= 2 && c <= 4)
         ) {
-          matrix.set(row + r, col + c, true, true)
+          matrix.set(row + r, col + c, 1, true)
         } else {
-          matrix.set(row + r, col + c, false, true)
+          matrix.set(row + r, col + c, 0, true)
         }
       }
     }
@@ -80,11 +80,11 @@ function setupFinderPattern(matrix: BitMatrix, version: number) {
  *
  * @param  {BitMatrix} matrix Modules matrix
  */
-function setupTimingPattern(matrix) {
+function setupTimingPattern(matrix: BitMatrix) {
   const size = matrix.size
 
   for (let r = 8; r < size - 8; r++) {
-    const value = r % 2 === 0
+    const value = r % 2 === 0 ? 1 : 0
     matrix.set(r, 6, value, true)
     matrix.set(6, r, value, true)
   }
@@ -98,7 +98,7 @@ function setupTimingPattern(matrix) {
  * @param  {BitMatrix} matrix  Modules matrix
  * @param  {Number}    version QR Code version
  */
-function setupAlignmentPattern(matrix, version) {
+function setupAlignmentPattern(matrix: BitMatrix, version: any) {
   const pos = AlignmentPattern.getPositions(version)
 
   for (let i = 0; i < pos.length; i++) {
@@ -108,9 +108,9 @@ function setupAlignmentPattern(matrix, version) {
     for (let r = -2; r <= 2; r++) {
       for (let c = -2; c <= 2; c++) {
         if (r === -2 || r === 2 || c === -2 || c === 2 || (r === 0 && c === 0)) {
-          matrix.set(row + r, col + c, true, true)
+          matrix.set(row + r, col + c, 1, true)
         } else {
-          matrix.set(row + r, col + c, false, true)
+          matrix.set(row + r, col + c, 0, true)
         }
       }
     }

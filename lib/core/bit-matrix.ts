@@ -25,9 +25,9 @@ export default class BitMatrix {
    * Set bit value at specified location
    * If reserved flag is set, this bit will be ignored during masking process.
    */
-  set(row: number, col: number, value: Bit, reserved: boolean = false) {
+  set(row: number, col: number, value: Bit, reserved = false) {
     const index = row * this.size + col
-    this.data[index] = +value
+    this.data[index] = value
     if (reserved) this.reservedBit[index] = 1
   }
 
@@ -41,8 +41,8 @@ export default class BitMatrix {
   /**
    * Applies xor operator at specified location (used during masking process)
    */
-  xor(row: number, col: number, value: Bit | boolean) {
-    this.data[row * this.size + col] ^= +value
+  xor(row: number, col: number, value: Bit) {
+    this.data[row * this.size + col] ^= value
   }
 
   /**

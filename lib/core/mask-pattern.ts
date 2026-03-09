@@ -182,7 +182,7 @@ function getMaskAt(maskPattern: QRCodeMaskPattern, i: number, j: number): boolea
       return (((i * j) % 3) + ((i + j) % 2)) % 2 === 0
 
     default:
-      throw new Error('bad maskPattern:' + maskPattern)
+      throw new Error('Bad maskPattern:' + maskPattern)
   }
 }
 
@@ -195,7 +195,7 @@ export function applyMask(pattern: QRCodeMaskPattern, data: BitMatrix) {
   for (let col = 0; col < size; col++) {
     for (let row = 0; row < size; row++) {
       if (data.isReserved(row, col)) continue
-      data.xor(row, col, getMaskAt(pattern, row, col))
+      data.xor(row, col, getMaskAt(pattern, row, col) ? 1 : 0)
     }
   }
 }
