@@ -12,42 +12,55 @@ const OUTPUT_OPTIONS = ['png', 'svg', 'utf8'] as const
  * Parse CLI arguments and return a CLI instance.
  */
 function parseArgs(): Command {
-  return program
-    .name('qrcode')
-    .usage('[options] <input string>')
-    .optionsGroup('QR Code options:')
-    .option('-v, --qversion <number>', `QR Code symbol version ${printRange(QR_VERSION_RANGE)}`, integerBetween(...QR_VERSION_RANGE))
-    .addOption(new Option('-e, --error <level>', 'Error correction level').choices(ALL_EC_LEVELS))
-    .option('-m, --mask <number>', `Mask pattern ${printRange(QR_MASK_RANGE)}`, integerBetween(...QR_MASK_RANGE))
-    .optionsGroup('Renderer options:')
-    // IDEA: Maybe use a shared constant for valid renderers, defined by the renderers themselves
-    .addOption(new Option('-t, --type <type>', 'Output type').choices(OUTPUT_OPTIONS))
-    .option('-i, --inverse', 'Invert colors')
-    .option('-w, --width <number>', 'Image width (px)', integerBetween(0))
-    .option('-s, --scale <number>', 'Scale factor', integer)
-    .option('-q, --qzone <number>', 'Quiet zone size', integerBetween(0))
-    .option('-l, --lightcolor <color>', 'Light RGBA hex color')
-    .option('-d, --darkcolor <color>', 'Dark RGBA hex color')
-    .option('--small', 'Output smaller QR code to terminal')
-    .optionsGroup('Options:')
-    .option('-o, --output <path>', 'Output file')
-    .helpOption('-h, --help', 'Show help')
-    .addHelpText('after', `
+  return (
+    program
+      .name('qrcode')
+      .usage('[options] <input string>')
+      .optionsGroup('QR Code options:')
+      .option(
+        '-v, --qversion <number>',
+        `QR Code symbol version ${printRange(QR_VERSION_RANGE)}`,
+        integerBetween(...QR_VERSION_RANGE),
+      )
+      .addOption(new Option('-e, --error <level>', 'Error correction level').choices(ALL_EC_LEVELS))
+      .option(
+        '-m, --mask <number>',
+        `Mask pattern ${printRange(QR_MASK_RANGE)}`,
+        integerBetween(...QR_MASK_RANGE),
+      )
+      .optionsGroup('Renderer options:')
+      // IDEA: Maybe use a shared constant for valid renderers, defined by the renderers themselves
+      .addOption(new Option('-t, --type <type>', 'Output type').choices(OUTPUT_OPTIONS))
+      .option('-i, --inverse', 'Invert colors')
+      .option('-w, --width <number>', 'Image width (px)', integerBetween(0))
+      .option('-s, --scale <number>', 'Scale factor', integer)
+      .option('-q, --qzone <number>', 'Quiet zone size', integerBetween(0))
+      .option('-l, --lightcolor <color>', 'Light RGBA hex color')
+      .option('-d, --darkcolor <color>', 'Dark RGBA hex color')
+      .option('--small', 'Output smaller QR code to terminal')
+      .optionsGroup('Options:')
+      .option('-o, --output <path>', 'Output file')
+      .helpOption('-h, --help', 'Show help')
+      .addHelpText(
+        'after',
+        `
 Examples:
   qrcode "some text"                      Draw in terminal window
   qrcode -o out.png "some text"           Save as png image
   qrcode -d F00 -o out.png "some text"    Use red as foreground color
-`)
-    .showHelpAfterError()
-    .version(pkg.version, '--version', 'Show version number')
-    // The input string is a variadic argument that will include any remaining
-    // input after parsing options In commander, this is indicated by the `...`
-    // suffix.
-    // The wrapping [] makes the input string arguments optional.
-    // This allows executing the CLI and reading from stdin, useful in scripts.
-    // By making the arguments optional, the help can be printed by default.
-    .argument('[input string...]', undefined)  // undefined to hide description
-    .parse()
+`,
+      )
+      .showHelpAfterError()
+      .version(pkg.version, '--version', 'Show version number')
+      // The input string is a variadic argument that will include any remaining
+      // input after parsing options In commander, this is indicated by the `...`
+      // suffix.
+      // The wrapping [] makes the input string arguments optional.
+      // This allows executing the CLI and reading from stdin, useful in scripts.
+      // By making the arguments optional, the help can be printed by default.
+      .argument('[input string...]', undefined) // undefined to hide description
+      .parse()
+  )
 }
 
 function printRange([min, max]: readonly [number, number]) {
@@ -78,8 +91,8 @@ function integerBetween(min: number, max: number = Number.MAX_SAFE_INTEGER) {
 /** The raw input CLI options, matching the CLI configuration above */
 type RawCliOptions = {
   qversion?: number
-  error?: typeof ALL_EC_LEVELS[number]
-  type?: typeof OUTPUT_OPTIONS[number]
+  error?: (typeof ALL_EC_LEVELS)[number]
+  type?: (typeof OUTPUT_OPTIONS)[number]
   small?: boolean
   inverse?: boolean
   mask?: number
@@ -94,8 +107,8 @@ type RawCliOptions = {
 /** Used after parsing and normalizing the user input. Maps to internal options in the QRCode library */
 type ParsedCliOptions = {
   version?: number
-  errorCorrectionLevel?: typeof ALL_EC_LEVELS[number]
-  type?: typeof OUTPUT_OPTIONS[number] | 'terminal'
+  errorCorrectionLevel?: (typeof ALL_EC_LEVELS)[number]
+  type?: (typeof OUTPUT_OPTIONS)[number] | 'terminal'
   small: boolean
   inverse: boolean
   maskPattern?: number
@@ -144,8 +157,8 @@ function parseOptions(args: RawCliOptions): ParsedCliOptions {
     scale: args.scale,
     color: {
       light: args.lightcolor,
-      dark: args.darkcolor
-    }
+      dark: args.darkcolor,
+    },
   }
 }
 
@@ -180,6 +193,6 @@ if (process.stdin.isTTY) {
   process.stdin.on('end', () => {
     // This process can be run as a command outside of a TTY
     // so if there was no data on stdin, read the CLI args instead
-    processInput(text.length ? text: cli.args.join(' '), argv)
+    processInput(text.length ? text : cli.args.join(' '), argv)
   })
 }
