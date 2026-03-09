@@ -21,7 +21,7 @@
     "url": "git+https://github.com/slidoapp/node-qrcode.git"
   },
   "bin": {
-    "qrcode": "./bin/qrcode"
+    "qrcode": "./bin/qrcode.ts"
   },
   "files": [
     "bin",
@@ -58,8 +58,7 @@
     "@types/pngjs": "^6.0.5",
     "commander": "15.0.0-0",
     "dijkstra-find-path": "^2.0.0",
-    "pngjs": "^7.0.0",
-    "yargs": "^18.0.0"
+    "pngjs": "^7.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.29.0",
