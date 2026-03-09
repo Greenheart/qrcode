@@ -42,10 +42,10 @@ import type { QRCodeErrorCorrectionLevel, QRCodeMaskPattern } from '#lib/types.t
 /**
  * Add finder patterns bits to matrix
  *
- * @param  {BitMatrix} matrix  Modules matrix
- * @param  {Number}    version QR Code version
+ * @param matrix  Modules matrix
+ * @param version QR Code version
  */
-function setupFinderPattern(matrix, version) {
+function setupFinderPattern(matrix: BitMatrix, version: number) {
   const size = matrix.size
   const pos = FinderPattern.getPositions(version)
 

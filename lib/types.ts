@@ -11,12 +11,15 @@ export type QRCodeErrorCorrectionLevel =
   | 'H'
 export type QRCodeMaskPattern = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7
 export type QRCodeToSJISFunc = (codePoint: string) => number
+export type QRVersion =
+  | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21
+  | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31 | 32 | 33 | 34 | 35 | 36 | 37 | 38 | 39 | 40
 
 export interface QRCodeOptions {
   /**
    * QR Code version. If not specified the more suitable value will be calculated.
    */
-  version?: number | undefined
+  version?: QRVersion | undefined
   /**
    * Error correction level.
    * @default 'M'
@@ -231,7 +234,7 @@ export interface QRCode {
   /**
    * Calculated QR Code version
    */
-  version: number
+  version: QRVersion
   /**
    * Error Correction Level
    */
