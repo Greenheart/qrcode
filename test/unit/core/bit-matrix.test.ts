@@ -3,10 +3,10 @@ import BitMatrix from '#core/bit-matrix.ts'
 
 test('Bit Matrix', () => {
   expect(() => {
-    BitMatrix(0)
+    new BitMatrix(0)
   }, 'Should throw if size is 0').toThrow()
   expect(() => {
-    BitMatrix(-1)
+    new BitMatrix(-1)
   }, 'Should throw if size less than 0').toThrow()
 
   const bm = new BitMatrix(2)
@@ -14,15 +14,13 @@ test('Bit Matrix', () => {
   expect(bm.size, 'Should have correct size').toEqual(2)
   expect(bm.data.length, 'Should correctly set buffer size').toEqual(4)
 
-  bm.set(0, 1, true, true)
+  bm.set(0, 1, 1, true)
   expect(bm.get(0, 1), 'Should correctly set bit to true').toEqual(1)
-  expect(bm.isReserved(0, 1), 'Should correctly set bit as reserved').toEqual(1)
+  expect(bm.isReserved(0, 1), 'Should correctly set bit as reserved').toEqual(true)
 
-  // TODO: check if the type is correct - would be better to return 1 | 0 rather than boolean or number
   bm.xor(0, 1, 1)
   expect(bm.get(0, 1), 'Should correctly xor bit').toEqual(0)
 
-  // TODO: Improve parameter types for BitMatrix.set()
-  bm.set(0, 1, false)
+  bm.set(0, 1, 0)
   expect(bm.get(0, 1), 'Should correctly set bit to false').toEqual(0)
 })
