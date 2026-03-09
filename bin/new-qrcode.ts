@@ -15,7 +15,6 @@ function parseArgs(): Command {
   return program
     .name('qrcode')
     .usage('[options] <input string>')
-    .version(pkg.version, '--version', 'Show version number')
     .optionsGroup('QR Code options:')
     .option('-v, --qversion <number>', `QR Code symbol version ${printRange(QR_VERSION_RANGE)}`, integerBetween(...QR_VERSION_RANGE))
     .addOption(new Option('-e, --error <level>', 'Error correction level').choices(ALL_EC_LEVELS))
@@ -31,8 +30,8 @@ function parseArgs(): Command {
     .option('-d, --darkcolor <color>', 'Dark RGBA hex color')
     .option('--small', 'Output smaller QR code to terminal')
     .optionsGroup('Options:')
-    .helpOption('-h, --help', 'Show help')
     .option('-o, --output <path>', 'Output file')
+    .helpOption('-h, --help', 'Show help')
     // The input string is a variadic argument that will include any remaining
     // input after parsing options In commander, this is indicated by the `...`
     // suffix.
@@ -47,6 +46,7 @@ Examples:
   qrcode -d F00 -o out.png "some text"    Use red as foreground color
 `)
     .showHelpAfterError()
+    .version(pkg.version, '--version', 'Show version number')
     .parse()
 }
 
