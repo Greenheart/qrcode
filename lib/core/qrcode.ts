@@ -11,6 +11,7 @@ import * as Version from './version.ts'
 import * as FormatInfo from './format-info.ts'
 import * as Mode from './mode.ts'
 import * as Segments from './segments.ts'
+import type { QRCodeErrorCorrectionLevel, QRCodeMaskPattern } from '#lib/types.ts'
 
 /**
  * QRCode for JavaScript
@@ -138,13 +139,13 @@ function setupVersionInfo(matrix, version) {
 }
 
 /**
- * Add format info bits to matrix
+ * Modify an existing BitMatrix to add format info bits.
  *
- * @param  {BitMatrix} matrix               Modules matrix
- * @param  {ErrorCorrectionLevel}    errorCorrectionLevel Error correction level
- * @param  {Number}    maskPattern          Mask pattern reference value
+ * @param matrix Modules matrix
+ * @param errorCorrectionLevel Error correction level
+ * @param maskPattern Mask pattern reference value
  */
-function setupFormatInfo(matrix, errorCorrectionLevel, maskPattern) {
+function setupFormatInfo(matrix: BitMatrix, errorCorrectionLevel: QRCodeErrorCorrectionLevel, maskPattern: QRCodeMaskPattern) {
   const size = matrix.size
   const bits = FormatInfo.getEncodedBits(errorCorrectionLevel, maskPattern)
   let i, mod

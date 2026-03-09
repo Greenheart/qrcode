@@ -1,3 +1,6 @@
+import type BitMatrix from "./bit-matrix.ts"
+import type { QRCodeMaskPattern } from "#lib/types.ts"
+
 export const Patterns = {
   PATTERN000: 0,
   PATTERN001: 1,
@@ -12,8 +15,6 @@ export const Patterns = {
 const MIN = Patterns.PATTERN000
 const MAX = Patterns.PATTERN111
 export const QR_MASK_RANGE = [MIN, MAX] as const
-
-export type QRCodeMaskPattern = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7
 
 /**
  * Weighted penalty scores for the undesirable features
@@ -46,7 +47,7 @@ export function parse(mask: unknown): QRCodeMaskPattern | undefined {
  * Points: N1 + i
  * i is the amount by which the number of adjacent modules of the same color exceeds 5
  */
-export function getPenaltyN1(data) {
+export function getPenaltyN1(data: BitMatrix) {
   const size = data.size
   let points = 0
   let sameCountCol = 0
@@ -90,7 +91,7 @@ export function getPenaltyN1(data) {
  *
  * Points: N2 * (m - 1) * (n - 1)
  */
-export function getPenaltyN2(data) {
+export function getPenaltyN2(data: BitMatrix) {
   const size = data.size
   let points = 0
 
@@ -115,7 +116,7 @@ export function getPenaltyN2(data) {
  *
  * Points: N3 * number of pattern found
  */
-export function getPenaltyN3(data) {
+export function getPenaltyN3(data: BitMatrix) {
   const size = data.size
   let points = 0
   let bitsCol = 0
@@ -143,7 +144,7 @@ export function getPenaltyN3(data) {
  * k is the rating of the deviation of the proportion of dark modules
  * in the symbol from 50% in steps of 5%
  */
-export function getPenaltyN4(data) {
+export function getPenaltyN4(data: BitMatrix) {
   let darkCount = 0
   const modulesCount = data.data.length
 
@@ -157,12 +158,11 @@ export function getPenaltyN4(data) {
 /**
  * Return mask value at given position
  *
- * @param  {Number} maskPattern Pattern reference value
- * @param  {Number} i           Row
- * @param  {Number} j           Column
- * @return {Boolean}            Mask value
+ * @param maskPattern Pattern reference value
+ * @param i Row
+ * @param j Column
  */
-function getMaskAt(maskPattern, i, j) {
+function getMaskAt(maskPattern: QRCodeMaskPattern, i: number, j: number): boolean {
   switch (maskPattern) {
     case Patterns.PATTERN000:
       return (i + j) % 2 === 0
@@ -189,10 +189,10 @@ function getMaskAt(maskPattern, i, j) {
 /**
  * Apply a mask pattern to a BitMatrix
  *
- * @param  {Number}    pattern Pattern reference number
- * @param  {BitMatrix} data    BitMatrix data
+ * @param pattern Pattern reference number
+ * @param data BitMatrix data
  */
-export function applyMask(pattern, data) {
+export function applyMask(pattern: QRCodeMaskPattern, data: BitMatrix) {
   const size = data.size
 
   for (let col = 0; col < size; col++) {
@@ -209,7 +209,7 @@ export function applyMask(pattern, data) {
  * @param  {BitMatrix} data
  * @return {Number} Mask pattern reference number
  */
-export function getBestMask(data, setupFormatFunc) {
+export function getBestMask(data: BitMatrix, setupFormatFunc: (mask: QRCodeMaskPattern) => number): number {
   let bestPattern = 0
   let lowerPenalty = Infinity
 

@@ -41,8 +41,8 @@ export default class BitMatrix {
   /**
    * Applies xor operator at specified location (used during masking process)
    */
-  xor(row: number, col: number, value: Bit) {
-    this.data[row * this.size + col] ^= value
+  xor(row: number, col: number, value: Bit | boolean) {
+    this.data[row * this.size + col] ^= +value
   }
 
   /**
