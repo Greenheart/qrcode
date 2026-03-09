@@ -491,7 +491,7 @@ export function create(data, options) {
     // Use higher error correction level as default
     errorCorrectionLevel = ECLevel.from(options.errorCorrectionLevel, ECLevel.M)
     version = Version.from(options.version)
-    mask = MaskPattern.from(options.maskPattern)
+    mask = MaskPattern.parse(options.maskPattern)
 
     if (options.toSJISFunc) {
       Utils.setToSJISFunction(options.toSJISFunc)

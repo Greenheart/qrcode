@@ -13,6 +13,8 @@ const MIN = Patterns.PATTERN000
 const MAX = Patterns.PATTERN111
 export const QR_MASK_RANGE = [MIN, MAX] as const
 
+export type QRCodeMaskPattern = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7
+
 /**
  * Weighted penalty scores for the undesirable features
  */
@@ -24,24 +26,17 @@ const PenaltyScores = {
 } as const
 
 /**
- * Check if mask pattern value is valid
- *
- * @param mask Mask pattern
- * @return true if valid, false otherwise
- */
-export function isValid(mask: number) {
-  return mask != null && mask !== '' && !isNaN(mask) && MIN <= mask && mask <= MAX
-}
-
-/**
  * Returns mask pattern from a value.
  * If value is not valid, returns undefined
  *
- * @param  {Number|String} value        Mask pattern value
- * @return {Number}                     Valid mask pattern or undefined
+ * @param value Mask pattern value
+ * @return Valid mask pattern or undefined
  */
-export function from(value) {
-  return isValid(value) ? parseInt(value, 10) : undefined
+export function parse(mask: unknown): QRCodeMaskPattern | undefined {
+  const num = typeof mask !== 'number' ? parseInt(mask as any, 10) : mask
+  if (Number.isInteger(num) && MIN <= num && num <= MAX) {
+    return num as QRCodeMaskPattern
+  }
 }
 
 /**

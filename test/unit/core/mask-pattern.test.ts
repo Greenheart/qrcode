@@ -49,20 +49,22 @@ const expectedPattern111 = new Uint8Array([
   1, 0, 0,
 ])
 
-test('MaskPattern validity', () => {
+test('MaskPattern parse invalid input', () => {
   // @ts-expect-error Testing invalid input
-  expect(MaskPattern.isValid(), 'Should return false if no input').toEqual(false)
-  // @ts-expect-error Testing invalid input
-  expect(MaskPattern.isValid(''), 'Should return false if value is not a number').toEqual(false)
-  expect(MaskPattern.isValid(-1), 'Should return false if value is not in range').toEqual(false)
-  expect(MaskPattern.isValid(8), 'Should return false if value is not in range').toEqual(false)
+  expect(MaskPattern.parse(), 'Should return undefined if no input').toEqual(undefined)
+  expect(MaskPattern.parse(''), 'Should return undefined if value is not a number').toEqual(undefined)
+  expect(MaskPattern.parse(-1), 'Should return undefined if value is not in range').toEqual(undefined)
+  expect(MaskPattern.parse(8), 'Should return undefined if value is not in range').toEqual(undefined)
+  expect(MaskPattern.parse(null), 'Should return undefined if value is null').toEqual(undefined)
+  expect(MaskPattern.parse(NaN), 'Should return undefined if value is NaN').toEqual(undefined)
 })
 
-test('MaskPattern from value', () => {
-  expect(MaskPattern.from(5), 'Should return correct mask pattern from a number').toEqual(5)
-  expect(MaskPattern.from('5'), 'Should return correct mask pattern from a string').toEqual(5)
-  expect(MaskPattern.from(-1), 'Should return undefined if value is invalid').toEqual(undefined)
-  expect(MaskPattern.from(null), 'Should return undefined if value is null').toEqual(undefined)
+test('MaskPattern parse value', () => {
+  expect(MaskPattern.parse(5), 'Should return correct mask pattern from a number').toEqual(5)
+  expect(MaskPattern.parse('5'), 'Should return correct mask pattern from a string').toEqual(5)
+  expect(MaskPattern.parse(-1), 'Should return undefined if value is too small').toEqual(undefined)
+  expect(MaskPattern.parse(8), 'Should return undefined if value is too big').toEqual(undefined)
+  expect(MaskPattern.parse(6.5), 'Should return undefined if value is a float').toEqual(undefined)
 })
 
 test('Mask pattern - Apply mask', () => {
