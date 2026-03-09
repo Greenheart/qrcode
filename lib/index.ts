@@ -9,5 +9,5 @@
  *
  */
 
-import * as server from './server.js'
+import * as server from './server.ts'
 export default server

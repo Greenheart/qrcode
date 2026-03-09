@@ -3,7 +3,7 @@ import fs, { WriteStream } from 'fs'
 import path from 'path'
 import os from 'os'
 import sinon from 'sinon'
-import QRCode from '#lib/index.js'
+import QRCode from '#lib/index.ts'
 import * as Helpers from '#test/helpers.js'
 import StreamMock from '#test/mocks/writable-stream.js'
 

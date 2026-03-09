@@ -1,4 +1,4 @@
-import canPromise from './can-promise.js'
+import canPromise from './can-promise.ts'
 import * as QRCode from './core/qrcode.js'
 import * as PngRenderer from './renderer/png.js'
 import * as Utf8Renderer from './renderer/utf8.js'

@@ -1,6 +1,6 @@
 import { test, expect } from 'vitest'
 import { Canvas, createCanvas } from 'canvas'
-import QRCode from '#lib/index.js'
+import QRCode from '#lib/index.ts'
 import * as Helpers from '#test/helpers.js'
 
 test('toCanvas - no promise available', () => {

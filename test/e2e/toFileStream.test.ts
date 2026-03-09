@@ -1,6 +1,6 @@
 import { test, expect } from 'vitest'
 import sinon from 'sinon'
-import QRCode from '#lib/index.js'
+import QRCode from '#lib/index.ts'
 import StreamMock from '../mocks/writable-stream.js'
 
 test('toFileStream png', () => {

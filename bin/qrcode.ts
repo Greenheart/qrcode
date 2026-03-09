@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { program, Option, InvalidArgumentError, type Command } from 'commander'
-import QRCode from '#lib/index.js'
+import QRCode from '#lib/index.ts'
 import { ALL_EC_LEVELS } from '#core/error-correction-level.ts'
 import { QR_VERSION_RANGE } from '#core/version-check.ts'
 import { QR_MASK_RANGE } from '#core/mask-pattern.ts'
