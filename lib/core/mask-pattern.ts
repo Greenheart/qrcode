@@ -188,9 +188,6 @@ function getMaskAt(maskPattern: QRCodeMaskPattern, i: number, j: number): boolea
 
 /**
  * Apply a mask pattern to a BitMatrix
- *
- * @param pattern Pattern reference number
- * @param data BitMatrix data
  */
 export function applyMask(pattern: QRCodeMaskPattern, data: BitMatrix) {
   const size = data.size
@@ -205,12 +202,9 @@ export function applyMask(pattern: QRCodeMaskPattern, data: BitMatrix) {
 
 /**
  * Returns the best mask pattern for data
- *
- * @param  {BitMatrix} data
- * @return {Number} Mask pattern reference number
  */
-export function getBestMask(data: BitMatrix, setupFormatFunc: (mask: QRCodeMaskPattern) => number): number {
-  let bestPattern = 0
+export function getBestMask(data: BitMatrix, setupFormatFunc: (mask: QRCodeMaskPattern) => number): QRCodeMaskPattern {
+  let bestPattern: QRCodeMaskPattern = 0
   let lowerPenalty = Infinity
 
   for (let p = MIN; p <= MAX; p++) {
@@ -226,7 +220,7 @@ export function getBestMask(data: BitMatrix, setupFormatFunc: (mask: QRCodeMaskP
 
     if (penalty < lowerPenalty) {
       lowerPenalty = penalty
-      bestPattern = p
+      bestPattern = p as QRCodeMaskPattern
     }
   }
 
