@@ -1,4 +1,4 @@
-import toSJIS from './to-sjis.js'
+import toSJIS from './to-sjis.ts'
 
 /* global QRCode */
 QRCode.toSJIS = toSJIS

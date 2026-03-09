@@ -4,7 +4,7 @@ import * as Segments from '#core/segments.js'
 import NumericData from '#core/numeric-data.js'
 import AlphanumericData from '#core/alphanumeric-data.js'
 import ByteData from '#core/byte-data.js'
-import toSJIS from '#helper/to-sjis.js'
+import toSJIS from '#helper/to-sjis.ts'
 import * as Utils from '#core/utils.js'
 
 let testData = [

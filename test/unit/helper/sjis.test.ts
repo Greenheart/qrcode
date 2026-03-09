@@ -1,6 +1,6 @@
 import { test, expect } from 'vitest'
 
-import toSJIS from '#helper/to-sjis.js'
+import toSJIS from '#helper/to-sjis.ts'
 
 test('SJIS from char', () => {
   expect(toSJIS(''), 'Should return undefined if character is invalid').toEqual(undefined)

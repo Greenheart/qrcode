@@ -3,7 +3,7 @@ import { test, expect } from 'vitest'
 import BitBuffer from '#core/bit-buffer.js'
 import KanjiData from '#core/kanji-data.js'
 import * as Mode from '#core/mode.js'
-import toSJIS from '#helper/to-sjis.js'
+import toSJIS from '#helper/to-sjis.ts'
 import { setToSJISFunction } from '#lib/core/utils.js'
 
 setToSJISFunction(toSJIS)
