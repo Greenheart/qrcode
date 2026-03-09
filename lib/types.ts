@@ -1,3 +1,5 @@
+import type BitMatrix from "./core/bit-matrix.ts"
+
 export type QRCodeErrorCorrectionLevel =
   | 'low'
   | 'medium'
@@ -242,35 +244,6 @@ export interface QRCode {
    * Generated segments
    */
   segments: GeneratedQRCodeSegment[]
-}
-
-/**
- * Helper class to handle QR Code symbol modules.
- */
-export interface BitMatrix {
-  /**
-   * Symbol size.
-   */
-  size: number
-  data: Uint8Array
-  reservedBit: Uint8Array
-  /**
-   * Set bit value at specified location
-   * If reserved flag is set, this bit will be ignored during masking process.
-   */
-  set(row: number, col: number, value: number, reserved: boolean): void
-  /**
-   * @return Bit value at specified location.
-   */
-  get(row: number, col: number): number
-  /**
-   * Applies xor operator at specified location (used during masking process).
-   */
-  xor(row: number, col: number, value: number): void
-  /**
-   * Check if bit at specified location is reserved.
-   */
-  isReserved(row: number, col: number): number
 }
 
 export interface ErrorCorrectionLevel {
