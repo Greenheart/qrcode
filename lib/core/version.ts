@@ -73,24 +73,6 @@ function getBestVersionForMixedData(segments, errorCorrectionLevel) {
 }
 
 /**
- * TODO: Replace with parse
- *
- * Returns version number from a value.
- * If value is not a valid version, returns defaultValue
- *
- * @param  {Number|String} value        QR Code version
- * @param  {Number}        defaultValue Fallback value
- * @return {Number}                     QR Code version number
- */
-export function from(value, defaultValue) {
-  if (isValid(value)) {
-    return parseInt(value, 10)
-  }
-
-  return defaultValue
-}
-
-/**
  * Returns how much data can be stored with the specified QR code version
  * and error correction level
  *

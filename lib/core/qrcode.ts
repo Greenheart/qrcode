@@ -481,13 +481,13 @@ export function create(data, options) {
   }
 
   let errorCorrectionLevel = ECLevel.M
-  let version
-  let mask
+  let version: QRVersion | undefined
+  let mask: QRCodeMaskPattern | undefined
 
   if (typeof options !== 'undefined') {
     // Use higher error correction level as default
     errorCorrectionLevel = ECLevel.from(options.errorCorrectionLevel, ECLevel.M)
-    version = Version.from(options.version)
+    version = Version.parse(options.version)
     mask = MaskPattern.parse(options.maskPattern)
 
     if (options.toSJISFunc) {
