@@ -55,7 +55,6 @@
     "browser": "node examples/clientsideserver.js"
   },
   "dependencies": {
-    "@types/pngjs": "^6.0.5",
     "commander": "15.0.0-0",
     "dijkstra-find-path": "^2.0.0",
     "pngjs": "^7.0.0"
@@ -69,6 +68,7 @@
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-terser": "^1.0.0",
     "@types/node": "^25.3.3",
+    "@types/pngjs": "^6.0.5",
     "@types/sinon": "^21.0.0",
     "@vitest/coverage-v8": "4.0.18",
     "browserify": "^17.0.1",

@@ -11,9 +11,6 @@ importers:
 
   .:
     dependencies:
-      '@types/pngjs':
-        specifier: ^6.0.5
-        version: 6.0.5
       commander:
         specifier: 15.0.0-0
         version: 15.0.0-0
@@ -48,6 +45,9 @@ importers:
       '@types/node':
         specifier: ^25.3.3
         version: 25.3.3
+      '@types/pngjs':
+        specifier: ^6.0.5
+        version: 6.0.5
       '@types/sinon':
         specifier: ^21.0.0
         version: 21.0.0
