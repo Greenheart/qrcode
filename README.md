@@ -843,6 +843,8 @@ https://github.com/soldair/node-qrcode/issues/45
 The source code is based on the [QRCode for JavaScript](https://github.com/kazuhikoarase/qrcode-generator) by Kazuhiko Arase,
 licenced under [MIT License](https://github.com/kazuhikoarase/qrcode-generator/blob/master/LICENSE).
 
+TypeScript definitions originally contributed by [York Yao](https://github.com/plantain-00), [Michael Nahkies](https://github.com/mnahkies), [Rémi Sormain](https://github.com/Marchelune), and [BendingBender](https://github.com/BendingBender). Licensed under the MIT license.
+
 ## License
 
 Source code is licensed under [MIT License](https://github.com/soldair/node-qrcode/blob/master/license).
