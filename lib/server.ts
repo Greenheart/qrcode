@@ -30,38 +30,40 @@ function checkParams(text, opts, cb) {
   }
 }
 
-function getTypeFromFilename(path) {
+const STRING_RENDERERS = {
+  svg: SvgRenderer,
+  terminal: TerminalRenderer,
+  utf8: Utf8Renderer,
+} as const
+
+const RENDERERS = {
+  svg: SvgRenderer,
+  txt: Utf8Renderer,
+  utf8: Utf8Renderer,
+  png: PngRenderer,
+  'image/png': PngRenderer,
+} as const
+
+type RendererType = keyof typeof RENDERERS
+type StringRendererType = keyof typeof STRING_RENDERERS
+
+function getTypeFromFilename(path: string) {
   return path.slice(((path.lastIndexOf('.') - 1) >>> 0) + 2).toLowerCase()
 }
 
-function getRendererFromType(type) {
-  switch (type) {
-    case 'svg':
-      return SvgRenderer
-
-    case 'txt':
-    case 'utf8':
-      return Utf8Renderer
-
-    case 'png':
-    case 'image/png':
-    default:
-      return PngRenderer
+function getRendererFromType<T extends RendererType>(type: T): typeof RENDERERS[T] {
+  if (typeof RENDERERS[type] === 'function') {
+    return RENDERERS[type]
   }
+  // TODO: Fix return type
+  return PngRenderer
 }
 
-function getStringRendererFromType(type) {
-  switch (type) {
-    case 'svg':
-      return SvgRenderer
-
-    case 'terminal':
-      return TerminalRenderer
-
-    case 'utf8':
-    default:
-      return Utf8Renderer
+function getStringRendererFromType<T extends StringRendererType>(type: T): typeof STRING_RENDERERS[T] {
+  if (typeof STRING_RENDERERS[type] === 'function') {
+    return STRING_RENDERERS[type]
   }
+  return Utf8Renderer
 }
 
 function render(renderFunc, text, params) {
