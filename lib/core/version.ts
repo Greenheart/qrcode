@@ -2,8 +2,34 @@ import * as Utils from './utils.ts'
 import * as ECCode from './error-correction-code.ts'
 import * as ECLevel from './error-correction-level.ts'
 import * as Mode from './mode.ts'
-import * as VersionCheck from './version-check.ts'
 import type { QRVersion } from '#lib/types.ts'
+
+const MIN = 1
+const MAX = 40
+export const QR_VERSION_RANGE = [MIN, MAX] as const
+
+/**
+ * Check if QR Code version is valid
+ *
+ * TODO: Replace isValid() and from() with parse() instead
+ *
+ * @param version QR Code version
+ * @return true if valid version, false otherwise
+ */
+export function isValid(version: number) {
+  return !isNaN(version) && MIN <= version && version <= MAX
+}
+
+/**
+ * Parse and returns the QR code version (1-40), or undefined if the version is invalid.
+ */
+export function parse(version: unknown): QRVersion | undefined {
+  let num = typeof version !== 'number' ? parseInt(version as any, 10) : version
+  if (Number.isInteger(num) && MIN <= num && num <= MAX) {
+    return num as QRVersion
+  }
+}
+
 // Generator polynomial used to encode version information
 const G18 = (1 << 12) | (1 << 11) | (1 << 10) | (1 << 9) | (1 << 8) | (1 << 5) | (1 << 2) | (1 << 0)
 const G18_BCH = Utils.getBCHDigit(G18)
@@ -57,7 +83,7 @@ function getBestVersionForMixedData(segments, errorCorrectionLevel) {
  * @return {Number}                     QR Code version number
  */
 export function from(value, defaultValue) {
-  if (VersionCheck.isValid(value)) {
+  if (isValid(value)) {
     return parseInt(value, 10)
   }
 
@@ -85,7 +111,7 @@ export function getCapacity(
   mode: { bit: number; id?: string; ccBits?: number[] },
 ) {
   // IDEA: Maybe remove this check and always guard calls to this function with parsing the QR version or using a default value?
-  if (!VersionCheck.isValid(version)) {
+  if (!isValid(version)) {
     throw new Error('Invalid QR Code version')
   }
 
@@ -162,7 +188,7 @@ export function getBestVersionForData(data, errorCorrectionLevel) {
  */
 export function getEncodedBits(version: QRVersion) {
   // TODO: Why is isValid needed to be called here? Ideally just call parse at an earlier point to avoid the repeated checks
-  if (!VersionCheck.isValid(version) || version < 7) {
+  if (!isValid(version) || version < 7) {
     throw new Error('Invalid QR Code version')
   }
 

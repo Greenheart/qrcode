@@ -1,17 +1,19 @@
-import * as VersionCheck from './version-check.ts'
+import * as Version from './version.ts'
 import * as Regex from './regex.ts'
+import type { QRVersion } from '#lib/types.ts'
+
+// TODO: create a `Mode` type which maps to the actual modes defined below
+
 /**
  * Numeric mode encodes data from the decimal digit set (0 - 9)
  * (byte values 30HEX to 39HEX).
  * Normally, 3 data characters are represented by 10 bits.
- *
- * @type {Object}
  */
 export const NUMERIC = {
   id: 'Numeric',
   bit: 1 << 0,
   ccBits: [10, 12, 14],
-}
+} as const
 
 /**
  * Alphanumeric mode encodes data from a set of 45 characters,
@@ -19,25 +21,21 @@ export const NUMERIC = {
  *      26 alphabetic characters (A - Z),
  *   and 9 symbols (SP, $, %, *, +, -, ., /, :).
  * Normally, two input characters are represented by 11 bits.
- *
- * @type {Object}
  */
 export const ALPHANUMERIC = {
   id: 'Alphanumeric',
   bit: 1 << 1,
   ccBits: [9, 11, 13],
-}
+} as const
 
 /**
  * In byte mode, data is encoded at 8 bits per character.
- *
- * @type {Object}
  */
 export const BYTE = {
   id: 'Byte',
   bit: 1 << 2,
   ccBits: [8, 16, 16],
-}
+} as const
 
 /**
  * The Kanji mode efficiently encodes Kanji characters in accordance with
@@ -45,37 +43,33 @@ export const BYTE = {
  * The Shift JIS values are shifted from the JIS X 0208 values.
  * JIS X 0208 gives details of the shift coded representation.
  * Each two-byte character value is compacted to a 13-bit binary codeword.
- *
- * @type {Object}
  */
 export const KANJI = {
   id: 'Kanji',
   bit: 1 << 3,
   ccBits: [8, 10, 12],
-}
+} as const
 
 /**
  * Mixed mode will contain a sequences of data in a combination of any of
  * the modes described above
- *
- * @type {Object}
  */
 export const MIXED = {
   bit: -1,
-}
+} as const
 
 /**
  * Returns the number of bits needed to store the data length
  * according to QR Code specifications.
  *
- * @param  {Mode}   mode    Data mode
- * @param  {Number} version QR Code version
- * @return {Number}         Number of bits
+ * @param {Mode} mode Data mode
+ * @param version QR Code version
+ * @return Number of bits
  */
-export function getCharCountIndicator(mode, version) {
+export function getCharCountIndicator(mode, version: QRVersion): number {
   if (!mode.ccBits) throw new Error('Invalid mode: ' + mode)
 
-  if (!VersionCheck.isValid(version)) {
+  if (!Version.isValid(version)) {
     throw new Error('Invalid version: ' + version)
   }
 
@@ -87,13 +81,13 @@ export function getCharCountIndicator(mode, version) {
 /**
  * Returns the most efficient mode to store the specified data
  *
- * @param  {String} dataStr Input data string
- * @return {Mode}           Best mode
+ * @param dataStr Input data string
+ * @return {Mode} Best mode
  */
-export function getBestModeForData(dataStr) {
-  if (Regex.testNumeric(dataStr)) return NUMERIC
-  else if (Regex.testAlphanumeric(dataStr)) return ALPHANUMERIC
-  else if (Regex.testKanji(dataStr)) return KANJI
+export function getBestModeForData(data: string) {
+  if (Regex.testNumeric(data)) return NUMERIC
+  else if (Regex.testAlphanumeric(data)) return ALPHANUMERIC
+  else if (Regex.testKanji(data)) return KANJI
   else return BYTE
 }
 

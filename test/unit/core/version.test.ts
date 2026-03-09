@@ -1,6 +1,5 @@
 import { test, expect } from 'vitest'
 import * as Version from '#core/version.ts'
-import * as VersionCheck from '#core/version-check.ts'
 import * as ECLevel from '#core/error-correction-level.ts'
 import * as Mode from '#core/mode.ts'
 import NumericData from '#core/numeric-data.ts'
@@ -190,21 +189,27 @@ const EXPECTED_VERSION_BITS = [
   0x28c69,
 ]
 
+// TODO: Remove isValid when no longer needed
 test('Version validity', () => {
   // @ts-expect-error Testing invalid input
-  expect(VersionCheck.isValid(), 'Should return false if no input').toEqual(false)
+  expect(Version.isValid(), 'Should return false if no input').toEqual(false)
   // @ts-expect-error Testing invalid input
-  expect(VersionCheck.isValid(''), 'Should return false if version is not a number').toEqual(false)
-  expect(VersionCheck.isValid(0), 'Should return false if version is not in range').toEqual(false)
-  expect(VersionCheck.isValid(41), 'Should return false if version is not in range').toEqual(false)
+  expect(Version.isValid(''), 'Should return false if version is not a number').toEqual(false)
+  expect(Version.isValid(0), 'Should return false if version is not in range').toEqual(false)
+  expect(Version.isValid(41), 'Should return false if version is not in range').toEqual(false)
+})
+
+test('Version validity', () => {
+  // @ts-expect-error Testing invalid input
+  expect(Version.parse(), 'Should return undefined if no input').toEqual(undefined)
+  expect(Version.parse(''), 'Should return undefined if version is not a number').toEqual(undefined)
+  expect(Version.parse(0), 'Should return undefined if version is not in range').toEqual(undefined)
+  expect(Version.parse(41), 'Should return undefined if version is not in range').toEqual(undefined)
 })
 
 test('Version from value', () => {
-  // TODO: Improve type for Version.from() - or improve how versions are parsed (similar to ECLevel and similar)
-  expect(Version.from(5), 'Should return correct version from a number').toEqual(5)
-  expect(Version.from('5'), 'Should return correct version from a string').toEqual(5)
-  expect(Version.from(0, 1), 'Should return default value if version is invalid').toEqual(1)
-  expect(Version.from(null, 1), 'Should return default value if version is undefined').toEqual(1)
+  expect(Version.parse(5), 'Should return correct version from a number').toEqual(5)
+  expect(Version.parse('5'), 'Should return correct version from a string').toEqual(5)
 })
 
 test('Version capacity', () => {
