@@ -11,7 +11,7 @@ import * as Version from './version.ts'
 import * as FormatInfo from './format-info.ts'
 import * as Mode from './mode.ts'
 import * as Segments from './segments.ts'
-import type { QRCodeErrorCorrectionLevel, QRCodeMaskPattern } from '#lib/types.ts'
+import type { Bit, QRCodeErrorCorrectionLevel, QRCodeMaskPattern, QRVersion } from '#lib/types.ts'
 
 /**
  * QRCode for JavaScript
@@ -45,7 +45,7 @@ import type { QRCodeErrorCorrectionLevel, QRCodeMaskPattern } from '#lib/types.t
  * @param matrix  Modules matrix
  * @param version QR Code version
  */
-function setupFinderPattern(matrix: BitMatrix, version: number) {
+function setupFinderPattern(matrix: BitMatrix, version: QRVersion) {
   const size = matrix.size
   const pos = FinderPattern.getPositions(version)
 
@@ -77,8 +77,6 @@ function setupFinderPattern(matrix: BitMatrix, version: number) {
  * Add timing pattern bits to matrix
  *
  * Note: this function must be called before {@link setupAlignmentPattern}
- *
- * @param  {BitMatrix} matrix Modules matrix
  */
 function setupTimingPattern(matrix: BitMatrix) {
   const size = matrix.size
@@ -94,9 +92,6 @@ function setupTimingPattern(matrix: BitMatrix) {
  * Add alignment patterns bits to matrix
  *
  * Note: this function must be called after {@link setupTimingPattern}
- *
- * @param  {BitMatrix} matrix  Modules matrix
- * @param  {Number}    version QR Code version
  */
 function setupAlignmentPattern(matrix: BitMatrix, version: any) {
   const pos = AlignmentPattern.getPositions(version)
@@ -119,19 +114,16 @@ function setupAlignmentPattern(matrix: BitMatrix, version: any) {
 
 /**
  * Add version info bits to matrix
- *
- * @param  {BitMatrix} matrix  Modules matrix
- * @param  {Number}    version QR Code version
  */
-function setupVersionInfo(matrix, version) {
+function setupVersionInfo(matrix: BitMatrix, version: QRVersion) {
   const size = matrix.size
   const bits = Version.getEncodedBits(version)
-  let row, col, mod
+  let row: number, col: number, mod: Bit
 
   for (let i = 0; i < 18; i++) {
     row = Math.floor(i / 3)
     col = (i % 3) + size - 8 - 3
-    mod = ((bits >> i) & 1) === 1
+    mod = ((bits >> i) & 1) === 1 ? 1 : 0
 
     matrix.set(row, col, mod, true)
     matrix.set(col, row, mod, true)
@@ -145,7 +137,11 @@ function setupVersionInfo(matrix, version) {
  * @param errorCorrectionLevel Error correction level
  * @param maskPattern Mask pattern reference value
  */
-function setupFormatInfo(matrix: BitMatrix, errorCorrectionLevel: QRCodeErrorCorrectionLevel, maskPattern: QRCodeMaskPattern) {
+function setupFormatInfo(
+  matrix: BitMatrix,
+  errorCorrectionLevel: QRCodeErrorCorrectionLevel,
+  maskPattern: QRCodeMaskPattern,
+) {
   const size = matrix.size
   const bits = FormatInfo.getEncodedBits(errorCorrectionLevel, maskPattern)
   let i, mod

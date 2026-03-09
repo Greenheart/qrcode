@@ -1,5 +1,5 @@
-import type BitMatrix from "./bit-matrix.ts"
-import type { QRCodeMaskPattern } from "#lib/types.ts"
+import type BitMatrix from './bit-matrix.ts'
+import type { QRCodeMaskPattern } from '#lib/types.ts'
 
 export const Patterns = {
   PATTERN000: 0,
@@ -203,7 +203,10 @@ export function applyMask(pattern: QRCodeMaskPattern, data: BitMatrix) {
 /**
  * Returns the best mask pattern for data
  */
-export function getBestMask(data: BitMatrix, setupFormatFunc: (mask: QRCodeMaskPattern) => number): QRCodeMaskPattern {
+export function getBestMask(
+  data: BitMatrix,
+  setupFormatFunc: (mask: QRCodeMaskPattern) => number,
+): QRCodeMaskPattern {
   let bestPattern: QRCodeMaskPattern = 0
   let lowerPenalty = Infinity
 

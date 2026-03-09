@@ -52,9 +52,15 @@ const expectedPattern111 = new Uint8Array([
 test('MaskPattern parse invalid input', () => {
   // @ts-expect-error Testing invalid input
   expect(MaskPattern.parse(), 'Should return undefined if no input').toEqual(undefined)
-  expect(MaskPattern.parse(''), 'Should return undefined if value is not a number').toEqual(undefined)
-  expect(MaskPattern.parse(-1), 'Should return undefined if value is not in range').toEqual(undefined)
-  expect(MaskPattern.parse(8), 'Should return undefined if value is not in range').toEqual(undefined)
+  expect(MaskPattern.parse(''), 'Should return undefined if value is not a number').toEqual(
+    undefined,
+  )
+  expect(MaskPattern.parse(-1), 'Should return undefined if value is not in range').toEqual(
+    undefined,
+  )
+  expect(MaskPattern.parse(8), 'Should return undefined if value is not in range').toEqual(
+    undefined,
+  )
   expect(MaskPattern.parse(null), 'Should return undefined if value is null').toEqual(undefined)
   expect(MaskPattern.parse(NaN), 'Should return undefined if value is NaN').toEqual(undefined)
 })

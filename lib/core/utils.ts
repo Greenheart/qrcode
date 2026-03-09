@@ -1,4 +1,6 @@
-let toSJISFunction
+import type { QRCodeToSJISFunc, QRVersion } from "#lib/types.ts"
+
+let toSJISFunction: QRCodeToSJISFunc
 const CODEWORDS_COUNT = [
   0, // Not used
   26,
@@ -46,10 +48,11 @@ const CODEWORDS_COUNT = [
 /**
  * Returns the QR Code size for the specified version
  *
- * @param  {Number} version QR Code version
- * @return {Number}         size of QR code
+ * @param version QR Code version
+ * @return Size of QR code
  */
-export function getSymbolSize(version) {
+export function getSymbolSize(version: QRVersion) {
+  // IDEA: Maybe change the errors to tests instead? Unless the code depends on throwing and catching exceptions of course.
   if (!version) throw new Error('"version" cannot be null or undefined')
   if (version < 1 || version > 40) throw new Error('"version" should be in range from 1 to 40')
   return version * 4 + 17
@@ -58,20 +61,20 @@ export function getSymbolSize(version) {
 /**
  * Returns the total number of codewords used to store data and EC information.
  *
- * @param  {Number} version QR Code version
- * @return {Number}         Data length in bits
+ * @param version QR Code version
+ * @return Data length in bits
  */
-export function getSymbolTotalCodewords(version) {
+export function getSymbolTotalCodewords(version: QRVersion) {
   return CODEWORDS_COUNT[version]
 }
 
 /**
  * Encode data with Bose-Chaudhuri-Hocquenghem
  *
- * @param  {Number} data Value to encode
- * @return {Number}      Encoded value
+ * @param data Value to encode
+ * @return Encoded value
  */
-export function getBCHDigit(data) {
+export function getBCHDigit(data: number) {
   let digit = 0
 
   while (data !== 0) {
@@ -82,7 +85,7 @@ export function getBCHDigit(data) {
   return digit
 }
 
-export function setToSJISFunction(f) {
+export function setToSJISFunction(f: QRCodeToSJISFunc) {
   if (typeof f !== 'function') {
     throw new Error('"toSJISFunc" is not a valid function.')
   }
@@ -90,10 +93,11 @@ export function setToSJISFunction(f) {
   toSJISFunction = f
 }
 
+// IDEA: Maybe pass in toSJISFunction via QRCodeOptions instead
 export function isKanjiModeEnabled() {
   return typeof toSJISFunction !== 'undefined'
 }
 
-export function toSJIS(kanji) {
+export function toSJIS(kanji: string) {
   return toSJISFunction(kanji)
 }

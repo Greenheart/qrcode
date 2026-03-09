@@ -1,4 +1,4 @@
-type Bit = 1 | 0
+import type { Bit } from '#lib/types.ts'
 
 /**
  * Helper class to handle QR Code symbol modules

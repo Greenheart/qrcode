@@ -3,13 +3,16 @@ import * as ECCode from './error-correction-code.ts'
 import * as ECLevel from './error-correction-level.ts'
 import * as Mode from './mode.ts'
 import * as VersionCheck from './version-check.ts'
+import type { QRVersion } from '#lib/types.ts'
 // Generator polynomial used to encode version information
 const G18 = (1 << 12) | (1 << 11) | (1 << 10) | (1 << 9) | (1 << 8) | (1 << 5) | (1 << 2) | (1 << 0)
 const G18_BCH = Utils.getBCHDigit(G18)
 
+// TODO: Move check-version into this module and update all imports
+// TODO: Use the min and max version constants instead of numbers
 function getBestVersionForDataLength(mode, length, errorCorrectionLevel) {
   for (let currentVersion = 1; currentVersion <= 40; currentVersion++) {
-    if (length <= getCapacity(currentVersion, errorCorrectionLevel, mode)) {
+    if (length <= getCapacity(currentVersion as QRVersion, errorCorrectionLevel, mode)) {
       return currentVersion
     }
   }
@@ -17,27 +20,26 @@ function getBestVersionForDataLength(mode, length, errorCorrectionLevel) {
   return undefined
 }
 
-function getReservedBitsCount(mode, version) {
+function getReservedBitsCount(mode, version: QRVersion) {
   // Character count indicator + mode indicator bits
   return Mode.getCharCountIndicator(mode, version) + 4
 }
 
-function getTotalBitsFromDataArray(segments, version) {
+function getTotalBitsFromDataArray(segments, version: QRVersion) {
   let totalBits = 0
 
-  segments.forEach(function (data) {
-    const reservedBits = getReservedBitsCount(data.mode, version)
-    totalBits += reservedBits + data.getBitsLength()
-  })
+  for (const data of segments) {
+    totalBits += getReservedBitsCount(data.mode, version) + data.getBitsLength()
+  }
 
   return totalBits
 }
 
 function getBestVersionForMixedData(segments, errorCorrectionLevel) {
   for (let currentVersion = 1; currentVersion <= 40; currentVersion++) {
-    const length = getTotalBitsFromDataArray(segments, currentVersion)
-    if (length <= getCapacity(currentVersion, errorCorrectionLevel, Mode.MIXED)) {
-      return currentVersion
+    const length = getTotalBitsFromDataArray(segments, currentVersion as QRVersion)
+    if (length <= getCapacity(currentVersion as QRVersion, errorCorrectionLevel, Mode.MIXED)) {
+      return currentVersion as QRVersion
     }
   }
 
@@ -45,6 +47,8 @@ function getBestVersionForMixedData(segments, errorCorrectionLevel) {
 }
 
 /**
+ * TODO: Replace with parse
+ *
  * Returns version number from a value.
  * If value is not a valid version, returns defaultValue
  *
@@ -67,9 +71,20 @@ export function from(value, defaultValue) {
  * @param  {Number} version              QR Code version (1-40)
  * @param  {Number} errorCorrectionLevel Error correction level
  * @param  {Mode}   mode                 Data mode
- * @return {Number}                      Quantity of storable data
  */
-export function getCapacity(version, errorCorrectionLevel, mode) {
+export function getCapacity(
+  version: QRVersion,
+  // TODO: Improve type for error correction level
+  errorCorrectionLevel:
+    | string
+    | { readonly bit: 1 }
+    | { readonly bit: 0 }
+    | { readonly bit: 3 }
+    | { readonly bit: 2 },
+    // TODO: Improve this type based on the Mode class/type
+  mode: { bit: number; id?: string; ccBits?: number[] },
+) {
+  // IDEA: Maybe remove this check and always guard calls to this function with parsing the QR version or using a default value?
   if (!VersionCheck.isValid(version)) {
     throw new Error('Invalid QR Code version')
   }
@@ -143,10 +158,10 @@ export function getBestVersionForData(data, errorCorrectionLevel) {
  * It consists of an 18-bit sequence containing 6 data bits,
  * with 12 error correction bits calculated using the (18, 6) Golay code.
  *
- * @param  {Number} version QR Code version
- * @return {Number}         Encoded version info bits
+ * @return Encoded version info bits
  */
-export function getEncodedBits(version) {
+export function getEncodedBits(version: QRVersion) {
+  // TODO: Why is isValid needed to be called here? Ideally just call parse at an earlier point to avoid the repeated checks
   if (!VersionCheck.isValid(version) || version < 7) {
     throw new Error('Invalid QR Code version')
   }
