@@ -51,12 +51,14 @@ function getTypeFromFilename(path: string) {
   return path.slice(((path.lastIndexOf('.') - 1) >>> 0) + 2).toLowerCase()
 }
 
-function getRendererFromType<T extends RendererType>(type: T): typeof RENDERERS[T] {
+function getRendererFromType<T extends RendererType>(type: T): (typeof RENDERERS)[T] {
   // TODO: Fix the return type - maybe the PngRenderer is different than the other renderers
   return RENDERERS[type] ?? PngRenderer
 }
 
-function getStringRendererFromType<T extends StringRendererType>(type: T): typeof STRING_RENDERERS[T] {
+function getStringRendererFromType<T extends StringRendererType>(
+  type: T,
+): (typeof STRING_RENDERERS)[T] {
   return STRING_RENDERERS[type] ?? Utf8Renderer
 }
 

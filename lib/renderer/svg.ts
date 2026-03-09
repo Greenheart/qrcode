@@ -1,7 +1,6 @@
 import { render } from './svg-tag.ts'
 import fs from 'node:fs'
 
-
 export function renderToFile(path, qrData, options, cb) {
   if (typeof cb === 'undefined') {
     cb = options
