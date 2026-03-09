@@ -21,7 +21,7 @@ export default [
     plugins: [commonjs(), resolve(), babel(babelConfig), terser()],
   },
   {
-    input: 'helper/to-sjis-browser.js',
+    input: 'helper/to-sjis-browser.ts',
     output: {
       file: 'build/qrcode.tosjis.js',
       format: 'iife',
