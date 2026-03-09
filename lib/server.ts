@@ -52,18 +52,12 @@ function getTypeFromFilename(path: string) {
 }
 
 function getRendererFromType<T extends RendererType>(type: T): typeof RENDERERS[T] {
-  if (typeof RENDERERS[type] === 'function') {
-    return RENDERERS[type]
-  }
-  // TODO: Fix return type
-  return PngRenderer
+  // TODO: Fix the return type - maybe the PngRenderer is different than the other renderers
+  return RENDERERS[type] ?? PngRenderer
 }
 
 function getStringRendererFromType<T extends StringRendererType>(type: T): typeof STRING_RENDERERS[T] {
-  if (typeof STRING_RENDERERS[type] === 'function') {
-    return STRING_RENDERERS[type]
-  }
-  return Utf8Renderer
+  return STRING_RENDERERS[type] ?? Utf8Renderer
 }
 
 function render(renderFunc, text, params) {
