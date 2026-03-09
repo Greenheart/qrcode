@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { program, Option, InvalidArgumentError, Command } from 'commander'
+import { program, Option, InvalidArgumentError, type Command } from 'commander'
 import QRCode from '#lib/index.js'
 import { ALL_EC_LEVELS } from '#core/error-correction-level.ts'
 import { QR_VERSION_RANGE } from '#core/version-check.ts'
@@ -32,13 +32,6 @@ function parseArgs(): Command {
     .optionsGroup('Options:')
     .option('-o, --output <path>', 'Output file')
     .helpOption('-h, --help', 'Show help')
-    // The input string is a variadic argument that will include any remaining
-    // input after parsing options In commander, this is indicated by the `...`
-    // suffix.
-    // The wrapping [] makes the input string arguments optional.
-    // This allows executing the CLI and reading from stdin, useful in scripts.
-    // By making the arguments optional, the help can be printed by default.
-    .argument('[input string...]', 'Content of the QR code')
     .addHelpText('after', `
 Examples:
   qrcode "some text"                      Draw in terminal window
@@ -47,9 +40,15 @@ Examples:
 `)
     .showHelpAfterError()
     .version(pkg.version, '--version', 'Show version number')
+    // The input string is a variadic argument that will include any remaining
+    // input after parsing options In commander, this is indicated by the `...`
+    // suffix.
+    // The wrapping [] makes the input string arguments optional.
+    // This allows executing the CLI and reading from stdin, useful in scripts.
+    // By making the arguments optional, the help can be printed by default.
+    .argument('[input string...]', undefined)  // undefined to hide description
     .parse()
 }
-
 
 function printRange([min, max]: readonly [number, number]) {
   return `(${min} - ${max})`
@@ -116,7 +115,7 @@ function save(file: string, text: string, options: ParsedCliOptions) {
       process.exit(1)
     }
 
-    console.log('saved qrcode to: ' + file + '\n')
+    console.log('Saved qrcode to: ' + file + '\n')
   })
 }
 
