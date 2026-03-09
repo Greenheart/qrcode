@@ -210,11 +210,10 @@ export function applyMask(pattern, data) {
  * @return {Number} Mask pattern reference number
  */
 export function getBestMask(data, setupFormatFunc) {
-  const numPatterns = Object.keys(Patterns).length
   let bestPattern = 0
   let lowerPenalty = Infinity
 
-  for (let p = 0; p < numPatterns; p++) {
+  for (let p = MIN; p <= MAX; p++) {
     setupFormatFunc(p)
     applyMask(p, data)
 
