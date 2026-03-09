@@ -33,7 +33,7 @@ test.skip('Utf8 renderToFile', () => {
   // NOTE: This might be possible to solve with better mocking of the file system calls
 
   const sampleQrData = QRCode.create('sample text', { version: 2 })
-  const fileName = 'qrimage.txt'
+  const fileName = 'qrimage-tofile.txt'
   let fsStub = sinon.stub(fs, 'writeFile').callsArg(2)
 
   Utf8Renderer.renderToFile(fileName, sampleQrData, (err) => {

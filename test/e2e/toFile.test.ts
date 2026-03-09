@@ -186,7 +186,7 @@ test('toFile svg', () => {
 })
 
 test('toFile utf8', () => {
-  const fileName = path.join(os.tmpdir(), 'qrimage.txt')
+  const fileName = path.join(os.tmpdir(), 'qrimage-utf8.txt')
   const expectedOutput = [
     '                                 ',
     '                                 ',
