@@ -161,11 +161,8 @@ export function getBestVersionForData(data, errorCorrectionLevel): QRVersion | u
  * @return Encoded version info bits
  */
 export function getEncodedBits(version: QRVersion) {
-  // TODO: Why is isValid needed to be called here? Ideally just call parse at an earlier point to avoid the repeated checks
-  // Maybe avoid throwing in here if we can guarantee the input is valid, and just return undefined instead
-  // TODO: Check how getEncodedBits() is used. Maybe other core library code relies on this function throwing an error?
-  if (!isValid(version) || version < 7) {
-    throw new Error('Invalid QR Code version')
+  if (version < 7) {
+    throw new Error(`Expected QR version >= 7 but got: ${version}`)
   }
 
   let d = version << 12
