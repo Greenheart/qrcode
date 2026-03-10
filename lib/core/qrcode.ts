@@ -11,7 +11,7 @@ import * as Version from './version.ts'
 import * as FormatInfo from './format-info.ts'
 import * as Mode from './mode.ts'
 import * as Segments from './segments.ts'
-import type { Bit, QRCodeErrorCorrectionLevel, QRCodeMaskPattern, QRVersion } from '#lib/types.ts'
+import type { Bit, ErrorCorrectionLevel, QRCodeMaskPattern, QRVersion } from '#lib/types.ts'
 
 /**
  * QRCode for JavaScript
@@ -138,7 +138,7 @@ function setupVersionInfo(matrix: BitMatrix, version: QRVersion) {
  */
 function setupFormatInfo(
   matrix: BitMatrix,
-  errorCorrectionLevel: QRCodeErrorCorrectionLevel,
+  errorCorrectionLevel: ErrorCorrectionLevel,
   maskPattern: QRCodeMaskPattern,
 ) {
   const size = matrix.size
@@ -367,7 +367,7 @@ function createCodewords(bitBuffer, version: QRVersion, errorCorrectionLevel) {
  *
  * @param data Input string
  * @param version QR Code version
- * @param {ErrorCorretionLevel} errorCorrectionLevel Error level
+ * @param errorCorrectionLevel Error level
  * @param maskPattern Mask pattern
  * @return {Object} Object containing symbol data
  *
@@ -375,9 +375,9 @@ function createCodewords(bitBuffer, version: QRVersion, errorCorrectionLevel) {
  */
 function createSymbol(
   data: string,
-  version: QRVersion,
-  errorCorrectionLevel,
-  maskPattern: QRCodeMaskPattern,
+  errorCorrectionLevel: ErrorCorrectionLevel,
+  version?: QRVersion,
+  maskPattern?: QRCodeMaskPattern,
 ) {
   let segments
 
@@ -500,5 +500,5 @@ export function create(data, options) {
     }
   }
 
-  return createSymbol(data, version, errorCorrectionLevel, mask)
+  return createSymbol(data, errorCorrectionLevel, version, mask)
 }
