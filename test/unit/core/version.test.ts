@@ -202,14 +202,16 @@ test('Version validity', () => {
 test('Version validity', () => {
   // @ts-expect-error Testing invalid input
   expect(Version.parse(), 'Should return undefined if no input').toEqual(undefined)
-  expect(Version.parse(''), 'Should return undefined if version is not a number').toEqual(undefined)
-  expect(Version.parse(0), 'Should return undefined if version is not in range').toEqual(undefined)
-  expect(Version.parse(41), 'Should return undefined if version is not in range').toEqual(undefined)
+  expect(Version.parse(''), 'Should return undefined if version cannot be parsed to an integer').toEqual(undefined)
+  expect(Version.parse(0), 'Should return undefined if version is too low').toEqual(undefined)
+  expect(Version.parse(41), 'Should return undefined if version is too high').toEqual(undefined)
 })
 
 test('Version parse from value', () => {
   expect(Version.parse(5), 'Should return correct version from a number').toEqual(5)
   expect(Version.parse('5'), 'Should return correct version from a string').toEqual(5)
+  expect(Version.parse(1), 'Should parse lower bound').toEqual(1)
+  expect(Version.parse(40), 'Should parse upper bound').toEqual(40)
 })
 
 test('Version capacity', () => {
