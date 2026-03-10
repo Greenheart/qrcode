@@ -202,7 +202,10 @@ test('Version validity', () => {
 test('Version validity', () => {
   // @ts-expect-error Testing invalid input
   expect(Version.parse(), 'Should return undefined if no input').toEqual(undefined)
-  expect(Version.parse(''), 'Should return undefined if version cannot be parsed to an integer').toEqual(undefined)
+  expect(
+    Version.parse(''),
+    'Should return undefined if version cannot be parsed to an integer',
+  ).toEqual(undefined)
   expect(Version.parse(0), 'Should return undefined if version is too low').toEqual(undefined)
   expect(Version.parse(41), 'Should return undefined if version is too high').toEqual(undefined)
 })
