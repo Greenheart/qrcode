@@ -118,12 +118,11 @@ function setupAlignmentPattern(matrix: BitMatrix, version: any) {
 function setupVersionInfo(matrix: BitMatrix, version: QRVersion) {
   const size = matrix.size
   const bits = Version.getEncodedBits(version)
-  let row: number, col: number, mod: Bit
 
   for (let i = 0; i < 18; i++) {
-    row = Math.floor(i / 3)
-    col = (i % 3) + size - 8 - 3
-    mod = ((bits >> i) & 1) === 1 ? 1 : 0
+    let row = Math.floor(i / 3)
+    let col = (i % 3) + size - 8 - 3
+    let mod: Bit = ((bits >> i) & 1) === 1 ? 1 : 0
 
     matrix.set(row, col, mod, true)
     matrix.set(col, row, mod, true)
@@ -144,10 +143,9 @@ function setupFormatInfo(
 ) {
   const size = matrix.size
   const bits = FormatInfo.getEncodedBits(errorCorrectionLevel, maskPattern)
-  let i, mod
 
-  for (i = 0; i < 15; i++) {
-    mod = ((bits >> i) & 1) === 1
+  for (let i = 0; i < 15; i++) {
+    let mod = ((bits >> i) & 1) as Bit
 
     // vertical
     if (i < 6) {
@@ -175,10 +173,10 @@ function setupFormatInfo(
 /**
  * Add encoded data bits to matrix
  *
- * @param  {BitMatrix}  matrix Modules matrix
- * @param  {Uint8Array} data   Data codewords
+ * @param matrix Modules matrix
+ * @param data Data codewords
  */
-function setupData(matrix, data) {
+function setupData(matrix: BitMatrix, data: Uint8Array) {
   const size = matrix.size
   let inc = -1
   let row = size - 1
@@ -191,10 +189,10 @@ function setupData(matrix, data) {
     while (true) {
       for (let c = 0; c < 2; c++) {
         if (!matrix.isReserved(row, col - c)) {
-          let dark = false
+          let dark: Bit = 0
 
           if (byteIndex < data.length) {
-            dark = ((data[byteIndex] >>> bitIndex) & 1) === 1
+            dark = ((data[byteIndex] >>> bitIndex) & 1) as Bit
           }
 
           matrix.set(row, col - c, dark)
