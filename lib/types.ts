@@ -290,6 +290,10 @@ export interface QRCode {
   segments: GeneratedQRCodeSegment[]
 }
 
+/**
+ * The parsed error correction level to use internally in the library.
+ * Not to be confused with the public type {@link QRCodeErrorCorrectionLevel}
+ */
 export interface ErrorCorrectionLevel {
   bit: 0 | 1 | 2 | 3
 }
