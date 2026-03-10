@@ -294,8 +294,17 @@ export interface ErrorCorrectionLevel {
   bit: 0 | 1 | 2 | 3
 }
 
-export type ModeId = 'Numeric' | 'Alphanumeric' | 'Byte' | 'Kanji'
-export interface Mode<TModeId extends ModeId = ModeId> {
+export type QREncodingModeId = 'Numeric' | 'Alphanumeric' | 'Byte' | 'Kanji'
+
+/**
+ * Encoding mode for a segment in the QR code.
+ *
+ * @prop id Unique identifier
+ * @prop bit This bit is used to indicate the encoding mode for each segment in the QR code.
+ * @prop ccBits This array of three numbers represents the number of bits needed to store the data length.
+ *              Larger QR code versions need more bits for this purpose.
+ */
+export interface QREncodingMode<TModeId extends QREncodingModeId = QREncodingModeId> {
   id: TModeId
   bit: number
   ccBits: readonly number[]
@@ -309,21 +318,21 @@ export interface DataSegment {
 }
 
 export interface NumericData extends DataSegment {
-  mode: Mode<'Numeric'>
+  mode: QREncodingMode<'Numeric'>
   data: string
 }
 
 export interface AlphanumericData extends DataSegment {
-  mode: Mode<'Alphanumeric'>
+  mode: QREncodingMode<'Alphanumeric'>
   data: string
 }
 
 export interface ByteData extends DataSegment {
-  mode: Mode<'Byte'>
+  mode: QREncodingMode<'Byte'>
   data: Uint8Array
 }
 
 export interface KanjiData extends DataSegment {
-  mode: Mode<'Kanji'>
+  mode: QREncodingMode<'Kanji'>
   data: string
 }

@@ -208,7 +208,7 @@ test('Version validity', () => {
   expect(Version.parse(41), 'Should return undefined if version is not in range').toEqual(undefined)
 })
 
-test('Version from value', () => {
+test('Version parse from value', () => {
   expect(Version.parse(5), 'Should return correct version from a number').toEqual(5)
   expect(Version.parse('5'), 'Should return correct version from a string').toEqual(5)
 })
@@ -232,7 +232,7 @@ test('Version capacity', () => {
   }, 'Should throw if version is not in range').toThrow()
 
   for (let l = 0; l < EC_LEVELS.length; l++) {
-    for (let i = 1; i <= 40; i++) {
+    for (let i = Version.MIN; i <= Version.MAX; i++) {
       expect(
         Version.getCapacity(i, EC_LEVELS[l], Mode.NUMERIC),
         'Should return correct numeric mode capacity',
@@ -255,7 +255,7 @@ test('Version capacity', () => {
 
       expect(
         Version.getCapacity(i, EC_LEVELS[l]),
-        'Should return correct byte mode capacity',
+        'Should return correct byte mode capacity when no explicit mode is passed',
       ).toEqual(EXPECTED_BYTE_CAPACITY[i - 1][l])
     }
   }

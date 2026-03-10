@@ -2,7 +2,7 @@ import * as Utils from './utils.ts'
 import * as ECCode from './error-correction-code.ts'
 import * as ECLevel from './error-correction-level.ts'
 import * as Mode from './mode.ts'
-import type { QRVersion } from '#lib/types.ts'
+import type { QRVersion, QREncodingMode } from '#lib/types.ts'
 
 export const MIN = 1
 export const MAX = 40
@@ -11,7 +11,7 @@ export const QR_VERSION_RANGE = [MIN, MAX] as const
 /**
  * Check if QR Code version is valid
  *
- * TODO: Replace isValid() and from() with parse() instead
+ * TODO: Replace isValid() with parse() instead
  *
  * @param version QR Code version
  * @return true if valid version, false otherwise
@@ -46,7 +46,7 @@ function getBestVersionForDataLength(mode, length, errorCorrectionLevel): QRVers
   return undefined
 }
 
-function getReservedBitsCount(mode, version: QRVersion) {
+function getReservedBitsCount(mode: QREncodingMode, version: QRVersion) {
   // Character count indicator + mode indicator bits
   return Mode.getCharCountIndicator(mode, version) + 4
 }
@@ -90,7 +90,8 @@ export function getCapacity(
     | { readonly bit: 3 }
     | { readonly bit: 2 },
   // TODO: Improve this type based on the Mode class/type
-  mode: { bit: number; id?: string; ccBits?: number[] },
+  // This needs ccBits later on in the process, and early on only the bit
+  mode: QREncodingMode | typeof Mode.MIXED,
 ) {
   // IDEA: Maybe remove this check and always guard calls to this function with parsing the QR version or using a default value?
   if (!isValid(version)) {
@@ -98,6 +99,9 @@ export function getCapacity(
   }
 
   // Use Byte mode as default
+  // TODO: Verify if getCapacity is ever called without an explicit mode
+  // If not, remove this and let it be a required argument instead
+  // Or if getCapacity() is sometimes called without the mode, make this a default value in the function parameters instead to reduce code size.
   if (typeof mode === 'undefined') mode = Mode.BYTE
 
   // Total codewords for this QR code version (Data + Error correction)
@@ -109,12 +113,14 @@ export function getCapacity(
   // Total number of data codewords
   const dataTotalCodewordsBits = (totalCodewords - ecTotalCodewords) * 8
 
-  if (mode === Mode.MIXED) return dataTotalCodewordsBits
+  if (mode === Mode.MIXED) {
+    return dataTotalCodewordsBits
+  }
 
-  const usableBits = dataTotalCodewordsBits - getReservedBitsCount(mode, version)
+  const usableBits = dataTotalCodewordsBits - getReservedBitsCount(mode as QREncodingMode, version)
 
   // Return max number of storable codewords
-  switch (mode) {
+  switch (mode as QREncodingMode) {
     case Mode.NUMERIC:
       return Math.floor((usableBits / 10) * 3)
 

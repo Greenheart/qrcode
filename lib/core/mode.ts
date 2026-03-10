@@ -1,15 +1,13 @@
 import * as Version from './version.ts'
 import * as Regex from './regex.ts'
-import type { QRVersion } from '#lib/types.ts'
-
-// TODO: create a `Mode` type which maps to the actual modes defined below
+import type { QREncodingMode, QREncodingModeId, QRVersion } from '#lib/types.ts'
 
 /**
  * Numeric mode encodes data from the decimal digit set (0 - 9)
  * (byte values 30HEX to 39HEX).
  * Normally, 3 data characters are represented by 10 bits.
  */
-export const NUMERIC = {
+export const NUMERIC: QREncodingMode<'Numeric'> = {
   id: 'Numeric',
   bit: 1 << 0,
   ccBits: [10, 12, 14],
@@ -19,10 +17,13 @@ export const NUMERIC = {
  * Alphanumeric mode encodes data from a set of 45 characters,
  * i.e. 10 numeric digits (0 - 9),
  *      26 alphabetic characters (A - Z),
- *   and 9 symbols (SP, $, %, *, +, -, ., /, :).
+ *   and 9 symbols (Space, $, %, *, +, -, ., /, :).
+ *
+ * This is Base45 encoding, specified in https://datatracker.ietf.org/doc/rfc9285/
+ *
  * Normally, two input characters are represented by 11 bits.
  */
-export const ALPHANUMERIC = {
+export const ALPHANUMERIC: QREncodingMode<'Alphanumeric'> = {
   id: 'Alphanumeric',
   bit: 1 << 1,
   ccBits: [9, 11, 13],
@@ -31,7 +32,7 @@ export const ALPHANUMERIC = {
 /**
  * In byte mode, data is encoded at 8 bits per character.
  */
-export const BYTE = {
+export const BYTE: QREncodingMode<'Byte'> = {
   id: 'Byte',
   bit: 1 << 2,
   ccBits: [8, 16, 16],
@@ -44,29 +45,36 @@ export const BYTE = {
  * JIS X 0208 gives details of the shift coded representation.
  * Each two-byte character value is compacted to a 13-bit binary codeword.
  */
-export const KANJI = {
+export const KANJI: QREncodingMode<'Kanji'> = {
   id: 'Kanji',
   bit: 1 << 3,
   ccBits: [8, 10, 12],
 } as const
 
+
+
 /**
  * Mixed mode will contain a sequences of data in a combination of any of
  * the modes described above
+ *
+ * TODO: See how the MIXED mode is used, and if it should be added to the Mode type or remain a separate type
+ * It is only used in two places, in getCapacity() and getBestVersionForMixedData()
  */
 export const MIXED = {
   bit: -1,
 } as const
 
+
 /**
  * Returns the number of bits needed to store the data length
  * according to QR Code specifications.
- *
- * @param {Mode} mode Data mode
  */
-export function getCharCountIndicator(mode, version: QRVersion): number {
+export function getCharCountIndicator(mode: QREncodingMode, version: QRVersion): number {
+  // TODO: See how this function is called, and if the validation is needed.
+  // Since it is a internal API in the module, it should be safe to rely on TypeScript types instead of manual checks and throwing errors
   if (!mode.ccBits) throw new Error('Invalid mode: ' + mode)
 
+  // TODO: Same here, use the types to enforce usage since this is only used within this module
   if (!Version.isValid(version)) {
     throw new Error('Invalid version: ' + version)
   }
@@ -78,11 +86,8 @@ export function getCharCountIndicator(mode, version: QRVersion): number {
 
 /**
  * Returns the most efficient mode to store the specified data
- *
- * @param dataStr Input data string
- * @return {Mode} Best mode
  */
-export function getBestModeForData(data: string) {
+export function getBestModeForData(data: string): QREncodingMode {
   if (Regex.testNumeric(data)) return NUMERIC
   else if (Regex.testAlphanumeric(data)) return ALPHANUMERIC
   else if (Regex.testKanji(data)) return KANJI
@@ -91,39 +96,28 @@ export function getBestModeForData(data: string) {
 
 /**
  * Return mode name as string
- *
- * @param {Mode} mode Mode object
- * @returns {String}  Mode name
  */
-export function toString(mode) {
+export function toString(mode: QREncodingMode): QREncodingModeId {
   if (mode && mode.id) return mode.id
   throw new Error('Invalid mode')
 }
 
 /**
  * Check if input param is a valid mode object
- *
- * @param   {Mode}    mode Mode object
- * @returns {Boolean} True if valid mode, false otherwise
  */
-export function isValid(mode) {
-  return Boolean(mode && mode.bit && mode.ccBits)
+export function isValid(mode: unknown): mode is QREncodingMode {
+  return Boolean(mode && (mode as QREncodingMode).bit && (mode as QREncodingMode).ccBits)
 }
 
 /**
  * Get mode object from its name
- *
- * @param   {String} string Mode name
- * @returns {Mode}          Mode object
  */
-function fromString(string) {
-  if (typeof string !== 'string') {
+function fromString(name: string): QREncodingMode {
+  if (typeof name !== 'string') {
     throw new Error('Param is not a string')
   }
 
-  const lcStr = string.toLowerCase()
-
-  switch (lcStr) {
+  switch (name.toLowerCase()) {
     case 'numeric':
       return NUMERIC
     case 'alphanumeric':
@@ -133,13 +127,15 @@ function fromString(string) {
     case 'byte':
       return BYTE
     default:
-      throw new Error('Unknown mode: ' + string)
+      throw new Error('Unknown mode: ' + name)
   }
 }
 
 /**
  * Returns mode from a value.
  * If value is not a valid mode, returns defaultValue
+ *
+ * TODO: Replace from() with parse() instead, potentially returning undefined, and assign default values outside of the function
  *
  * @param  {Mode|String} value        Encoding mode
  * @param  {Mode}        defaultValue Fallback value
