@@ -4,22 +4,21 @@ import * as Version from '#core/version.ts'
 import * as ECLevel from '#core/error-correction-level.ts'
 import * as ECCode from '#core/error-correction-code.ts'
 import * as Mode from '#core/mode.ts'
-import type { QRVersion } from '#lib/types.ts'
+import { getQRVersionRange } from '#test/helpers.ts'
 
 test('Error correction codewords', () => {
-  const levels = [ECLevel.L, ECLevel.M, ECLevel.Q, ECLevel.H]
+  for (const v of getQRVersionRange()) {
+    const totalCodewords = Utils.getSymbolTotalCodewords(v)
+    const reservedByte = Math.ceil((Mode.getCharCountIndicator(Mode.BYTE, v) + 4) / 8)
 
-  for (let v = Version.MIN; v <= Version.MAX; v++) {
-    const totalCodewords = Utils.getSymbolTotalCodewords(v as QRVersion)
-    const reservedByte = Math.ceil((Mode.getCharCountIndicator(Mode.BYTE, v as QRVersion) + 4) / 8)
-
-    for (let l = 0; l < levels.length; l++) {
-      const dataCodewords = Version.getCapacity(v as QRVersion, levels[l], Mode.BYTE) + reservedByte
+    // TODO: Create a test helper for looping over all ECLevels to reduce risk for errors
+    for (const level of [ECLevel.L, ECLevel.M, ECLevel.Q, ECLevel.H]) {
+      const dataCodewords = Version.getCapacity(v, level, Mode.BYTE) + reservedByte
 
       const expectedCodewords = totalCodewords - dataCodewords
 
       expect(
-        ECCode.getTotalCodewordsCount(v, levels[l]),
+        ECCode.getTotalCodewordsCount(v, level),
         'Should return correct codewords number',
       ).toEqual(expectedCodewords)
     }
@@ -32,14 +31,9 @@ test('Error correction codewords', () => {
 })
 
 test('Error correction blocks', () => {
-  const levels = [ECLevel.L, ECLevel.M, ECLevel.Q, ECLevel.H]
-
-  for (let v = 1; v <= 40; v++) {
-    for (let l = 0; l < levels.length; l++) {
-      expect(
-        ECCode.getBlocksCount(v, levels[l]),
-        'Should return a positive number',
-      ).toBeGreaterThan(0)
+  for (const v of getQRVersionRange()) {
+    for (const level of [ECLevel.L, ECLevel.M, ECLevel.Q, ECLevel.H]) {
+      expect(ECCode.getBlocksCount(v, level), 'Should return a positive number').toBeGreaterThan(0)
     }
   }
 

@@ -1,5 +1,6 @@
 import { test, expect } from 'vitest'
 import * as Utils from '#core/utils.js'
+import { getQRVersionRange } from '#test/helpers.ts'
 
 /**
  * QR Code sizes. Each element refers to a version
@@ -11,26 +12,28 @@ const EXPECTED_SYMBOL_SIZES = [
 
 test('Symbol size', () => {
   expect(() => {
-    // @ts-expect-error Testing invalid arguments
+    // @ts-expect-error Testing invalid version
     Utils.getSymbolSize()
   }, 'Should throw if version is undefined').toThrow()
   expect(() => {
+    // @ts-expect-error Testing invalid version
     Utils.getSymbolSize(0)
   }, 'Should throw if version is not in range').toThrow()
   expect(() => {
+    // @ts-expect-error Testing invalid version
     Utils.getSymbolSize(41)
   }, 'Should throw if version is not in range').toThrow()
 
-  for (let i = 1; i <= 40; i++) {
-    expect(Utils.getSymbolSize(i), 'Should return correct symbol size').toEqual(
-      EXPECTED_SYMBOL_SIZES[i - 1],
+  for (const v of getQRVersionRange()) {
+    expect(Utils.getSymbolSize(v), 'Should return correct symbol size').toEqual(
+      EXPECTED_SYMBOL_SIZES[v - 1],
     )
   }
 })
 
 test('Symbol codewords', () => {
-  for (let i = 1; i <= 40; i++) {
-    expect(Utils.getSymbolTotalCodewords(i), 'Should return positive number').toBeGreaterThan(0)
+  for (const v of getQRVersionRange()) {
+    expect(Utils.getSymbolTotalCodewords(v), 'Should return positive number').toBeGreaterThan(0)
   }
 })
 

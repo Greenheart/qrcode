@@ -1,5 +1,6 @@
 import { test, expect } from 'vitest'
 import * as Mode from '#core/mode.ts'
+import { getQRVersionRange } from '#test/helpers.ts'
 
 test('Mode bits', () => {
   const EXPECTED_BITS = {
@@ -25,23 +26,23 @@ test('Char count bits', () => {
     kanji: [8, 10, 12],
   }
 
-  // TODO: See if v can be declared locally for each loop?
-  let v
-  for (v = 1; v < 10; v++) {
+  // Depending on the QR code version, different bits are used for the char count
+
+  for (const v of getQRVersionRange(1, 9)) {
     expect(Mode.getCharCountIndicator(Mode.NUMERIC, v)).toEqual(EXPECTED_BITS.numeric[0])
     expect(Mode.getCharCountIndicator(Mode.ALPHANUMERIC, v)).toEqual(EXPECTED_BITS.alphanumeric[0])
     expect(Mode.getCharCountIndicator(Mode.BYTE, v)).toEqual(EXPECTED_BITS.byte[0])
     expect(Mode.getCharCountIndicator(Mode.KANJI, v)).toEqual(EXPECTED_BITS.kanji[0])
   }
 
-  for (v = 10; v < 27; v++) {
+  for (const v of getQRVersionRange(10, 26)) {
     expect(Mode.getCharCountIndicator(Mode.NUMERIC, v)).toEqual(EXPECTED_BITS.numeric[1])
     expect(Mode.getCharCountIndicator(Mode.ALPHANUMERIC, v)).toEqual(EXPECTED_BITS.alphanumeric[1])
     expect(Mode.getCharCountIndicator(Mode.BYTE, v)).toEqual(EXPECTED_BITS.byte[1])
     expect(Mode.getCharCountIndicator(Mode.KANJI, v)).toEqual(EXPECTED_BITS.kanji[1])
   }
 
-  for (v = 27; v <= 40; v++) {
+  for (const v of getQRVersionRange(27, 40)) {
     expect(Mode.getCharCountIndicator(Mode.NUMERIC, v)).toEqual(EXPECTED_BITS.numeric[2])
     expect(Mode.getCharCountIndicator(Mode.ALPHANUMERIC, v)).toEqual(EXPECTED_BITS.alphanumeric[2])
     expect(Mode.getCharCountIndicator(Mode.BYTE, v)).toEqual(EXPECTED_BITS.byte[2])

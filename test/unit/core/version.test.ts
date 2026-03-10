@@ -6,9 +6,8 @@ import NumericData from '#core/numeric-data.ts'
 import AlphanumericData from '#core/alphanumeric-data.ts'
 import KanjiData from '#core/kanji-data.ts'
 import ByteData from '#core/byte-data.ts'
+import { arrayWithLength, getQRVersionRange } from '#test/helpers.ts'
 
-import { arrayWithLength } from '#test/helpers.js'
-import type { QRVersion } from '#lib/types.ts'
 const EC_LEVELS = [ECLevel.L, ECLevel.M, ECLevel.Q, ECLevel.H]
 
 const EXPECTED_NUMERIC_CAPACITY = [
@@ -232,7 +231,7 @@ test('Version capacity', () => {
   }, 'Should throw if version is not in range').toThrow()
 
   for (let l = 0; l < EC_LEVELS.length; l++) {
-    for (let i = Version.MIN; i <= Version.MAX; i++) {
+    for (const i of getQRVersionRange()) {
       expect(
         Version.getCapacity(i, EC_LEVELS[l], Mode.NUMERIC),
         'Should return correct numeric mode capacity',
@@ -258,29 +257,29 @@ test('Version capacity', () => {
 
 test('Version best match', () => {
   function testBestVersionForCapacity(expectedCapacity, DataCtor) {
-    for (let v = 0; v < Version.MAX; v++) {
+    for (const v of getQRVersionRange()) {
       for (let l = 0; l < EC_LEVELS.length; l++) {
-        const capacity = expectedCapacity[v][l]
+        const capacity = expectedCapacity[v - 1][l]
         const data = new DataCtor(arrayWithLength(capacity + 1).join('-'))
 
         expect(
           Version.getBestVersionForData(data, EC_LEVELS[l]),
           'Should return best version',
-        ).toEqual(v + 1)
+        ).toEqual(v)
         expect(
           Version.getBestVersionForData([data], EC_LEVELS[l]),
           'Should return best version',
-        ).toEqual(v + 1)
+        ).toEqual(v)
 
         if (l === 1) {
           expect(
             Version.getBestVersionForData(data, null),
             'Should return best version for ECLevel.M if error level is undefined',
-          ).toEqual(v + 1)
+          ).toEqual(v)
           expect(
             Version.getBestVersionForData([data], null),
             'Should return best version for ECLevel.M if error level is undefined',
-          ).toEqual(v + 1)
+          ).toEqual(v)
         }
       }
     }
@@ -315,7 +314,7 @@ test('Version best match', () => {
 
   const version = Version.getBestVersionForData([new ByteData('abc'), new NumericData('1234')])
   expect(
-    Version.MIN <= version && version <= Version.MAX,
+    version && Version.MIN <= version && version <= Version.MAX,
     'Should return a version number if input array is valid',
   ).toEqual(true)
 
@@ -325,12 +324,13 @@ test('Version best match', () => {
 test('Version encoded info', () => {
   for (let v = 0; v < 7; v++) {
     expect(() => {
-      Version.getEncodedBits(v as QRVersion)
+      // @ts-expect-error Testing invalid input
+      Version.getEncodedBits(v)
     }, 'Should throw if version is invalid or less than 7').toThrow()
   }
 
-  for (let v = 7; v <= Version.MAX; v++) {
-    const bch = Version.getEncodedBits(v as QRVersion)
+  for (const v of getQRVersionRange(7, 40)) {
+    const bch = Version.getEncodedBits(v)
     expect(bch, 'Should return correct bits').toEqual(EXPECTED_VERSION_BITS[v - 7])
   }
 })

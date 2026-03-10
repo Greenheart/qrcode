@@ -12,7 +12,9 @@
     "noEmit": true,
     "lib": ["esnext", "dom", "dom.iterable"],
     "allowImportingTsExtensions": true,
-    "erasableSyntaxOnly": true
+    "erasableSyntaxOnly": true,
+    "types": ["vitest/importMeta"],
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["**/*.js", "**/*.ts"],
   "exclude": ["node_modules", "examples", "build"]

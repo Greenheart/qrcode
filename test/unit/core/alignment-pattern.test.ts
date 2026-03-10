@@ -1,6 +1,6 @@
 import { test, expect } from 'vitest'
 import * as pattern from '#core/alignment-pattern.ts'
-import * as Version from '#core/version.ts'
+import { getQRVersionRange } from '#test/helpers.ts'
 
 /**
  * Row/column coordinates of the center module of each alignment pattern.
@@ -50,16 +50,16 @@ const EXPECTED_POSITION_TABLE = [
 ]
 
 test('Alignment pattern - Row/Col coords', () => {
-  for (let i = Version.MIN; i <= Version.MAX; i++) {
-    const pos = pattern.getRowColCoords(i)
-    expect(pos, 'Should return correct coords').toStrictEqual(EXPECTED_POSITION_TABLE[i - 1])
+  for (const v of getQRVersionRange()) {
+    const pos = pattern.getRowColCoords(v)
+    expect(pos, 'Should return correct coords').toStrictEqual(EXPECTED_POSITION_TABLE[v - 1])
   }
 })
 
 test('Alignment pattern - Positions', () => {
-  for (let i = Version.MIN; i <= Version.MAX; i++) {
-    const pos = pattern.getPositions(i)
-    const expectedPos = EXPECTED_POSITION_TABLE[i - 1]
+  for (const v of getQRVersionRange()) {
+    const pos = pattern.getPositions(v)
+    const expectedPos = EXPECTED_POSITION_TABLE[v - 1]
     const expectedLength = (Math.pow(expectedPos.length, 2) || 3) - 3
 
     expect(pos.length, 'Should return correct number of positions').toStrictEqual(expectedLength)

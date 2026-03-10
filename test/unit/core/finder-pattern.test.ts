@@ -1,8 +1,9 @@
 import { test, expect } from 'vitest'
 import * as pattern from '#core/finder-pattern.ts'
+import { getQRVersionRange } from '#test/helpers.ts'
 
 test('Finder pattern', () => {
-  for (let i = 1; i <= 40; i++) {
-    expect(pattern.getPositions(i).length, 'Should always return 3 pattern positions').toEqual(3)
+  for (const v of getQRVersionRange()) {
+    expect(pattern.getPositions(v).length, 'Should always return 3 pattern positions').toEqual(3)
   }
 })
