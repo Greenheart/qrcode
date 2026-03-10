@@ -1,6 +1,7 @@
 import { test, expect } from 'vitest'
 import * as ECLevel from '#core/error-correction-level.ts'
 import * as Version from '#core/version.ts'
+import * as Mode from '#core/mode.ts'
 import * as QRCode from '#core/qrcode.ts'
 import toSJIS from '#helper/to-sjis.ts'
 import { arrayWithLength } from '#test/helpers.js'
@@ -95,8 +96,7 @@ test('QRCode version', () => {
   expect(qr.errorCorrectionLevel, 'Should set correct EC level').toEqual(ECLevel.M)
 
   expect(() => {
-    // TODO: Fix type for getCapacity()
-    qr = QRCode.create(arrayWithLength(Version.getCapacity(2, ECLevel.H)).join('a'), {
+    qr = QRCode.create(arrayWithLength(Version.getCapacity(2, ECLevel.H, Mode.BYTE)).join('a'), {
       version: 1,
       // TODO: Fix type for errorCorrectionLevel.
       // While technically possible to pass in an errorCorrectionLevel like { bit: number },
@@ -106,7 +106,7 @@ test('QRCode version', () => {
   }, 'Should throw if data cannot be contained with chosen version').toThrow()
 
   expect(() => {
-    qr = QRCode.create(arrayWithLength(Version.getCapacity(40, ECLevel.H) + 2).join('a'), {
+    qr = QRCode.create(arrayWithLength(Version.getCapacity(40, ECLevel.H, Mode.BYTE) + 2).join('a'), {
       version: 40,
       errorCorrectionLevel: ECLevel.H,
     })

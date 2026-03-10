@@ -98,12 +98,6 @@ export function getCapacity(
     throw new Error('Invalid QR Code version')
   }
 
-  // Use Byte mode as default
-  // TODO: Verify if getCapacity is ever called without an explicit mode
-  // If not, remove this and let it be a required argument instead
-  // Or if getCapacity() is sometimes called without the mode, make this a default value in the function parameters instead to reduce code size.
-  if (typeof mode === 'undefined') mode = Mode.BYTE
-
   // Total codewords for this QR code version (Data + Error correction)
   const totalCodewords = Utils.getSymbolTotalCodewords(version)
 

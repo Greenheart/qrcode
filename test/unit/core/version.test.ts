@@ -252,11 +252,6 @@ test('Version capacity', () => {
         Version.getCapacity(i, EC_LEVELS[l], Mode.BYTE),
         'Should return correct byte mode capacity',
       ).toEqual(EXPECTED_BYTE_CAPACITY[i - 1][l])
-
-      expect(
-        Version.getCapacity(i, EC_LEVELS[l]),
-        'Should return correct byte mode capacity when no explicit mode is passed',
-      ).toEqual(EXPECTED_BYTE_CAPACITY[i - 1][l])
     }
   }
 })
