@@ -50,10 +50,12 @@ test('Char count bits', () => {
   }
 
   expect(() => {
+    // @ts-expect-error Testing invalid mode
     Mode.getCharCountIndicator({}, 1)
   }, 'Should throw if mode is invalid').toThrow()
 
   expect(() => {
+    // @ts-expect-error Testing invalid version
     Mode.getCharCountIndicator(Mode.BYTE, 0)
   }, 'Should throw if version is invalid').toThrow()
 })
@@ -99,11 +101,11 @@ test('From value', () => {
     { name: 'byte', mode: Mode.BYTE },
   ]
 
-  for (let m = 0; m < modes.length; m++) {
+  for (const { name, mode } of modes) {
     // TODO: Fix type for method - or even better, parse the input and return a distinct type. default value might be handled separately
-    expect(Mode.from(modes[m].name)).toEqual(modes[m].mode)
-    expect(Mode.from(modes[m].name.toUpperCase())).toEqual(modes[m].mode)
-    expect(Mode.from(modes[m].mode)).toEqual(modes[m].mode)
+    expect(Mode.from(name)).toEqual(mode)
+    expect(Mode.from(name.toUpperCase())).toEqual(mode)
+    expect(Mode.from(mode)).toEqual(mode)
   }
 
   expect(Mode.from('', Mode.NUMERIC), 'Should return default value if mode is invalid').toEqual(
@@ -124,6 +126,7 @@ test('To string', () => {
   expect(Mode.toString(Mode.KANJI)).toEqual('Kanji')
 
   expect(() => {
+    // @ts-expect-error Testing invalid input
     Mode.toString({})
   }, 'Should throw if mode is invalid').toThrow()
 })

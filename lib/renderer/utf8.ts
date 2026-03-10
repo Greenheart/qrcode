@@ -63,6 +63,7 @@ export function render(qrData, options, cb) {
 // should either be moved to a separate module to allow the core UTF-8
 // renderer to work even for browser environments.
 // Or, removed since this is literally just a fs.writeFile() call over the render(qrData) to a path.
+// Or, use a file stream similar to how it's done for the PNG.renderToFile() method.
 export function renderToFile(path, qrData, options, cb) {
   if (typeof cb === 'undefined') {
     cb = options

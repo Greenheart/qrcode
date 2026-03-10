@@ -89,8 +89,6 @@ export function getCapacity(
     | { readonly bit: 0 }
     | { readonly bit: 3 }
     | { readonly bit: 2 },
-  // TODO: Improve this type based on the Mode class/type
-  // This needs ccBits later on in the process, and early on only the bit
   mode: QREncodingMode | typeof Mode.MIXED,
 ) {
   // IDEA: Maybe remove this check and always guard calls to this function with parsing the QR version or using a default value?
@@ -169,6 +167,8 @@ export function getBestVersionForData(data, errorCorrectionLevel): QRVersion | u
  */
 export function getEncodedBits(version: QRVersion) {
   // TODO: Why is isValid needed to be called here? Ideally just call parse at an earlier point to avoid the repeated checks
+  // Maybe avoid throwing in here if we can guarantee the input is valid, and just return undefined instead
+  // TODO: Check how getEncodedBits() is used. Maybe other core library code relies on this function throwing an error?
   if (!isValid(version) || version < 7) {
     throw new Error('Invalid QR Code version')
   }

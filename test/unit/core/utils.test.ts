@@ -55,6 +55,7 @@ test('BCH Digit', () => {
 
 test('Set/Get SJIS function', () => {
   expect(() => {
+    // @ts-expect-error Testing invalid arguments
     Utils.setToSJISFunction()
   }, 'Should throw if param is not a function').toThrow()
 
@@ -67,6 +68,7 @@ test('Set/Get SJIS function', () => {
     return 'test_' + c
   }
 
+  // @ts-expect-error Testing mock function
   Utils.setToSJISFunction(testFunc)
 
   expect(

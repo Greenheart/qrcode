@@ -1,3 +1,6 @@
+import * as Version from '#core/version.ts'
+import type { QRVersion } from '#lib/types.ts'
+
 const nativePromise = global.Promise
 
 /**
@@ -17,6 +20,7 @@ export function arrayWithFill<T>(length: number, fillValue: T) {
   return Array.from({ length }).fill(fillValue)
 }
 
+// IDEA: Consider replacing this hack with a proper Vitest Promise mock.
 export function removeNativePromise() {
   if (global.Promise) {
     delete global.Promise

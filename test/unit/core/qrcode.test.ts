@@ -85,6 +85,7 @@ test('QRCode error correction', () => {
     }
   }
 
+  // TODO: Indicate that options are optional when fixing types for QRCode.create()
   qr = QRCode.create('ABCDEFG')
   expect(qr.errorCorrectionLevel, 'Should set default EC level to M').toEqual(ECLevel.M)
 })
@@ -106,14 +107,16 @@ test('QRCode version', () => {
   }, 'Should throw if data cannot be contained with chosen version').toThrow()
 
   expect(() => {
-    qr = QRCode.create(arrayWithLength(Version.getCapacity(40, ECLevel.H, Mode.BYTE) + 2).join('a'), {
-      version: 40,
-      errorCorrectionLevel: ECLevel.H,
-    })
+    qr = QRCode.create(
+      arrayWithLength(Version.getCapacity(40, ECLevel.H, Mode.BYTE) + 2).join('a'),
+      {
+        version: 40,
+        errorCorrectionLevel: ECLevel.H,
+      },
+    )
   }, 'Should throw if data cannot be contained in a qr code').toThrow()
 
   expect(() => {
-    // @ts-expect-error Testing invalid version
     qr = QRCode.create('abcdefg', { version: 'invalid' })
   }, 'Should use best version if the one provided is invalid').not.toThrow()
 })

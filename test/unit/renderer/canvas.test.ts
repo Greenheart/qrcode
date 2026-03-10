@@ -181,6 +181,7 @@ test('CanvasRenderer renderToBlob', () => {
 
         // TODO: This test is broken for some reson with Node.js 24 and `canvas@3.2.1`. Might be a breaking change of some sort.
         // expect(imageBlob.size % 4, 'Should have a correct size').toEqual(0)
+        // NOTE: This might be related to the failing test in ../../e2e/toDataURL.test.ts
 
         expect(imageBlob.type, 'Should have a correct type value').toEqual('image/png')
       },

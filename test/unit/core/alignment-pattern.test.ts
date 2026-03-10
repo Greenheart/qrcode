@@ -65,10 +65,10 @@ test('Alignment pattern - Positions', () => {
     expect(pos.length, 'Should return correct number of positions').toStrictEqual(expectedLength)
 
     // For each coord value check if it's present in the expected coords table
-    pos.forEach((position) => {
-      position.forEach((coord) => {
+    for (const position of pos) {
+      for (const coord of position) {
         expect(expectedPos.indexOf(coord), 'Should return valid coord value').not.toEqual(-1)
-      })
-    })
+      }
+    }
   }
 })

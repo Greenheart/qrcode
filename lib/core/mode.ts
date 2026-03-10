@@ -51,8 +51,6 @@ export const KANJI: QREncodingMode<'Kanji'> = {
   ccBits: [8, 10, 12],
 } as const
 
-
-
 /**
  * Mixed mode will contain a sequences of data in a combination of any of
  * the modes described above
@@ -63,7 +61,6 @@ export const KANJI: QREncodingMode<'Kanji'> = {
 export const MIXED = {
   bit: -1,
 } as const
-
 
 /**
  * Returns the number of bits needed to store the data length
@@ -99,6 +96,8 @@ export function getBestModeForData(data: string): QREncodingMode {
  */
 export function toString(mode: QREncodingMode): QREncodingModeId {
   if (mode && mode.id) return mode.id
+  // IDEA: Consider replacing this error with stricter type checking instead. Might be OK if we only call this internally in the library.
+  // TODO: Check usage of Mode.toString() and see if we could rely on the type system here instead.
   throw new Error('Invalid mode')
 }
 
