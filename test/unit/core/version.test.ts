@@ -213,23 +213,6 @@ test('Version parse from value', () => {
 })
 
 test('Version capacity', () => {
-  expect(() => {
-    // @ts-expect-error Testing invalid arguments
-    Version.getCapacity()
-  }, 'Should throw if version is undefined').toThrow()
-  expect(() => {
-    // @ts-expect-error Testing invalid arguments
-    Version.getCapacity('')
-  }, 'Should throw if version is not a number').toThrow()
-  expect(() => {
-    // @ts-expect-error Testing invalid arguments
-    Version.getCapacity(0)
-  }, 'Should throw if version is not in range').toThrow()
-  expect(() => {
-    // @ts-expect-error Testing invalid arguments
-    Version.getCapacity(41)
-  }, 'Should throw if version is not in range').toThrow()
-
   for (let l = 0; l < EC_LEVELS.length; l++) {
     for (const i of getQRVersionRange()) {
       expect(

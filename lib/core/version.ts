@@ -91,11 +91,6 @@ export function getCapacity(
     | { readonly bit: 2 },
   mode: QREncodingMode | typeof Mode.MIXED,
 ) {
-  // IDEA: Maybe remove this check and always guard calls to this function with parsing the QR version or using a default value?
-  if (!isValid(version)) {
-    throw new Error('Invalid QR Code version')
-  }
-
   // Total codewords for this QR code version (Data + Error correction)
   const totalCodewords = Utils.getSymbolTotalCodewords(version)
 
