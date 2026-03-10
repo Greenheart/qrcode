@@ -375,7 +375,12 @@ function createCodewords(bitBuffer, version: QRVersion, errorCorrectionLevel) {
  *
  * TODO: Use correct return type for QRCodeSymbol
  */
-function createSymbol(data: string, version: QRVersion, errorCorrectionLevel, maskPattern: QRCodeMaskPattern) {
+function createSymbol(
+  data: string,
+  version: QRVersion,
+  errorCorrectionLevel,
+  maskPattern: QRCodeMaskPattern,
+) {
   let segments
 
   if (Array.isArray(data)) {

@@ -53,9 +53,12 @@ const CODEWORDS_COUNT = [
  * @return Size of QR code
  */
 export function getSymbolSize(version: QRVersion) {
-  // IDEA: Maybe change the errors to tests instead? Unless the code depends on throwing and catching exceptions of course.
+  // IDEA: Maybe change the errors to tests instead?
+  // Unless the code depends on throwing and catching exceptions of course.
   if (!version) throw new Error('"version" cannot be null or undefined')
-  if (version < Version.MIN || version > Version.MAX) throw new Error('"version" should be in range from 1 to 40')
+  if (version < Version.MIN || version > Version.MAX) {
+    throw new Error('"version" should be in range from 1 to 40')
+  }
   return version * 4 + 17
 }
 
