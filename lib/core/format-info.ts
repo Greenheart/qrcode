@@ -12,7 +12,10 @@ const G15_BCH = Utils.getBCHDigit(G15)
  *
  * @return Encoded format information bits
  */
-export function getEncodedBits(errorCorrectionLevel: ErrorCorrectionLevel, mask: QRCodeMaskPattern): number {
+export function getEncodedBits(
+  errorCorrectionLevel: ErrorCorrectionLevel,
+  mask: QRCodeMaskPattern,
+): number {
   const data = (errorCorrectionLevel.bit << 3) | mask
   let d = data << 10
 

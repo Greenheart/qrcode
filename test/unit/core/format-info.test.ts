@@ -11,7 +11,10 @@ const EXPECTED_FORMAT_BITS = [
 ]
 
 test('Format encoded info', () => {
+  // TODO: Create a test helper function to get error correction levels with correct types
   const levels = [ECLevel.L, ECLevel.M, ECLevel.Q, ECLevel.H]
+  // TODO: Create a test helper function to get the mask patterns with correct types
+  // Maybe use Object.values(MaskPattern.Patterns) and return that with the correct type
   const patterns = Object.keys(MaskPattern.Patterns).length
 
   for (let l = 0; l < levels.length; l++) {

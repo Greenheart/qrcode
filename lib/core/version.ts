@@ -2,7 +2,7 @@ import * as Utils from './utils.ts'
 import * as ECCode from './error-correction-code.ts'
 import * as ECLevel from './error-correction-level.ts'
 import * as Mode from './mode.ts'
-import type { QRVersion, QREncodingMode } from '#lib/types.ts'
+import type { QRVersion, QREncodingMode, ErrorCorrectionLevel } from '#lib/types.ts'
 
 export const MIN = 1
 export const MAX = 40
@@ -34,9 +34,11 @@ export function parse(version: unknown): QRVersion | undefined {
 const G18 = (1 << 12) | (1 << 11) | (1 << 10) | (1 << 9) | (1 << 8) | (1 << 5) | (1 << 2) | (1 << 0)
 const G18_BCH = Utils.getBCHDigit(G18)
 
-// TODO: Move check-version into this module and update all imports
-// TODO: Use the min and max version constants instead of numbers
-function getBestVersionForDataLength(mode, length, errorCorrectionLevel): QRVersion | undefined {
+function getBestVersionForDataLength(
+  mode: QREncodingMode,
+  length: number,
+  errorCorrectionLevel: ErrorCorrectionLevel,
+): QRVersion | undefined {
   for (let currentVersion = MIN; currentVersion <= MAX; currentVersion++) {
     if (length <= getCapacity(currentVersion as QRVersion, errorCorrectionLevel, mode)) {
       return currentVersion as QRVersion
@@ -126,12 +128,16 @@ export function getCapacity(
 /**
  * Returns the minimum version needed to contain the amount of data
  *
- * @param  {Segment} data                    Segment of data
- * @param  {Number} [errorCorrectionLevel=H] Error correction level
+ * @param {Segment} data Segment of data
  */
-export function getBestVersionForData(data, errorCorrectionLevel): QRVersion | undefined {
+export function getBestVersionForData(
+  data,
+  errorCorrectionLevel: ErrorCorrectionLevel,
+): QRVersion | undefined {
   let seg
 
+  // TODO: See if this can be replaced with an error correction level parsed earlier and passsed in as an required argument instead
+  // This depends on where getBestVersionForData is called.
   const ecl = ECLevel.from(errorCorrectionLevel, ECLevel.M)
 
   if (Array.isArray(data)) {

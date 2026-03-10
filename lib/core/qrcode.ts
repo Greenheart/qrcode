@@ -92,8 +92,11 @@ function setupTimingPattern(matrix: BitMatrix) {
  * Add alignment patterns bits to matrix
  *
  * Note: this function must be called after {@link setupTimingPattern}
+ *
+ * TODO: Check where this is called and if the version is safe to use
+ * Only called in one place, internally in this module so it should be safe to use.
  */
-function setupAlignmentPattern(matrix: BitMatrix, version: any) {
+function setupAlignmentPattern(matrix: BitMatrix, version: QRVersion) {
   const pos = AlignmentPattern.getPositions(version)
 
   for (let i = 0; i < pos.length; i++) {
@@ -414,13 +417,10 @@ function createSymbol(
 
     // Check if the specified version can contain the data
   } else if (version < bestVersion) {
-    throw new Error(
-      '\n' +
-        'The chosen QR Code version cannot contain this amount of data.\n' +
-        'Minimum version required to store current data is: ' +
-        bestVersion +
-        '.\n',
-    )
+    throw new Error(`
+The chosen QR Code version cannot contain this amount of data.
+Minimum version required to store current data is: ${bestVersion}
+`)
   }
 
   const dataBits = createData(version, errorCorrectionLevel, segments)
@@ -478,7 +478,7 @@ function createSymbol(
  * @param {Number} [options.version]              QR Code version
  * @param {String} [options.errorCorrectionLevel] Error correction level
  * @param {string | number} [options.maskPattern] Mask pattern
- * @param {Function} [options.toSJISFunc]         Helper func to convert utf8 to sjis
+ * @param {Function} [options.toSJISFunc]         Helper function to convert utf8 to sjis
  */
 export function create(data, options) {
   if (typeof data === 'undefined' || data === '') {
