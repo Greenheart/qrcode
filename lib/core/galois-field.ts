@@ -1,5 +1,6 @@
 const EXP_TABLE = new Uint8Array(512)
 const LOG_TABLE = new Uint8Array(256)
+
 /**
  * Precompute the log and anti-log tables for faster computation later
  *
@@ -35,33 +36,23 @@ const LOG_TABLE = new Uint8Array(256)
 
 /**
  * Returns log value of n inside Galois Field
- *
- * @param  {Number} n
- * @return {Number}
  */
-export function log(n) {
+export function log(n: number) {
   if (n < 1) throw new Error('log(' + n + ')')
   return LOG_TABLE[n]
 }
 
 /**
  * Returns anti-log value of n inside Galois Field
- *
- * @param  {Number} n
- * @return {Number}
  */
-export function exp(n) {
+export function exp(n: number) {
   return EXP_TABLE[n]
 }
 
 /**
  * Multiplies two number inside Galois Field
- *
- * @param  {Number} x
- * @param  {Number} y
- * @return {Number}
  */
-export function mul(x, y) {
+export function mul(x: number, y: number) {
   if (x === 0 || y === 0) return 0
 
   // should be EXP_TABLE[(LOG_TABLE[x] + LOG_TABLE[y]) % 255] if EXP_TABLE wasn't oversized

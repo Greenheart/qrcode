@@ -1,5 +1,6 @@
 import type { ErrorCorrectionLevel, QRCodeMaskPattern } from '#lib/types.ts'
 import * as Utils from './utils.ts'
+
 const G15 = (1 << 10) | (1 << 8) | (1 << 5) | (1 << 4) | (1 << 2) | (1 << 1) | (1 << 0)
 const G15_MASK = (1 << 14) | (1 << 12) | (1 << 10) | (1 << 4) | (1 << 1)
 const G15_BCH = Utils.getBCHDigit(G15)
