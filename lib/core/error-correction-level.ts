@@ -2,6 +2,9 @@ import type { ErrorCorrectionLevel, QRCodeErrorCorrectionLevel } from '#lib/type
 
 /**
  * Maps error correction levels from the public API to the internal runtime values.
+ *
+ * Each level has a bit used for operations like encoding data,
+ * and an offset used for getting the error correction block and codeword sizes.
  */
 export const EC_LEVELS: Record<
   Extract<QRCodeErrorCorrectionLevel, 'L' | 'M' | 'Q' | 'H'>,
@@ -20,10 +23,6 @@ export const EC_LEVELS: Record<
 // TODO: we do use the EC Levels in multiple places, like in version.test.ts for example, and could use
 // an array of EC levels from here instead of re-creating it in every test module
 // IDEA: We could also use a helper function to get all EC Levels for tests
-
-// TODO: Use a simpler definition for error correction levels
-// IDEA: Maybe parse like `input.trimStart()[0].toLowerCase()` to be backwards compatible even if the longer string is passed in.
-// Or just implement the breaking change to keep the library smaller, only accepting the single character strings as input
 
 // NOTE: For backwards compatibility.
 // Maybe simplify how the levels are defined to improve type safety
@@ -45,6 +44,9 @@ export function parse(level: unknown): ErrorCorrectionLevel | undefined {
     if (parsedLevel) {
       return parsedLevel
     }
+    // By throwing an exception here, users of the library know if they passed the wrong input.
+    // This helps users avoid subtle errors that can't easily be recovered.
+    // Compare this to Version.parse(), where the library can easily find a good version based on the data itself.
     throw new Error('Unknown error correction level: ' + level)
   }
 }
