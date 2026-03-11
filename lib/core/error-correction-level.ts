@@ -17,10 +17,6 @@ export const EC_LEVELS: Record<
   H: { bit: 2, offset: 3 },
 } as const
 
-// TODO: Since this is only used for the CLI, consider solving this in another way instead so we don't include this array for other versions.
-// IDEA: We could export the EC_LEVELS object instead and use that in the CLI as well as below.
-export const ALL_EC_LEVELS = Object.keys(EC_LEVELS) as (keyof typeof EC_LEVELS)[]
-
 // TODO: we do use the EC Levels in multiple places, like in version.test.ts for example, and could use
 // an array of EC levels from here instead of re-creating it in every test module
 // IDEA: We could also use a helper function to get all EC Levels for tests

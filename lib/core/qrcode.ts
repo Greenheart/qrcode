@@ -100,9 +100,6 @@ function setupTimingPattern(matrix: BitMatrix) {
  * Add alignment patterns bits to matrix
  *
  * Note: this function must be called after {@link setupTimingPattern}
- *
- * TODO: Check where this is called and if the version is safe to use
- * Only called in one place, internally in this module so it should be safe to use.
  */
 function setupAlignmentPattern(matrix: BitMatrix, version: QRVersion) {
   const pos = AlignmentPattern.getPositions(version)

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { program, Option, InvalidArgumentError, type Command } from 'commander'
 import QRCode from '#lib/index.ts'
-import { ALL_EC_LEVELS } from '#core/error-correction-level.ts'
+import { EC_LEVELS } from '#core/error-correction-level.ts'
 import { QR_VERSION_RANGE } from '#core/version.ts'
 import { QR_MASK_RANGE } from '#core/mask-pattern.ts'
 import pkg from '../package.json' with { type: 'json' }
@@ -22,7 +22,7 @@ function parseArgs(): Command {
         `QR Code symbol version ${printRange(QR_VERSION_RANGE)}`,
         integerBetween(...QR_VERSION_RANGE),
       )
-      .addOption(new Option('-e, --error <level>', 'Error correction level').choices(ALL_EC_LEVELS))
+      .addOption(new Option('-e, --error <level>', 'Error correction level').choices(Object.keys(EC_LEVELS)))
       .option(
         '-m, --mask <number>',
         `Mask pattern ${printRange(QR_MASK_RANGE)}`,
@@ -91,7 +91,7 @@ function integerBetween(min: number, max: number = Number.MAX_SAFE_INTEGER) {
 /** The raw input CLI options, matching the CLI configuration above */
 type RawCliOptions = {
   qversion?: number
-  error?: (typeof ALL_EC_LEVELS)[number]
+  error?: keyof typeof EC_LEVELS
   type?: (typeof OUTPUT_OPTIONS)[number]
   small?: boolean
   inverse?: boolean
@@ -107,7 +107,7 @@ type RawCliOptions = {
 /** Used after parsing and normalizing the user input. Maps to internal options in the QRCode library */
 type ParsedCliOptions = {
   version?: number
-  errorCorrectionLevel?: (typeof ALL_EC_LEVELS)[number]
+  errorCorrectionLevel?: keyof typeof EC_LEVELS
   type?: (typeof OUTPUT_OPTIONS)[number] | 'terminal'
   small: boolean
   inverse: boolean
