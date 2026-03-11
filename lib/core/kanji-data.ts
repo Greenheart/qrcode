@@ -8,7 +8,6 @@ export default class KanjiData {
   data: string
 
   constructor(data: QRCodeKanjiSegment['data']) {
-
     this.data = data
   }
 

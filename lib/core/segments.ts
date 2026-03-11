@@ -8,17 +8,21 @@ import ByteData from './byte-data.ts'
 import KanjiData from './kanji-data.ts'
 import * as Regex from './regex.ts'
 import * as Utils from './utils.ts'
-import type { DataSegment, QRCodeSegment, QRVersion, QREncodingMode, QRCodeByteSegment, QRCodeAlphanumericSegment, QRCodeNumericSegment, QRCodeKanjiSegment } from '#lib/types.ts'
+import type {
+  DataSegment,
+  QRCodeSegment,
+  QRVersion,
+  QREncodingMode,
+  QRCodeByteSegment,
+  QRCodeAlphanumericSegment,
+  QRCodeNumericSegment,
+  QRCodeKanjiSegment,
+} from '#lib/types.ts'
 
 /**
  * Returns UTF8 byte length
- *
- * @param str Input string
- * @return Number of bytes
- *
- * NOTE: See if there's a better alternative to unescape?
  */
-function getStringByteLength(str: string) {
+function getStringByteLength(str: string): number {
   return unescape(encodeURIComponent(str)).length
 }
 
@@ -331,7 +335,7 @@ export function rawSplit(data: string): DataSegment[] {
 }
 
 if (import.meta.vitest) {
-  test.only('buildGraph should return correct length - issue 272', () => {
+  test('buildGraph should return correct length - issue 272', () => {
     // Nodes created from the input string `ABCDEF123`, matching issue 272
     // Learn more: https://github.com/soldair/node-qrcode/issues/272
     const NODES = [

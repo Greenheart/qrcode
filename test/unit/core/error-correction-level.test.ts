@@ -19,7 +19,7 @@ test('Error level parsed from input value', () => {
   }
 
   expect(ECLevel.parse(undefined), 'Should return undefined if value is undefined').toEqual(
-    undefined
+    undefined,
   )
   expect(() => ECLevel.parse(''), 'Should throw if value is invalid').toThrow()
   expect(() => ECLevel.parse('extra'), 'Should throw if value is invalid').toThrow()
