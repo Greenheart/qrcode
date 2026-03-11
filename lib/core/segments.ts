@@ -8,7 +8,7 @@ import ByteData from './byte-data.ts'
 import KanjiData from './kanji-data.ts'
 import * as Regex from './regex.ts'
 import * as Utils from './utils.ts'
-import type { DataSegment, QRCodeSegment, QRVersion, QREncodingMode, QRCodeByteSegment, QRCodeAlphanumericSegment,type QRCodeNumericSegment, QRCodeKanjiSegment } from '#lib/types.ts'
+import type { DataSegment, QRCodeSegment, QRVersion, QREncodingMode, QRCodeByteSegment, QRCodeAlphanumericSegment, QRCodeNumericSegment, QRCodeKanjiSegment } from '#lib/types.ts'
 
 /**
  * Returns UTF8 byte length
