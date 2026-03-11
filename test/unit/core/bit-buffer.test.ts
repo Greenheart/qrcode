@@ -3,7 +3,7 @@ import BitBuffer from '#core/bit-buffer.ts'
 
 test('Bit Buffer', () => {
   const testData = 0x41 // 'A'
-  const expectedDataBits = [false, true, false, false, false, false, false, true]
+  const expectedDataBits = [0, 1, 0, 0, 0, 0, 0, 1]
 
   const bitBuffer = new BitBuffer()
 

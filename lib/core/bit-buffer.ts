@@ -1,25 +1,26 @@
-function BitBuffer() {
-  this.buffer = []
-  this.length = 0
-}
+import type { Bit } from "#lib/types.ts";
 
-BitBuffer.prototype = {
-  get: function (index) {
+export default class BitBuffer {
+  buffer: Bit[] = []
+  length = 0
+
+  get(index: number) {
     const bufIndex = Math.floor(index / 8)
-    return ((this.buffer[bufIndex] >>> (7 - (index % 8))) & 1) === 1
-  },
+    return ((this.buffer[bufIndex] >>> (7 - (index % 8))) & 1) as Bit
+  }
 
-  put: function (num, length) {
+  put(num: number, length: number) {
     for (let i = 0; i < length; i++) {
-      this.putBit(((num >>> (length - i - 1)) & 1) === 1)
+      this.putBit(((num >>> (length - i - 1)) & 1) as Bit)
     }
-  },
+  }
 
-  getLengthInBits: function () {
+  // TODO: Maybe rename to getBitLength for consistency with other classes?
+  getLengthInBits() {
     return this.length
-  },
+  }
 
-  putBit: function (bit) {
+  putBit(bit: Bit) {
     const bufIndex = Math.floor(this.length / 8)
     if (this.buffer.length <= bufIndex) {
       this.buffer.push(0)
@@ -30,7 +31,5 @@ BitBuffer.prototype = {
     }
 
     this.length++
-  },
+  }
 }
-
-export default BitBuffer
