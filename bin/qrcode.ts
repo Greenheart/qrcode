@@ -22,7 +22,9 @@ function parseArgs(): Command {
         `QR Code symbol version ${printRange(QR_VERSION_RANGE)}`,
         integerBetween(...QR_VERSION_RANGE),
       )
-      .addOption(new Option('-e, --error <level>', 'Error correction level').choices(Object.keys(EC_LEVELS)))
+      .addOption(
+        new Option('-e, --error <level>', 'Error correction level').choices(Object.keys(EC_LEVELS)),
+      )
       .option(
         '-m, --mask <number>',
         `Mask pattern ${printRange(QR_MASK_RANGE)}`,

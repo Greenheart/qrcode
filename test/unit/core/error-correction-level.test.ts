@@ -3,7 +3,7 @@ import * as ECLevel from '#core/error-correction-level.ts'
 
 const EC_LEVELS = [ECLevel.L, ECLevel.M, ECLevel.Q, ECLevel.H]
 
-test('Error level from input value', () => {
+test('Error level parsed from input value', () => {
   const values = [
     ['l', 'low'],
     ['m', 'medium'],
@@ -13,19 +13,16 @@ test('Error level from input value', () => {
 
   for (let l = 0; l < values.length; l++) {
     for (let i = 0; i < values[l].length; i++) {
-      expect(ECLevel.from(values[l][i])).toEqual(EC_LEVELS[l])
-      expect(ECLevel.from(values[l][i].toUpperCase())).toEqual(EC_LEVELS[l])
+      expect(ECLevel.parse(values[l][i])).toEqual(EC_LEVELS[l])
+      expect(ECLevel.parse(values[l][i].toUpperCase())).toEqual(EC_LEVELS[l])
     }
   }
 
-  expect(ECLevel.from(ECLevel.L), 'Should return passed level if value is valid').toEqual(ECLevel.L)
-  expect(
-    ECLevel.from(undefined, ECLevel.M),
-    'Should return default level if value is undefined',
-  ).toEqual(ECLevel.M)
-  expect(ECLevel.from('', ECLevel.Q), 'Should return default level if value is invalid').toEqual(
-    ECLevel.Q,
+  expect(ECLevel.parse(undefined), 'Should return undefined if value is undefined').toEqual(
+    undefined
   )
+  expect(() => ECLevel.parse(''), 'Should throw if value is invalid').toThrow()
+  expect(() => ECLevel.parse('extra'), 'Should throw if value is invalid').toThrow()
 })
 
 test('Error level validity', () => {

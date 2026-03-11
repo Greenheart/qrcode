@@ -1,4 +1,4 @@
-import type { Bit } from "#lib/types.ts";
+import type { Bit } from '#lib/types.ts'
 
 export default class BitBuffer {
   buffer: Bit[] = []

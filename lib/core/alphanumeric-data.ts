@@ -11,6 +11,7 @@ import * as Mode from './mode.ts'
  * O(n) when calling indexOf() repeatedly.
  * Tiny increase in memory usage, but lower CPU usage.
  */
+// oxfmt-ignore
 const ALPHA_NUM_CHARS = new Map(([
   '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E',
   'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',

@@ -279,13 +279,18 @@ test('Version best match', () => {
   testBestVersionForCapacity(EXPECTED_KANJI_CAPACITY, KanjiData)
   testBestVersionForCapacity(EXPECTED_BYTE_CAPACITY, ByteData)
 
-  const version = Version.getBestVersionForData([new ByteData('abc'), new NumericData('1234')], ECLevel.M)
+  const version = Version.getBestVersionForData(
+    [new ByteData('abc'), new NumericData('1234')],
+    ECLevel.M,
+  )
   expect(
     version && Version.MIN <= version && version <= Version.MAX,
     'Should return a version number if input array is valid',
   ).toEqual(true)
 
-  expect(Version.getBestVersionForData([], ECLevel.M), 'Should return 1 if array is empty').toEqual(1)
+  expect(Version.getBestVersionForData([], ECLevel.M), 'Should return 1 if array is empty').toEqual(
+    1,
+  )
 })
 
 test('Version encoded info', () => {
