@@ -266,7 +266,7 @@ function createData(version: QRVersion, errorCorrectionLevel, segments) {
   // a terminator of up to four 0s must be added to the right side of the string.
   // If the bit string is more than four bits shorter than the required number of bits,
   // add four 0s to the end.
-  if (buffer.getLengthInBits() + 4 <= dataTotalCodewordsBits) {
+  if (buffer.getBitsLength() + 4 <= dataTotalCodewordsBits) {
     buffer.put(0, 4)
   }
 
@@ -275,7 +275,7 @@ function createData(version: QRVersion, errorCorrectionLevel, segments) {
 
   // After adding the terminator, if the number of bits in the string is not a multiple of 8,
   // pad the string on the right with 0s to make the string's length a multiple of 8.
-  while (buffer.getLengthInBits() % 8 !== 0) {
+  while (buffer.getBitsLength() % 8 !== 0) {
     buffer.putBit(0)
   }
 
@@ -283,7 +283,7 @@ function createData(version: QRVersion, errorCorrectionLevel, segments) {
   // Extend the buffer to fill the data capacity of the symbol corresponding to
   // the Version and Error Correction Level by adding the Pad Codewords 11101100 (0xEC)
   // and 00010001 (0x11) alternately.
-  const remainingByte = (dataTotalCodewordsBits - buffer.getLengthInBits()) / 8
+  const remainingByte = (dataTotalCodewordsBits - buffer.getBitsLength()) / 8
   for (let i = 0; i < remainingByte; i++) {
     buffer.put(i % 2 ? 0x11 : 0xec, 8)
   }

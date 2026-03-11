@@ -15,8 +15,7 @@ export default class BitBuffer {
     }
   }
 
-  // TODO: Maybe rename to getBitLength for consistency with other classes?
-  getLengthInBits() {
+  getBitsLength() {
     return this.length
   }
 
