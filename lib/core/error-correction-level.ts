@@ -32,56 +32,6 @@ export const M = EC_LEVELS.M
 export const Q = EC_LEVELS.Q
 export const H = EC_LEVELS.H
 
-// IDEA: Maybe parse and instead return undefined if no value was found?
-// TODO: Move tests for fromString() to parse() instead.
-function fromString(string: string) {
-  if (typeof string !== 'string') {
-    throw new Error('Param is not a string')
-  }
-
-  const lcStr = string.toLowerCase()
-
-  switch (lcStr) {
-    case 'l':
-    case 'low':
-      return L
-
-    case 'm':
-    case 'medium':
-      return M
-
-    case 'q':
-    case 'quartile':
-      return Q
-
-    case 'h':
-    case 'high':
-      return H
-
-    default:
-      throw new Error('Unknown EC Level: ' + string)
-  }
-}
-
-// TODO: Combine tests for isValid() with parse()
-export function isValid(level) {
-  return Boolean(level && typeof level.bit !== 'undefined' && level.bit >= 0 && level.bit < 4)
-}
-
-// TODO: Replace ECLevel.from() with ECLevel.parse()
-export function from(value, defaultValue) {
-  if (isValid(value)) {
-    return value
-  }
-
-  try {
-    return fromString(value)
-    // oxlint-disable no-unused-vars
-  } catch (e) {
-    return defaultValue
-  }
-}
-
 /**
  * Parse and return the error correction level, throwing an error if the parsed level is invalid.
  * Returns undefined and ignores non-string values that can't be parsed.
