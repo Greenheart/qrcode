@@ -2,11 +2,11 @@ import * as GF from './galois-field.ts'
 /**
  * Multiplies two polynomials inside Galois Field
  *
- * @param  {Uint8Array} p1 Polynomial
- * @param  {Uint8Array} p2 Polynomial
- * @return {Uint8Array}    Product of p1 and p2
+ * @param p1 Polynomial
+ * @param p2 Polynomial
+ * @return Product of p1 and p2
  */
-export function mul(p1, p2) {
+export function mul(p1: Uint8Array, p2: Uint8Array) {
   const coeff = new Uint8Array(p1.length + p2.length - 1)
 
   for (let i = 0; i < p1.length; i++) {
@@ -21,11 +21,11 @@ export function mul(p1, p2) {
 /**
  * Calculate the remainder of polynomials division
  *
- * @param  {Uint8Array} divident Polynomial
- * @param  {Uint8Array} divisor  Polynomial
- * @return {Uint8Array}          Remainder
+ * @param divident Polynomial
+ * @param divisor Polynomial
+ * @return Remainder
  */
-export function mod(divident, divisor) {
+export function mod(divident: Uint8Array, divisor: Uint8Array) {
   let result = new Uint8Array(divident)
 
   while (result.length - divisor.length >= 0) {
@@ -48,10 +48,10 @@ export function mod(divident, divisor) {
  * Generate an irreducible generator polynomial of specified degree
  * (used by Reed-Solomon encoder)
  *
- * @param  {Number} degree Degree of the generator polynomial
- * @return {Uint8Array}    Buffer containing polynomial coefficients
+ * @param degree Degree of the generator polynomial
+ * @return Uint8Array containing polynomial coefficients
  */
-export function generateECPolynomial(degree) {
+export function generateECPolynomial(degree: number) {
   let poly = new Uint8Array([1])
   for (let i = 0; i < degree; i++) {
     poly = mul(poly, new Uint8Array([1, GF.exp(i)]))
