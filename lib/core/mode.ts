@@ -79,10 +79,12 @@ export function getCharCountIndicator(mode: QREncodingMode, version: QRVersion):
  * Returns the most efficient mode to store the specified data
  */
 export function getBestModeForData(data: string | QRCodeSegment['data']): QREncodingMode {
-  if (Regex.testNumeric(data)) return NUMERIC
-  else if (Regex.testAlphanumeric(data)) return ALPHANUMERIC
-  else if (Regex.testKanji(data)) return KANJI
-  else return BYTE
+  if (typeof data === 'string') {
+    if (Regex.testNumeric(data)) return NUMERIC
+    else if (Regex.testAlphanumeric(data)) return ALPHANUMERIC
+    else if (Regex.testKanji(data)) return KANJI
+  }
+  return BYTE
 }
 
 /**

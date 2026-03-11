@@ -50,13 +50,15 @@ test('Char count bits', () => {
   }
 
   expect(() => {
+    // NOTE: Ideally we should ensure the mode is valid closer to the
+    // public API surface and use strict types to enforce internal usage.
+    // Then we could stop throwing errors in getCharCountIndicator()
     // @ts-expect-error Testing invalid mode
     Mode.getCharCountIndicator({}, 1)
   }, 'Should throw if mode is invalid').toThrow()
 })
 
-test('Best mode', () => {
-  /* eslint-disable quote-props */
+test(Mode.getBestModeForData.name, () => {
   const EXPECTED_MODE = {
     12345: Mode.NUMERIC,
     abcde: Mode.BYTE,
@@ -69,14 +71,16 @@ test('Best mode', () => {
     皿a晒三: Mode.BYTE,
   }
 
-  Object.keys(EXPECTED_MODE).forEach(function (data) {
+  for (const [data, expectedMode] of Object.entries(EXPECTED_MODE)) {
     expect(
       Mode.getBestModeForData(data),
-      'Should return mode ' + Mode.toString(EXPECTED_MODE[data]) + ' for data: ' + data,
-    ).toEqual(EXPECTED_MODE[data])
-  })
+      'Should return mode ' + Mode.toString(expectedMode) + ' for data: ' + data,
+    ).toEqual(expectedMode)
+  }
 })
 
+// TODO: Refactor so we parse the mode and remove the need for isValid
+// TODO: Move these tests to cover Mode.parse instead
 test('Is valid', () => {
   expect(Mode.isValid(Mode.NUMERIC)).toEqual(true)
   expect(Mode.isValid(Mode.ALPHANUMERIC)).toEqual(true)
@@ -88,6 +92,8 @@ test('Is valid', () => {
   expect(Mode.isValid({ ccBits: [] })).toEqual(false)
 })
 
+// TODO: Refactor so we parse the mode and remove the need for isValid
+// TODO: Move these tests to cover Mode.parse instead
 test('From value', () => {
   const modes = [
     { name: 'numeric', mode: Mode.NUMERIC },
