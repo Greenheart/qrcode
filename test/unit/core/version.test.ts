@@ -234,7 +234,7 @@ test('Version capacity', () => {
 })
 
 test('Version best match', () => {
-  function testBestVersionForCapacity(expectedCapacity, DataCtor) {
+  function testBestVersionForCapacity(expectedCapacity: number[][], DataCtor) {
     for (const v of getQRVersionRange()) {
       for (let l = 0; l < EC_LEVELS.length; l++) {
         const capacity = expectedCapacity[v - 1][l]
@@ -248,17 +248,6 @@ test('Version best match', () => {
           Version.getBestVersionForData([data], EC_LEVELS[l]),
           'Should return best version',
         ).toEqual(v)
-
-        if (l === 1) {
-          expect(
-            Version.getBestVersionForData(data, null),
-            'Should return best version for ECLevel.M if error level is undefined',
-          ).toEqual(v)
-          expect(
-            Version.getBestVersionForData([data], null),
-            'Should return best version for ECLevel.M if error level is undefined',
-          ).toEqual(v)
-        }
       }
     }
 
@@ -290,13 +279,13 @@ test('Version best match', () => {
   testBestVersionForCapacity(EXPECTED_KANJI_CAPACITY, KanjiData)
   testBestVersionForCapacity(EXPECTED_BYTE_CAPACITY, ByteData)
 
-  const version = Version.getBestVersionForData([new ByteData('abc'), new NumericData('1234')])
+  const version = Version.getBestVersionForData([new ByteData('abc'), new NumericData('1234')], ECLevel.M)
   expect(
     version && Version.MIN <= version && version <= Version.MAX,
     'Should return a version number if input array is valid',
   ).toEqual(true)
 
-  expect(Version.getBestVersionForData([]), 'Should return 1 if array is empty').toEqual(1)
+  expect(Version.getBestVersionForData([], ECLevel.M), 'Should return 1 if array is empty').toEqual(1)
 })
 
 test('Version encoded info', () => {

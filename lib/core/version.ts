@@ -1,6 +1,5 @@
 import * as Utils from './utils.ts'
 import * as ECCode from './error-correction-code.ts'
-import * as ECLevel from './error-correction-level.ts'
 import * as Mode from './mode.ts'
 import type { QRVersion, QREncodingMode, ErrorCorrectionLevel } from '#lib/types.ts'
 
@@ -118,13 +117,9 @@ export function getBestVersionForData(
 ): QRVersion | undefined {
   let seg
 
-  // TODO: See if this can be replaced with an error correction level parsed earlier and passsed in as an required argument instead
-  // This depends on where getBestVersionForData is called.
-  const ecl = ECLevel.from(errorCorrectionLevel, ECLevel.M)
-
   if (Array.isArray(data)) {
     if (data.length > 1) {
-      return getBestVersionForMixedData(data, ecl)
+      return getBestVersionForMixedData(data, errorCorrectionLevel)
     }
 
     if (data.length === 0) {
@@ -136,7 +131,7 @@ export function getBestVersionForData(
     seg = data
   }
 
-  return getBestVersionForDataLength(seg.mode, seg.getLength(), ecl)
+  return getBestVersionForDataLength(seg.mode, seg.getLength(), errorCorrectionLevel)
 }
 
 /**
