@@ -1,26 +1,19 @@
 import * as Polynomial from './polynomial.ts'
 
-// IDEA: Maybe import simple functions from the polynomial instead of the namespace wildcard import?
-
 export default class ReedSolomonEncoder {
   genPoly: Uint8Array<ArrayBuffer> | undefined
   degree: number
 
-  constructor(degree: number) {
-    this.genPoly = undefined
-    this.degree = degree
-
-    if (this.degree) this.initialize(this.degree)
-  }
-
   /**
-   * Initialize the encoder.
-   * The input param should correspond to the number of error correction codewords.
+   * Initialize a new encoder.
+   * @param degree The number of error correction codewords.
    */
-  initialize(degree: number) {
-    // create an irreducible generator polynomial
+  constructor(degree: number) {
+    if (!degree || degree < 1) throw new Error('Degree must be >= 1')
+
     this.degree = degree
-    this.genPoly = Polynomial.generateECPolynomial(this.degree)
+    // Create an irreducible generator polynomial
+    this.genPoly = Polynomial.generateECPolynomial(degree)
   }
 
   /**
