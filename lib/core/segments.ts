@@ -55,7 +55,7 @@ function getSegments(regex, mode, str) {
  */
 function getSegmentsFromString(dataStr) {
   const numSegs = getSegments(Regex.NUMERIC, Mode.NUMERIC, dataStr)
-  const alphaNumSegs = getSegments(Regex.ALPHANUMERIC, Mode.ALPHANUMERIC, dataStr)
+  const alphaNumSegs = getSegments(Regex.LETTERS_AND_CHARACTERS, Mode.ALPHANUMERIC, dataStr)
   let byteSegs
   let kanjiSegs
 

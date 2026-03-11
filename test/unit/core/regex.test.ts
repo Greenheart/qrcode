@@ -4,7 +4,7 @@ import * as Regex from '#core/regex.ts'
 test('Regex', () => {
   expect(Regex.NUMERIC, 'Should export a regex for NUMERIC').toBeInstanceOf(RegExp)
 
-  expect(Regex.ALPHANUMERIC, 'Should export a regex for ALPHANUMERIC').toBeInstanceOf(RegExp)
+  expect(Regex.LETTERS_AND_CHARACTERS, 'Should export a regex for ALPHANUMERIC').toBeInstanceOf(RegExp)
 
   expect(Regex.BYTE, 'Should export a regex for BYTE').toBeInstanceOf(RegExp)
 
