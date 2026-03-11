@@ -72,13 +72,7 @@ function getBestVersionForMixedData(segments, errorCorrectionLevel) {
  */
 export function getCapacity(
   version: QRVersion,
-  // TODO: Improve type for error correction level
-  errorCorrectionLevel:
-    | string
-    | { readonly bit: 1 }
-    | { readonly bit: 0 }
-    | { readonly bit: 3 }
-    | { readonly bit: 2 },
+  errorCorrectionLevel: ErrorCorrectionLevel,
   mode: QREncodingMode | typeof Mode.MIXED,
 ) {
   // Total codewords for this QR code version (Data + Error correction)

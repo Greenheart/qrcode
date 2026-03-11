@@ -27,11 +27,7 @@ const PenaltyScores = {
 } as const
 
 /**
- * Returns mask pattern from a value.
- * If value is not valid, returns undefined
- *
- * @param value Mask pattern value
- * @return Valid mask pattern or undefined
+ * Returns mask pattern from a value, or undefined if the mask is invalid.
  */
 export function parse(mask: unknown): QRCodeMaskPattern | undefined {
   const num = typeof mask !== 'number' ? parseInt(mask as any, 10) : mask

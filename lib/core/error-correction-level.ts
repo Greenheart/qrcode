@@ -1,6 +1,9 @@
-// NOTE: The benefit of this definition is that it allows
-// generating a TS union for all valid string values
-const EC_LEVELS = {
+import type { ErrorCorrectionLevel, QRCodeErrorCorrectionLevel } from "#lib/types.ts"
+
+/**
+ * Maps error correction levels from the public API to the internal runtime values.
+ */
+const EC_LEVELS: Record<Extract<QRCodeErrorCorrectionLevel, 'L' | 'M' | 'Q' | 'H'>, ErrorCorrectionLevel> = {
   /** Low */
   L: { bit: 1 },
   /** Medium */
@@ -74,5 +77,18 @@ export function from(value, defaultValue) {
     // oxlint-disable no-unused-vars
   } catch (e) {
     return defaultValue
+  }
+}
+
+/**
+ * Parse and returns the error correction level, or return undefined if not valid.
+ */
+export function parse(level: unknown): ErrorCorrectionLevel | undefined {
+  if (typeof level === 'string') {
+    const parsedLevel = EC_LEVELS[level[0].toUpperCase() as keyof typeof EC_LEVELS]
+    if (parsedLevel) {
+      return parsedLevel
+    }
+    throw new Error('Unknown EC level: ' + level)
   }
 }

@@ -1,4 +1,4 @@
-import type { QRVersion } from '#lib/types.ts'
+import type { ErrorCorrectionLevel, QRVersion } from '#lib/types.ts'
 import * as ECLevel from './error-correction-level.ts'
 const EC_BLOCKS_TABLE = [
   // L  M  Q  H
@@ -26,12 +26,8 @@ const EC_CODEWORDS_TABLE = [
 /**
  * Returns the number of error correction block that the QR Code should contain
  * for the specified version and error correction level.
- *
- * @param version QR Code version
- * @param errorCorrectionLevel Error correction level
- * @return Number of error correction blocks
  */
-export function getBlocksCount(version: QRVersion, errorCorrectionLevel) {
+export function getBlocksCount(version: QRVersion, errorCorrectionLevel: ErrorCorrectionLevel) {
   switch (errorCorrectionLevel) {
     case ECLevel.L:
       return EC_BLOCKS_TABLE[(version - 1) * 4 + 0]
@@ -49,12 +45,8 @@ export function getBlocksCount(version: QRVersion, errorCorrectionLevel) {
 /**
  * Returns the number of error correction codewords to use for the specified
  * version and error correction level.
- *
- * @param version QR Code version
- * @param errorCorrectionLevel Error correction level
- * @return Number of error correction codewords
  */
-export function getTotalCodewordsCount(version: QRVersion, errorCorrectionLevel) {
+export function getTotalCodewordsCount(version: QRVersion, errorCorrectionLevel: ErrorCorrectionLevel) {
   switch (errorCorrectionLevel) {
     case ECLevel.L:
       return EC_CODEWORDS_TABLE[(version - 1) * 4 + 0]
