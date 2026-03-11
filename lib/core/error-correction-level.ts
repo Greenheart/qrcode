@@ -20,12 +20,6 @@ export const EC_LEVELS: Record<
   H: { bit: 2, offset: 3 },
 } as const
 
-// TODO: we do use the EC Levels in multiple places, like in version.test.ts for example, and could use
-// an array of EC levels from here instead of re-creating it in every test module
-// IDEA: We could also use a helper function to get all EC Levels for tests
-
-// NOTE: For backwards compatibility.
-// Maybe simplify how the levels are defined to improve type safety
 export const L = EC_LEVELS.L
 export const M = EC_LEVELS.M
 export const Q = EC_LEVELS.Q

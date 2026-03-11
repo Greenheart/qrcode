@@ -1,7 +1,7 @@
 import { test, expect } from 'vitest'
 import * as FormatInfo from '#core/format-info.ts'
-import * as ECLevel from '#core/error-correction-level.ts'
 import * as MaskPattern from '#core/mask-pattern.ts'
+import { ALL_EC_LEVELS } from '#test/helpers.ts'
 
 const EXPECTED_FORMAT_BITS = [
   [0x77c4, 0x72f3, 0x7daa, 0x789d, 0x662f, 0x6318, 0x6c41, 0x6976],
@@ -11,15 +11,13 @@ const EXPECTED_FORMAT_BITS = [
 ]
 
 test('Format encoded info', () => {
-  // TODO: Create a test helper function to get error correction levels with correct types
-  const levels = [ECLevel.L, ECLevel.M, ECLevel.Q, ECLevel.H]
   // TODO: Create a test helper function to get the mask patterns with correct types
   // Maybe use Object.values(MaskPattern.Patterns) and return that with the correct type
   const patterns = Object.keys(MaskPattern.Patterns).length
 
-  for (let l = 0; l < levels.length; l++) {
+  for (let l = 0; l < ALL_EC_LEVELS.length; l++) {
     for (let p = 0; p < patterns; p++) {
-      const bch = FormatInfo.getEncodedBits(levels[l], p)
+      const bch = FormatInfo.getEncodedBits(ALL_EC_LEVELS[l], p)
       expect(bch, 'Should return correct bits').toEqual(EXPECTED_FORMAT_BITS[l][p])
     }
   }

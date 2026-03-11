@@ -6,9 +6,7 @@ import NumericData from '#core/numeric-data.ts'
 import AlphanumericData from '#core/alphanumeric-data.ts'
 import KanjiData from '#core/kanji-data.ts'
 import ByteData from '#core/byte-data.ts'
-import { arrayWithLength, getQRVersionRange } from '#test/helpers.ts'
-
-const EC_LEVELS = [ECLevel.L, ECLevel.M, ECLevel.Q, ECLevel.H]
+import { arrayWithLength, getQRVersionRange, ALL_EC_LEVELS } from '#test/helpers.ts'
 
 const EXPECTED_NUMERIC_CAPACITY = [
   [41, 34, 27, 17],
@@ -208,25 +206,25 @@ test('Version parse from value', () => {
 })
 
 test('Version capacity', () => {
-  for (let l = 0; l < EC_LEVELS.length; l++) {
+  for (let l = 0; l < ALL_EC_LEVELS.length; l++) {
     for (const i of getQRVersionRange()) {
       expect(
-        Version.getCapacity(i, EC_LEVELS[l], Mode.NUMERIC),
+        Version.getCapacity(i, ALL_EC_LEVELS[l], Mode.NUMERIC),
         'Should return correct numeric mode capacity',
       ).toEqual(EXPECTED_NUMERIC_CAPACITY[i - 1][l])
 
       expect(
-        Version.getCapacity(i, EC_LEVELS[l], Mode.ALPHANUMERIC),
+        Version.getCapacity(i, ALL_EC_LEVELS[l], Mode.ALPHANUMERIC),
         'Should return correct alphanumeric mode capacity',
       ).toEqual(EXPECTED_ALPHANUMERIC_CAPACITY[i - 1][l])
 
       expect(
-        Version.getCapacity(i, EC_LEVELS[l], Mode.KANJI),
+        Version.getCapacity(i, ALL_EC_LEVELS[l], Mode.KANJI),
         'Should return correct kanji mode capacity',
       ).toEqual(EXPECTED_KANJI_CAPACITY[i - 1][l])
 
       expect(
-        Version.getCapacity(i, EC_LEVELS[l], Mode.BYTE),
+        Version.getCapacity(i, ALL_EC_LEVELS[l], Mode.BYTE),
         'Should return correct byte mode capacity',
       ).toEqual(EXPECTED_BYTE_CAPACITY[i - 1][l])
     }
@@ -236,22 +234,22 @@ test('Version capacity', () => {
 test('Version best match', () => {
   function testBestVersionForCapacity(expectedCapacity: number[][], DataCtor) {
     for (const v of getQRVersionRange()) {
-      for (let l = 0; l < EC_LEVELS.length; l++) {
+      for (let l = 0; l < ALL_EC_LEVELS.length; l++) {
         const capacity = expectedCapacity[v - 1][l]
         const data = new DataCtor(arrayWithLength(capacity + 1).join('-'))
 
         expect(
-          Version.getBestVersionForData(data, EC_LEVELS[l]),
+          Version.getBestVersionForData(data, ALL_EC_LEVELS[l]),
           'Should return best version',
         ).toEqual(v)
         expect(
-          Version.getBestVersionForData([data], EC_LEVELS[l]),
+          Version.getBestVersionForData([data], ALL_EC_LEVELS[l]),
           'Should return best version',
         ).toEqual(v)
       }
     }
 
-    for (let i = 0; i < EC_LEVELS.length; i++) {
+    for (let i = 0; i < ALL_EC_LEVELS.length; i++) {
       const exceededCapacity = expectedCapacity[39][i] + 1
       const tooBigData = new DataCtor(arrayWithLength(exceededCapacity + 1).join('-'))
       const tooBigDataArray = [
@@ -260,15 +258,15 @@ test('Version best match', () => {
       ]
 
       expect(
-        Version.getBestVersionForData(tooBigData, EC_LEVELS[i]),
+        Version.getBestVersionForData(tooBigData, ALL_EC_LEVELS[i]),
         'Should return undefined if data is too big',
       ).toBeUndefined()
       expect(
-        Version.getBestVersionForData([tooBigData], EC_LEVELS[i]),
+        Version.getBestVersionForData([tooBigData], ALL_EC_LEVELS[i]),
         'Should return undefined if data is too big',
       ).toBeUndefined()
       expect(
-        Version.getBestVersionForData(tooBigDataArray, EC_LEVELS[i]),
+        Version.getBestVersionForData(tooBigDataArray, ALL_EC_LEVELS[i]),
         'Should return undefined if data is too big',
       ).toBeUndefined()
     }

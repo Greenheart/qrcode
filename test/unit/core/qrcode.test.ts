@@ -50,7 +50,7 @@ test('QRCode interface', () => {
 
   expect(() => {
     qr = QRCode.create('AAAAA00000', { errorCorrectionLevel: 'quartile' })
-    qr = QRCode.create('AAAAA00000', { errorCorrectionLevel: 'q' })
+    qr = QRCode.create('AAAAA00000', { errorCorrectionLevel: 'Q' })
   }, 'Should accept errorCorrectionLevel as string').not.toThrow()
 })
 
@@ -85,7 +85,6 @@ test('QRCode error correction', () => {
     }
   }
 
-  // TODO: Indicate that options are optional when fixing types for QRCode.create()
   qr = QRCode.create('ABCDEFG')
   expect(qr.errorCorrectionLevel, 'Should set default EC level to M').toEqual(ECLevel.M)
 })

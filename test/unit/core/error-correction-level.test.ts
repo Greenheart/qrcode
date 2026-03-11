@@ -1,21 +1,21 @@
 import { test, expect } from 'vitest'
 import * as ECLevel from '#core/error-correction-level.ts'
-
-const EC_LEVELS = [ECLevel.L, ECLevel.M, ECLevel.Q, ECLevel.H]
+import { ALL_EC_LEVELS } from '#test/helpers.ts'
 
 test('Error level parsed from input value', () => {
-  const values = [
-    ['l', 'low'],
-    ['m', 'medium'],
-    ['q', 'quartile'],
-    ['h', 'high'],
-  ]
+  const levelNames = ['low', 'medium', 'quartile', 'high']
 
-  for (let l = 0; l < values.length; l++) {
-    for (let i = 0; i < values[l].length; i++) {
-      expect(ECLevel.parse(values[l][i])).toEqual(EC_LEVELS[l])
-      expect(ECLevel.parse(values[l][i].toUpperCase())).toEqual(EC_LEVELS[l])
-    }
+  for (let i = 0; i < levelNames.length; i++) {
+    const name = levelNames[i]
+    const level = ALL_EC_LEVELS[i]
+
+    // Long name
+    expect(ECLevel.parse(name)).toEqual(level)
+    expect(ECLevel.parse(name.toUpperCase())).toEqual(level)
+
+    // Short name
+    expect(ECLevel.parse(name[0])).toEqual(level)
+    expect(ECLevel.parse(name[0].toUpperCase())).toEqual(level)
   }
 
   expect(ECLevel.parse(undefined), 'Should return undefined if value is undefined').toEqual(

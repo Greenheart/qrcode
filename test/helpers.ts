@@ -1,4 +1,5 @@
 import * as Version from '#core/version.ts'
+import { EC_LEVELS } from '#lib/core/error-correction-level.ts'
 import type { QRVersion } from '#lib/types.ts'
 
 const nativePromise = global.Promise
@@ -54,3 +55,8 @@ export function getQRVersionRange(min = Version.MIN, max = Version.MAX, step = 1
 function range(min: number, max: number, step = 1) {
   return Array.from({ length: Math.ceil((max - min) / step) }, (_, i) => min + i * step)
 }
+
+/**
+ * All error correction levels. Useful for tests
+ */
+export const ALL_EC_LEVELS = Object.values(EC_LEVELS)
