@@ -37,6 +37,7 @@ export const Q = EC_LEVELS.Q
 export const H = EC_LEVELS.H
 
 // IDEA: Maybe parse and instead return undefined if no value was found?
+// TODO: Move tests for fromString() to parse() instead.
 function fromString(string: string) {
   if (typeof string !== 'string') {
     throw new Error('Param is not a string')
@@ -66,10 +67,12 @@ function fromString(string: string) {
   }
 }
 
+// TODO: Combine tests for isValid() with parse()
 export function isValid(level) {
   return Boolean(level && typeof level.bit !== 'undefined' && level.bit >= 0 && level.bit < 4)
 }
 
+// TODO: Replace ECLevel.from() with ECLevel.parse()
 export function from(value, defaultValue) {
   if (isValid(value)) {
     return value
@@ -84,14 +87,18 @@ export function from(value, defaultValue) {
 }
 
 /**
- * Parse and returns the error correction level, or return undefined if not valid.
+ * Parse and return the error correction level, throwing an error if the parsed level is invalid.
+ * Returns undefined and ignores non-string values that can't be parsed.
  */
 export function parse(level: unknown): ErrorCorrectionLevel | undefined {
   if (typeof level === 'string') {
+    // Compare the first character for backwards compatibility with
+    // 1.x-versions of the library that accepted long names for each level.
+    // In 2.x, the type is narrowed to expect the first letter only, e.g. 'M'
     const parsedLevel = EC_LEVELS[level[0].toUpperCase() as keyof typeof EC_LEVELS]
     if (parsedLevel) {
       return parsedLevel
     }
-    throw new Error('Unknown EC level: ' + level)
+    throw new Error('Unknown error correction level: ' + level)
   }
 }
