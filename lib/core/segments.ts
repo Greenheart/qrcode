@@ -30,13 +30,14 @@ function getStringByteLength(str: string): number {
  * Get a list of segments of the specified mode
  * from a string
  *
- * @param  {Mode}   mode Segment mode
- * @param  {String} str  String to process
- * @return {Array}       Array of object with segments data
+ * @param regex The regex used to extract data
+ * @param {Mode} mode Segment mode
+ * @param str String to process
+ * @return {Array} Array of object with segments data
  */
-function getSegments(regex, mode, str) {
+function getSegments(regex: RegExp, mode, str: string) {
   const segments = []
-  let result
+  let result: ReturnType<RegExp['exec']>
 
   while ((result = regex.exec(str)) !== null) {
     segments.push({
@@ -53,14 +54,11 @@ function getSegments(regex, mode, str) {
 /**
  * Extracts a series of segments with the appropriate
  * modes from a string
- *
- * @param  {String} dataStr Input string
- * @return {Array}          Array of object with segments data
  */
-function getSegmentsFromString(dataStr) {
+function getSegmentsFromString(dataStr: string) {
   const numSegs = getSegments(Regex.NUMERIC, Mode.NUMERIC, dataStr)
   const alphaNumSegs = getSegments(Regex.LETTERS_AND_CHARACTERS, Mode.ALPHANUMERIC, dataStr)
-  let byteSegs
+  let byteSegs: QRCodeByteSegment[]
   let kanjiSegs
 
   if (Utils.isKanjiModeEnabled()) {
@@ -74,16 +72,9 @@ function getSegmentsFromString(dataStr) {
   const segs = [...numSegs, ...alphaNumSegs, ...byteSegs, ...kanjiSegs]
 
   return segs
-    .sort(function (s1, s2) {
-      return s1.index - s2.index
-    })
-    .map(function (obj) {
-      return {
-        data: obj.data,
-        mode: obj.mode,
-        length: obj.length,
-      }
-    })
+    .sort((s1, s2) => s1.index - s2.index)
+    // Remove the index property
+    .map(({ data, mode, length }) => ({ data, mode, length }))
 }
 
 /**
