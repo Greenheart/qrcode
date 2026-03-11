@@ -1,31 +1,34 @@
+import type { QRCodeByteSegment } from '#lib/types.ts'
+import type BitBuffer from './bit-buffer.ts'
 import * as Mode from './mode.ts'
 
-function ByteData(data) {
-  this.mode = Mode.BYTE
-  if (typeof data === 'string') {
-    this.data = new TextEncoder().encode(data)
-  } else {
-    this.data = new Uint8Array(data)
+export default class ByteData {
+  mode = Mode.BYTE
+  data: Uint8Array
+
+  constructor(data: QRCodeByteSegment['data']) {
+    if (typeof data === 'string') {
+      this.data = new TextEncoder().encode(data)
+    } else {
+      this.data = new Uint8Array(data)
+    }
+  }
+
+  static getBitsLength(length: number) {
+    return length * 8
+  }
+
+  getLength() {
+    return this.data.length
+  }
+
+  getBitsLength() {
+    return ByteData.getBitsLength(this.data.length)
+  }
+
+  write(bitBuffer: BitBuffer) {
+    for (let i = 0, l = this.data.length; i < l; i++) {
+      bitBuffer.put(this.data[i], 8)
+    }
   }
 }
-
-// IDEA: Rename to getBitLength to keep it consistent with AlphanumericData
-ByteData.getBitsLength = function getBitsLength(length) {
-  return length * 8
-}
-
-ByteData.prototype.getLength = function getLength() {
-  return this.data.length
-}
-
-ByteData.prototype.getBitsLength = function getBitsLength() {
-  return ByteData.getBitsLength(this.data.length)
-}
-
-ByteData.prototype.write = function (bitBuffer) {
-  for (let i = 0, l = this.data.length; i < l; i++) {
-    bitBuffer.put(this.data[i], 8)
-  }
-}
-
-export default ByteData

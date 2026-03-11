@@ -1,13 +1,12 @@
 import * as Mode from './mode.ts'
 import BitBuffer from './bit-buffer.ts'
+import type { QRCodeNumericSegment } from '#lib/types.ts'
 
 export default class NumericData {
   mode = Mode.NUMERIC
   data: string
 
-  // TODO: Find the data input type
-  // Can this be Uint8Array and similar?
-  constructor(data: unknown) {
+  constructor(data: QRCodeNumericSegment['data']) {
     this.data = data.toString()
   }
 

@@ -8,7 +8,7 @@ import ByteData from './byte-data.ts'
 import KanjiData from './kanji-data.ts'
 import * as Regex from './regex.ts'
 import * as Utils from './utils.ts'
-import type { DataSegment, QRCodeSegment, QRVersion, QREncodingMode } from '#lib/types.ts'
+import type { DataSegment, QRCodeSegment, QRVersion, QREncodingMode, QRCodeByteSegment, QRCodeAlphanumericSegment,type QRCodeNumericSegment, QRCodeKanjiSegment } from '#lib/types.ts'
 
 /**
  * Returns UTF8 byte length
@@ -257,16 +257,16 @@ function buildSingleSegment(
 
   switch (mode) {
     case Mode.NUMERIC:
-      return new NumericData(data)
+      return new NumericData(data as QRCodeNumericSegment['data'])
 
     case Mode.ALPHANUMERIC:
-      return new AlphanumericData(data)
+      return new AlphanumericData(data as QRCodeAlphanumericSegment['data'])
 
     case Mode.KANJI:
-      return new KanjiData(data)
+      return new KanjiData(data as QRCodeKanjiSegment['data'])
 
     case Mode.BYTE:
-      return new ByteData(data)
+      return new ByteData(data as QRCodeByteSegment['data'])
   }
 }
 

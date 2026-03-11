@@ -1,3 +1,4 @@
+import type { QRCodeAlphanumericSegment } from '#lib/types.ts'
 import type BitBuffer from './bit-buffer.ts'
 import * as Mode from './mode.ts'
 
@@ -25,7 +26,7 @@ export default class AlphanumericData {
   /**
    * @param data Base 45-encoded string. See https://datatracker.ietf.org/doc/rfc9285/ for more info.
    */
-  constructor(data: string) {
+  constructor(data: QRCodeAlphanumericSegment['data']) {
     this.data = data
   }
 
