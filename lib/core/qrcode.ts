@@ -11,7 +11,15 @@ import * as Version from './version.ts'
 import * as FormatInfo from './format-info.ts'
 import * as Mode from './mode.ts'
 import * as Segments from './segments.ts'
-import type { Bit, ErrorCorrectionLevel, QRCodeMaskPattern, QRVersion } from '#lib/types.ts'
+import type {
+  Bit,
+  ErrorCorrectionLevel,
+  QRCodeMaskPattern,
+  QRCodeOptions,
+  QRCodeSegment,
+  QRVersion,
+  QRCode,
+} from '#lib/types.ts'
 
 /**
  * QRCode for JavaScript
@@ -366,22 +374,14 @@ function createCodewords(bitBuffer, version: QRVersion, errorCorrectionLevel) {
 }
 
 /**
- * Build QR Code symbol
- *
- * @param data Input string
- * @param version QR Code version
- * @param errorCorrectionLevel Error level
- * @param maskPattern Mask pattern
- * @return {Object} Object containing symbol data
- *
- * TODO: Use correct return type for QRCodeSymbol
+ * Create a QR code symbol
  */
 function createSymbol(
-  data: string,
+  data: string | QRCodeSegment[],
   errorCorrectionLevel: ErrorCorrectionLevel,
   version?: QRVersion,
   maskPattern?: QRCodeMaskPattern,
-) {
+): QRCode {
   let segments
 
   if (Array.isArray(data)) {
@@ -449,9 +449,8 @@ Minimum version required to store current data is: ${bestVersion}
 
   // Either use the provided mask pattern if it is defined,
   // or find the best mask pattern based on the data and EC level.
-  maskPattern ??= MaskPattern.getBestMask(
-    modules,
-    (mask: QRCodeMaskPattern) => setupFormatInfo(modules, errorCorrectionLevel, mask),
+  maskPattern ??= MaskPattern.getBestMask(modules, (mask: QRCodeMaskPattern) =>
+    setupFormatInfo(modules, errorCorrectionLevel, mask),
   )
 
   // Apply mask pattern
@@ -470,18 +469,12 @@ Minimum version required to store current data is: ${bestVersion}
 }
 
 /**
- * QR Code
- *
- * @param {String | Array} data                 Input data
- * @param {Object} [options]                      Optional configurations
- * @param {Number} [options.version]              QR Code version
- * @param {String} [options.errorCorrectionLevel] Error correction level
- * @param {string | number} [options.maskPattern] Mask pattern
- * @param {Function} [options.toSJISFunc]         Helper function to convert utf8 to sjis
+ * Create a QR code symbol and return it as a QRCode object.
+ * @param data Text to encode or a list of objects describing QR code segments.
  */
-export function create(data, options) {
+export function create(data: string | QRCodeSegment[], options?: QRCodeOptions): QRCode {
   if (typeof data === 'undefined' || data === '') {
-    throw new Error('No input text')
+    throw new Error('No input data')
   }
 
   let errorCorrectionLevel = ECLevel.M

@@ -8,7 +8,7 @@ import ByteData from './byte-data.ts'
 import KanjiData from './kanji-data.ts'
 import * as Regex from './regex.ts'
 import * as Utils from './utils.ts'
-import type { QRVersion } from '#lib/types.ts'
+import type { DataSegment, QRCodeSegment, QRVersion, QREncodingMode } from '#lib/types.ts'
 
 /**
  * Returns UTF8 byte length
@@ -232,27 +232,21 @@ function buildGraph(nodes, version: QRVersion) {
 /**
  * Builds a segment from a specified data and mode.
  * If a mode is not specified, the more suitable will be used.
- *
- * @param  {String} data             Input data
- * @param  {Mode | String} modesHint Data mode
- * @return {Segment}                 Segment
  */
-function buildSingleSegment(data, modesHint) {
-  let mode
+function buildSingleSegment(
+  data: string | QRCodeSegment['data'],
+  modeHint?: string | QRCodeSegment['mode'],
+): DataSegment {
+  let mode: QREncodingMode
   const bestMode = Mode.getBestModeForData(data)
 
-  mode = Mode.from(modesHint, bestMode)
+  // TODO: Replace with Mode.parse()
+  mode = Mode.from(modeHint, bestMode)
 
   // Make sure data can be encoded
   if (mode !== Mode.BYTE && mode.bit < bestMode.bit) {
     throw new Error(
-      '"' +
-        data +
-        '"' +
-        ' cannot be encoded with mode ' +
-        Mode.toString(mode) +
-        '.\n Suggested mode is: ' +
-        Mode.toString(bestMode),
+      `"${data}" cannot be encoded with mode ${Mode.toString(mode)}. Suggested mode is: ${Mode.toString(bestMode)}`,
     )
   }
 
@@ -287,20 +281,17 @@ function buildSingleSegment(data, modesHint) {
  * data and mode.
  * Objects must contain at least the property "data".
  * If property "mode" is not present, the more suitable mode will be used.
- *
- * @param  {Array} array Array of objects with segments data
- * @return {Array}       Array of Segments
  */
-export function fromArray(array) {
-  return array.reduce(function (acc, seg) {
+export function fromArray(input: Array<string | QRCodeSegment>): DataSegment[] {
+  const dataSegments: DataSegment[] = []
+  for (const seg of input) {
     if (typeof seg === 'string') {
-      acc.push(buildSingleSegment(seg, null))
+      dataSegments.push(buildSingleSegment(seg))
     } else if (seg.data) {
-      acc.push(buildSingleSegment(seg.data, seg.mode))
+      dataSegments.push(buildSingleSegment(seg.data, seg.mode))
     }
-
-    return acc
-  }, [])
+  }
+  return dataSegments
 }
 
 /**
@@ -314,7 +305,7 @@ export function fromArray(array) {
  * TODO: Improve return type
  */
 export function fromString(data: string, version: QRVersion) {
-  const segs = getSegmentsFromString(data, Utils.isKanjiModeEnabled())
+  const segs = getSegmentsFromString(data)
 
   const nodes = buildNodes(segs)
   const graph = buildGraph(nodes, version)
@@ -334,12 +325,9 @@ export function fromString(data: string, version: QRVersion) {
  * The produced segments are far from being optimized.
  * The output of this function is only used to estimate a QR Code version
  * which may contain the data.
- *
- * @param  {string} data Input string
- * @return {Array}       Array of segments
  */
-export function rawSplit(data) {
-  return fromArray(getSegmentsFromString(data, Utils.isKanjiModeEnabled()))
+export function rawSplit(data: string): DataSegment[] {
+  return fromArray(getSegmentsFromString(data))
 }
 
 if (import.meta.vitest) {

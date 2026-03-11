@@ -161,8 +161,7 @@ testData = [...testData, ...kanjiTestData]
 test('Segments from array', () => {
   expect(
     Segments.fromArray(['abcdef', '12345']),
-
-    'Should return correct segment from array of string',
+    'Should return correct segment from array of strings',
   ).toStrictEqual([new ByteData('abcdef'), new NumericData('12345')])
 
   expect(

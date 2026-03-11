@@ -46,7 +46,10 @@ export function getBlocksCount(version: QRVersion, errorCorrectionLevel: ErrorCo
  * Returns the number of error correction codewords to use for the specified
  * version and error correction level.
  */
-export function getTotalCodewordsCount(version: QRVersion, errorCorrectionLevel: ErrorCorrectionLevel) {
+export function getTotalCodewordsCount(
+  version: QRVersion,
+  errorCorrectionLevel: ErrorCorrectionLevel,
+) {
   switch (errorCorrectionLevel) {
     case ECLevel.L:
       return EC_CODEWORDS_TABLE[(version - 1) * 4 + 0]

@@ -58,7 +58,7 @@ export type Bit = 1 | 0
 
 export interface QRCodeOptions {
   /**
-   * QR Code version. If not specified the more suitable value will be calculated.
+   * QR Code version. If not specified the most suitable value will be calculated.
    */
   version?: QRVersion | undefined
   /**
@@ -69,7 +69,7 @@ export interface QRCodeOptions {
   /**
    * Mask pattern used to mask the symbol.
    *
-   * If not specified the more suitable value will be calculated.
+   * If not specified the most suitable value will be calculated.
    */
   maskPattern?: QRCodeMaskPattern | undefined
   /**
@@ -237,6 +237,10 @@ export interface QRCodeRenderersOptions extends QRCodeOptions {
 }
 
 export type QRCodeSegmentMode = 'alphanumeric' | 'numeric' | 'byte' | 'kanji'
+
+/**
+ * Input QR code segments.
+ */
 export type QRCodeSegment =
   | QRCodeNumericSegment
   | QRCodeAlphanumericSegment
@@ -316,6 +320,9 @@ export interface QREncodingMode<TModeId extends QREncodingModeId = QREncodingMod
 
 export type GeneratedQRCodeSegment = NumericData | AlphanumericData | ByteData | KanjiData
 
+/**
+ * Processed segment containing a part of the QR code data.
+ */
 export interface DataSegment {
   getLength(): number
   getBitsLength(): number

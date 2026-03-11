@@ -1,5 +1,5 @@
 import * as Regex from './regex.ts'
-import type { QREncodingMode, QREncodingModeId, QRVersion } from '#lib/types.ts'
+import type { QRCodeSegment, QREncodingMode, QREncodingModeId, QRVersion } from '#lib/types.ts'
 
 /**
  * Numeric mode encodes data from the decimal digit set (0 - 9)
@@ -78,7 +78,7 @@ export function getCharCountIndicator(mode: QREncodingMode, version: QRVersion):
 /**
  * Returns the most efficient mode to store the specified data
  */
-export function getBestModeForData(data: string): QREncodingMode {
+export function getBestModeForData(data: string | QRCodeSegment['data']): QREncodingMode {
   if (Regex.testNumeric(data)) return NUMERIC
   else if (Regex.testAlphanumeric(data)) return ALPHANUMERIC
   else if (Regex.testKanji(data)) return KANJI
