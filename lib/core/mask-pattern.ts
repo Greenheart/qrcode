@@ -205,7 +205,7 @@ export function applyMask(pattern: QRCodeMaskPattern, data: BitMatrix) {
  */
 export function getBestMask(
   data: BitMatrix,
-  setupFormatFunc: (mask: QRCodeMaskPattern) => number,
+  setupFormatFunc: (mask: QRCodeMaskPattern) => void,
 ): QRCodeMaskPattern {
   let bestPattern: QRCodeMaskPattern = 0
   let lowerPenalty = Infinity

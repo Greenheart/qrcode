@@ -447,13 +447,12 @@ Minimum version required to store current data is: ${bestVersion}
   // Add data codewords
   setupData(modules, dataBits)
 
-  if (isNaN(maskPattern)) {
-    // Find best mask pattern
-    maskPattern = MaskPattern.getBestMask(
-      modules,
-      setupFormatInfo.bind(null, modules, errorCorrectionLevel),
-    )
-  }
+  // Either use the provided mask pattern if it is defined,
+  // or find the best mask pattern based on the data and EC level.
+  maskPattern ??= MaskPattern.getBestMask(
+    modules,
+    (mask: QRCodeMaskPattern) => setupFormatInfo(modules, errorCorrectionLevel, mask),
+  )
 
   // Apply mask pattern
   MaskPattern.applyMask(maskPattern, modules)
