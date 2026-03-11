@@ -53,11 +53,6 @@ test('Char count bits', () => {
     // @ts-expect-error Testing invalid mode
     Mode.getCharCountIndicator({}, 1)
   }, 'Should throw if mode is invalid').toThrow()
-
-  expect(() => {
-    // @ts-expect-error Testing invalid version
-    Mode.getCharCountIndicator(Mode.BYTE, 0)
-  }, 'Should throw if version is invalid').toThrow()
 })
 
 test('Best mode', () => {

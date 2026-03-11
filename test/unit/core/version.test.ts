@@ -189,16 +189,6 @@ const EXPECTED_VERSION_BITS = [
   0x28c69,
 ]
 
-// TODO: Remove isValid when no longer needed
-test('Version validity', () => {
-  // @ts-expect-error Testing invalid input
-  expect(Version.isValid(), 'Should return false if no input').toEqual(false)
-  // @ts-expect-error Testing invalid input
-  expect(Version.isValid(''), 'Should return false if version is not a number').toEqual(false)
-  expect(Version.isValid(0), 'Should return false if version is not in range').toEqual(false)
-  expect(Version.isValid(41), 'Should return false if version is not in range').toEqual(false)
-})
-
 test('Version validity', () => {
   // @ts-expect-error Testing invalid input
   expect(Version.parse(), 'Should return undefined if no input').toEqual(undefined)

@@ -1,4 +1,3 @@
-import * as Version from './version.ts'
 import * as Regex from './regex.ts'
 import type { QREncodingMode, QREncodingModeId, QRVersion } from '#lib/types.ts'
 
@@ -71,12 +70,7 @@ export function getCharCountIndicator(mode: QREncodingMode, version: QRVersion):
   // Since it is a internal API in the module, it should be safe to rely on TypeScript types instead of manual checks and throwing errors
   if (!mode.ccBits) throw new Error('Invalid mode: ' + mode)
 
-  // TODO: Same here, use the types to enforce usage since this is only used within this module
-  if (!Version.isValid(version)) {
-    throw new Error('Invalid version: ' + version)
-  }
-
-  if (version >= 1 && version < 10) return mode.ccBits[0]
+  if (version < 10) return mode.ccBits[0]
   else if (version < 27) return mode.ccBits[1]
   return mode.ccBits[2]
 }
