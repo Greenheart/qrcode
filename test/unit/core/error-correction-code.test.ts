@@ -23,11 +23,6 @@ test('Error correction codewords', () => {
       ).toEqual(expectedCodewords)
     }
   }
-
-  expect(
-    ECCode.getTotalCodewordsCount(1),
-    'Should return undefined if EC level is not specified',
-  ).toEqual(undefined)
 })
 
 test('Error correction blocks', () => {
@@ -36,8 +31,4 @@ test('Error correction blocks', () => {
       expect(ECCode.getBlocksCount(v, level), 'Should return a positive number').toBeGreaterThan(0)
     }
   }
-
-  expect(ECCode.getBlocksCount(1), 'Should return undefined if EC level is not specified').toEqual(
-    undefined,
-  )
 })

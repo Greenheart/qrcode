@@ -300,6 +300,8 @@ export interface QRCode {
  */
 export interface ErrorCorrectionLevel {
   bit: 0 | 1 | 2 | 3
+  /** Offset used to get the correct EC blocks and EC codewords */
+  offset: 0 | 1 | 2 | 3
 }
 
 export type QREncodingModeId = 'Numeric' | 'Alphanumeric' | 'Byte' | 'Kanji'

@@ -1,5 +1,5 @@
 import type { ErrorCorrectionLevel, QRVersion } from '#lib/types.ts'
-import * as ECLevel from './error-correction-level.ts'
+
 const EC_BLOCKS_TABLE = [
   // L  M  Q  H
   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 2, 2, 4, 1, 2, 4, 4, 2, 4, 4, 4, 2, 4, 6, 5, 2, 4, 6, 6, 2,
@@ -28,18 +28,7 @@ const EC_CODEWORDS_TABLE = [
  * for the specified version and error correction level.
  */
 export function getBlocksCount(version: QRVersion, errorCorrectionLevel: ErrorCorrectionLevel) {
-  switch (errorCorrectionLevel) {
-    case ECLevel.L:
-      return EC_BLOCKS_TABLE[(version - 1) * 4 + 0]
-    case ECLevel.M:
-      return EC_BLOCKS_TABLE[(version - 1) * 4 + 1]
-    case ECLevel.Q:
-      return EC_BLOCKS_TABLE[(version - 1) * 4 + 2]
-    case ECLevel.H:
-      return EC_BLOCKS_TABLE[(version - 1) * 4 + 3]
-    default:
-      return undefined
-  }
+  return EC_BLOCKS_TABLE[(version - 1) * 4 + errorCorrectionLevel.offset]
 }
 
 /**
@@ -50,16 +39,5 @@ export function getTotalCodewordsCount(
   version: QRVersion,
   errorCorrectionLevel: ErrorCorrectionLevel,
 ) {
-  switch (errorCorrectionLevel) {
-    case ECLevel.L:
-      return EC_CODEWORDS_TABLE[(version - 1) * 4 + 0]
-    case ECLevel.M:
-      return EC_CODEWORDS_TABLE[(version - 1) * 4 + 1]
-    case ECLevel.Q:
-      return EC_CODEWORDS_TABLE[(version - 1) * 4 + 2]
-    case ECLevel.H:
-      return EC_CODEWORDS_TABLE[(version - 1) * 4 + 3]
-    default:
-      return undefined
-  }
+  return EC_CODEWORDS_TABLE[(version - 1) * 4 + errorCorrectionLevel.offset]
 }

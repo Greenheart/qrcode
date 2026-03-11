@@ -3,18 +3,18 @@ import type { ErrorCorrectionLevel, QRCodeErrorCorrectionLevel } from '#lib/type
 /**
  * Maps error correction levels from the public API to the internal runtime values.
  */
-const EC_LEVELS: Record<
+export const EC_LEVELS: Record<
   Extract<QRCodeErrorCorrectionLevel, 'L' | 'M' | 'Q' | 'H'>,
   ErrorCorrectionLevel
 > = {
   /** Low */
-  L: { bit: 1 },
+  L: { bit: 1, offset: 0 },
   /** Medium */
-  M: { bit: 0 },
+  M: { bit: 0, offset: 1 },
   /** Quartile */
-  Q: { bit: 3 },
+  Q: { bit: 3, offset: 2 },
   /** High */
-  H: { bit: 2 },
+  H: { bit: 2, offset: 3 },
 } as const
 
 // TODO: Since this is only used for the CLI, consider solving this in another way instead so we don't include this array for other versions.
