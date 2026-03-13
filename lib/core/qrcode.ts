@@ -19,6 +19,7 @@ import type {
   QRCodeSegment,
   QRVersion,
   QRCode,
+  DataSegment,
 } from '#lib/types.ts'
 
 /**
@@ -379,7 +380,7 @@ function createSymbol(
   version?: QRVersion,
   maskPattern?: QRCodeMaskPattern,
 ): QRCode {
-  let segments
+  let segments: DataSegment[]
 
   if (Array.isArray(data)) {
     segments = Segments.fromArray(data)

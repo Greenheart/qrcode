@@ -61,6 +61,13 @@ export const MIXED = {
   bit: -1,
 } as const
 
+const MODES = {
+  NUMERIC,
+  ALPHANUMERIC,
+  KANJI,
+  BYTE,
+}
+
 /**
  * Returns the number of bits needed to store the data length
  * according to QR Code specifications.
@@ -88,63 +95,15 @@ export function getBestModeForData(data: string | QRCodeSegment['data']): QREnco
 }
 
 /**
- * Return mode name as string
+ * Parse and returns the QR encoding mode, or undefined if the mode is invalid.
  */
-export function toString(mode: QREncodingMode): QREncodingModeId {
-  if (mode && mode.id) return mode.id
-  // IDEA: Consider replacing this error with stricter type checking instead. Might be OK if we only call this internally in the library.
-  // TODO: Check usage of Mode.toString() and see if we could rely on the type system here instead.
-  throw new Error('Invalid mode')
-}
-
-/**
- * Check if input param is a valid mode object
- */
-export function isValid(mode: unknown): mode is QREncodingMode {
-  return Boolean(mode && (mode as QREncodingMode).bit && (mode as QREncodingMode).ccBits)
-}
-
-/**
- * Get mode object from its name
- */
-function fromString(name: string): QREncodingMode {
-  if (typeof name !== 'string') {
-    throw new Error('Param is not a string')
-  }
-
-  switch (name.toLowerCase()) {
-    case 'numeric':
-      return NUMERIC
-    case 'alphanumeric':
-      return ALPHANUMERIC
-    case 'kanji':
-      return KANJI
-    case 'byte':
-      return BYTE
-    default:
-      throw new Error('Unknown mode: ' + name)
-  }
-}
-
-/**
- * Returns mode from a value.
- * If value is not a valid mode, returns defaultValue
- *
- * TODO: Replace from() with parse() instead, potentially returning undefined, and assign default values outside of the function
- *
- * @param  {Mode|String} value        Encoding mode
- * @param  {Mode}        defaultValue Fallback value
- * @return {Mode}                     Encoding mode
- */
-export function from(value, defaultValue) {
-  if (isValid(value)) {
-    return value
-  }
-
-  try {
-    return fromString(value)
-    // oxlint-disable no-unused-vars
-  } catch (e) {
-    return defaultValue
+export function parse(value: unknown): QREncodingMode | undefined {
+  if (typeof value === 'string') {
+    // In the first case, the value could be a mode id that we can use to parse the mode
+    return MODES[value.toUpperCase() as keyof typeof MODES]
+  } else if (typeof (value as QREncodingMode)?.id === 'string') {
+    // In the second case, the value might already be a mode if we received a complete segment.
+    // However, we return the matching mode based defined by our code instead of potentially using invalid input.
+    return MODES[(value as QREncodingMode).id.toUpperCase() as keyof typeof MODES]
   }
 }

@@ -74,60 +74,38 @@ test(Mode.getBestModeForData.name, () => {
   for (const [data, expectedMode] of Object.entries(EXPECTED_MODE)) {
     expect(
       Mode.getBestModeForData(data),
-      'Should return mode ' + Mode.toString(expectedMode) + ' for data: ' + data,
+      'Should return mode ' + expectedMode.id + ' for data: ' + data,
     ).toEqual(expectedMode)
   }
 })
 
-// TODO: Refactor so we parse the mode and remove the need for isValid
-// TODO: Move these tests to cover Mode.parse instead
-test('Is valid', () => {
-  expect(Mode.isValid(Mode.NUMERIC)).toEqual(true)
-  expect(Mode.isValid(Mode.ALPHANUMERIC)).toEqual(true)
-  expect(Mode.isValid(Mode.BYTE)).toEqual(true)
-  expect(Mode.isValid(Mode.KANJI)).toEqual(true)
+test('Parse mode from existing mode', () => {
+  // Should parse valid modes
+  expect(Mode.parse(Mode.NUMERIC)).toEqual(Mode.NUMERIC)
+  expect(Mode.parse(Mode.ALPHANUMERIC)).toEqual(Mode.ALPHANUMERIC)
+  expect(Mode.parse(Mode.BYTE)).toEqual(Mode.BYTE)
+  expect(Mode.parse(Mode.KANJI)).toEqual(Mode.KANJI)
 
-  expect(Mode.isValid(undefined)).toEqual(false)
-  expect(Mode.isValid({ bit: 1 })).toEqual(false)
-  expect(Mode.isValid({ ccBits: [] })).toEqual(false)
+  // Should return undefined for invalid input
+  expect(Mode.parse(undefined)).toEqual(undefined)
+  expect(Mode.parse({ bit: 1 })).toEqual(undefined)
+  expect(Mode.parse({ ccBits: [] })).toEqual(undefined)
 })
 
-// TODO: Refactor so we parse the mode and remove the need for isValid
-// TODO: Move these tests to cover Mode.parse instead
-test('From value', () => {
+test('Parse mode from string', () => {
   const modes = [
-    { name: 'numeric', mode: Mode.NUMERIC },
-    { name: 'alphanumeric', mode: Mode.ALPHANUMERIC },
-    { name: 'kanji', mode: Mode.KANJI },
-    { name: 'byte', mode: Mode.BYTE },
+    { id: 'numeric', mode: Mode.NUMERIC },
+    { id: 'alphanumeric', mode: Mode.ALPHANUMERIC },
+    { id: 'kanji', mode: Mode.KANJI },
+    { id: 'byte', mode: Mode.BYTE },
   ]
 
-  for (const { name, mode } of modes) {
-    // TODO: Fix type for method - or even better, parse the input and return a distinct type. default value might be handled separately
-    expect(Mode.from(name)).toEqual(mode)
-    expect(Mode.from(name.toUpperCase())).toEqual(mode)
-    expect(Mode.from(mode)).toEqual(mode)
+  for (const { id, mode } of modes) {
+    expect(Mode.parse(id), 'Should parse from mode id').toEqual(mode)
+    expect(Mode.parse(id.toUpperCase()), 'Should handle uppercase').toEqual(mode)
   }
 
-  expect(Mode.from('', Mode.NUMERIC), 'Should return default value if mode is invalid').toEqual(
-    Mode.NUMERIC,
-  )
-
-  expect(
-    Mode.from(null, Mode.NUMERIC),
-
-    'Should return default value if mode undefined',
-  ).toEqual(Mode.NUMERIC)
-})
-
-test('To string', () => {
-  expect(Mode.toString(Mode.NUMERIC)).toEqual('Numeric')
-  expect(Mode.toString(Mode.ALPHANUMERIC)).toEqual('Alphanumeric')
-  expect(Mode.toString(Mode.BYTE)).toEqual('Byte')
-  expect(Mode.toString(Mode.KANJI)).toEqual('Kanji')
-
-  expect(() => {
-    // @ts-expect-error Testing invalid input
-    Mode.toString({})
-  }, 'Should throw if mode is invalid').toThrow()
+  expect(Mode.parse(''), 'Should return undefined if mode is invalid').toEqual(undefined)
+  expect(Mode.parse('custom'), 'Should return undefined if mode is invalid').toEqual(undefined)
+  expect(Mode.parse(undefined), 'Should return undefined if mode is undefined').toEqual(undefined)
 })

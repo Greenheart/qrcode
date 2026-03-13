@@ -12,7 +12,6 @@ import type {
   DataSegment,
   QRCodeSegment,
   QRVersion,
-  QREncodingMode,
   QRCodeByteSegment,
   QRCodeAlphanumericSegment,
   QRCodeNumericSegment,
@@ -232,18 +231,15 @@ function buildGraph(nodes, version: QRVersion) {
  */
 function buildSingleSegment(
   data: string | QRCodeSegment['data'],
-  modeHint?: string | QRCodeSegment['mode'],
+  modeHint?: QRCodeSegment['mode'],
 ): DataSegment {
-  let mode: QREncodingMode
   const bestMode = Mode.getBestModeForData(data)
-
-  // TODO: Replace with Mode.parse()
-  mode = Mode.from(modeHint, bestMode)
+  let mode = Mode.parse(modeHint) ?? bestMode
 
   // Make sure data can be encoded
   if (mode !== Mode.BYTE && mode.bit < bestMode.bit) {
     throw new Error(
-      `"${data}" cannot be encoded with mode ${Mode.toString(mode)}. Suggested mode is: ${Mode.toString(bestMode)}`,
+      `"${data}" cannot be encoded with mode ${mode.id}. Suggested mode is: ${bestMode.id}`,
     )
   }
 
@@ -265,6 +261,8 @@ function buildSingleSegment(
     case Mode.BYTE:
       return new ByteData(data as QRCodeByteSegment['data'])
   }
+
+  // NOTE: Undefined could theoretically be returned here, but should never happen in practice.
 }
 
 /**
