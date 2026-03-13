@@ -1,5 +1,5 @@
 import * as Regex from './regex.ts'
-import type { QRCodeSegment, QREncodingMode, QREncodingModeId, QRVersion } from '#lib/types.ts'
+import type { QRCodeSegment, QREncodingMode, QRVersion } from '#lib/types.ts'
 
 /**
  * Numeric mode encodes data from the decimal digit set (0 - 9)

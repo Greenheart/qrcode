@@ -18,10 +18,13 @@ export function arrayWithLength(length: number) {
  * @param fillValue The value to fill the array with
  */
 export function arrayWithFill<T>(length: number, fillValue: T) {
-  return Array.from({ length }).fill(fillValue)
+  return Array.from({ length }).fill(fillValue) as T[]
 }
 
 // IDEA: Consider replacing this hack with a proper Vitest Promise mock.
+// NOTE: Or even better, once we switch to only use Promises for async APIs,
+// we can remove the `can-promise.ts` module and tests that temporarily remove the promise object
+// using these methods
 export function removeNativePromise() {
   if (global.Promise) {
     delete global.Promise

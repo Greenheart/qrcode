@@ -16,6 +16,7 @@ import type {
   QRCodeAlphanumericSegment,
   QRCodeNumericSegment,
   QRCodeKanjiSegment,
+  QREncodingMode,
 } from '#lib/types.ts'
 
 /**
@@ -26,16 +27,26 @@ function getStringByteLength(str: string): number {
 }
 
 /**
- * Get a list of segments of the specified mode
- * from a string
+ * Raw, unoptimized segments.
+ * These are used to build a graph and find the optimal way to encode data.
+ */
+type RawSegment = {
+  data: string
+  mode: QREncodingMode
+  length: number
+}
+
+/**
+ * Use a regex to extract a list of segments of the specified mode from a string
  *
- * @param regex The regex used to extract data
- * @param {Mode} mode Segment mode
- * @param str String to process
  * @return {Array} Array of object with segments data
  */
-function getSegments(regex: RegExp, mode, str: string) {
-  const segments = []
+function getSegments(
+  regex: RegExp,
+  mode: QREncodingMode,
+  str: string,
+): (RawSegment & { index: number })[] {
+  const segments: (RawSegment & { index: number })[] = []
   let result: ReturnType<RegExp['exec']>
 
   while ((result = regex.exec(str)) !== null) {
@@ -54,11 +65,11 @@ function getSegments(regex: RegExp, mode, str: string) {
  * Extracts a series of segments with the appropriate
  * modes from a string
  */
-function getSegmentsFromString(dataStr: string) {
+function getSegmentsFromString(dataStr: string): RawSegment[] {
   const numSegs = getSegments(Regex.NUMERIC, Mode.NUMERIC, dataStr)
   const alphaNumSegs = getSegments(Regex.LETTERS_AND_CHARACTERS, Mode.ALPHANUMERIC, dataStr)
-  let byteSegs: QRCodeByteSegment[]
-  let kanjiSegs
+  let byteSegs: (RawSegment & { index: number })[]
+  let kanjiSegs: (RawSegment & { index: number })[]
 
   if (Utils.isKanjiModeEnabled()) {
     byteSegs = getSegments(Regex.BYTE, Mode.BYTE, dataStr)
@@ -73,7 +84,7 @@ function getSegmentsFromString(dataStr: string) {
   return (
     segs
       .sort((s1, s2) => s1.index - s2.index)
-      // Remove the index property
+      // Remove the index property after sorting
       .map(({ data, mode, length }) => ({ data, mode, length }))
   )
 }
@@ -81,12 +92,8 @@ function getSegmentsFromString(dataStr: string) {
 /**
  * Returns how many bits are needed to encode a string of
  * specified length with the specified mode
- *
- * @param  {Number} length String length
- * @param  {Mode} mode     Segment mode
- * @return {Number}        Bit length
  */
-function getSegmentBitsLength(length, mode) {
+function getSegmentBitsLength(length: number, mode: QREncodingMode) {
   switch (mode) {
     case Mode.NUMERIC:
       return NumericData.getBitsLength(length)
@@ -97,6 +104,8 @@ function getSegmentBitsLength(length, mode) {
     case Mode.BYTE:
       return ByteData.getBitsLength(length)
   }
+
+  throw new Error('Invalid mode: ' + mode)
 }
 
 /**
@@ -119,6 +128,18 @@ function mergeSegments(segs) {
 }
 
 /**
+ * Representing a node in a graph of raw data segments.
+ * These nodes will eventually be used to find the optimal encoding by
+ * finding the optimal path through the graph by combining the nodes.
+ */
+type Node = NumericNode | AlphanumericNode | KanjiNode | ByteNode
+
+type NumericNode = [RawSegment, { data: string, mode: QREncodingMode<'Alphanumeric'>, length: number }, ByteNode[0]]
+type AlphanumericNode = [RawSegment, ByteNode[0]]
+type KanjiNode = [RawSegment, ByteNode[0]]
+type ByteNode = [{ data: string; mode: QREncodingMode<'Byte'>; length: number }]
+
+/**
  * Generates a list of all possible nodes combination which
  * will be used to build a segments graph.
  *
@@ -131,11 +152,10 @@ function mergeSegments(segs) {
  *
  * Each node represents a possible segment.
  *
- * @param  {Array} segs Array of object with segments data
- * @return {Array}      Array of object with segments data
+ * @return {Array} Array of object with segments data
  */
-function buildNodes(segs) {
-  const nodes = []
+function buildNodes(segs: RawSegment[]): Node[] {
+  const nodes: Node[] = []
   for (let i = 0; i < segs.length; i++) {
     const seg = segs[i]
 
@@ -165,6 +185,59 @@ function buildNodes(segs) {
 }
 
 /**
+ * This graph consists of a `map` (the actual graph) and a lookup `table`.
+ * The purpose is to enable path finding to find the optimal way to encode
+ * segments of the QR code data.
+ *
+ * Since each segment can be encoded in 1-3 different ways, the `map` includes
+ * nodes for each encoding mode. This enables the path finding to traverse all
+ * unique nodes with the shortest total distance, which in our cases means
+ * to find the most optimal way to encode all data segments for the QR code.
+ *
+ * IDEA: It would be possible to make this type generic and add inferred type params
+ * to express that the Graph `table` always contains the keys of the `map`,
+ * excluding the special `start` node.
+ */
+type Graph = {
+  map: GraphMap,
+  table: GraphTable
+}
+
+// NOTE: Here's a sample for the generic Graph where the keys match
+// type Graph<Map extends GraphMap, NodeId extends Omit<(keyof Map), 'start'>> = {
+//   map: Map,
+//   table: {
+//     // Mapped object type?
+//     [nodeId: NodeId]: {
+//        node: RawSegment
+//        lastCount: number
+//     }
+//   }
+// }
+
+/**
+ * The actual graph used for path finding
+ */
+type GraphMap = {
+  [nodeId: string]: {
+    [nodeId: string]: number
+  } & { end?: number }
+  start: {
+    [nodeId: string]: number
+  }
+}
+
+/**
+ * A lookup table, mapping each node to its corresponding segment data
+ */
+type GraphTable = {
+  [nodeId: string]: {
+    node: RawSegment
+    lastCount: number
+  }
+}
+
+/**
  * Builds a graph from a list of nodes.
  * All segments in each node group will be connected with all the segments of
  * the next group and so on.
@@ -172,15 +245,11 @@ function buildNodes(segs) {
  * At each connection will be assigned a weight depending on the
  * segment's byte length.
  *
- * @param {Array} nodes Array of object with segments data
- * @param version QR Code version
- * @return {Object} Graph of all possible segments.
- *
- * TODO: Create a Graph type to clearly define the properties and types
+ * @return Graph of all possible segments.
  */
-function buildGraph(nodes, version: QRVersion) {
-  const table = {}
-  const graph = { start: {} }
+function buildGraph(nodes: Node[], version: QRVersion): Graph {
+  const table: GraphTable = {}
+  const graph: GraphMap = { start: {} }
   let prevNodeIds = ['start']
 
   for (let i = 0; i < nodes.length; i++) {
@@ -262,7 +331,7 @@ function buildSingleSegment(
       return new ByteData(data as QRCodeByteSegment['data'])
   }
 
-  // NOTE: Undefined could theoretically be returned here, but should never happen in practice.
+  throw new Error('Invalid mode: ' + mode)
 }
 
 /**
@@ -292,19 +361,13 @@ export function fromArray(input: Array<string | QRCodeSegment>): DataSegment[] {
 /**
  * Builds an optimized sequence of segments from a string,
  * which will produce the shortest possible bitstream.
- *
- * @param data Input string
- * @param version QR Code version
- * @return {Array} Array of segments
- *
- * TODO: Improve return type
  */
-export function fromString(data: string, version: QRVersion) {
+export function fromString(data: string, version: QRVersion): DataSegment[] {
   const segs = getSegmentsFromString(data)
 
   const nodes = buildNodes(segs)
   const graph = buildGraph(nodes, version)
-  const path = findPath(graph.map, 'start', 'end')
+  const path = findPath(graph.map, 'start', 'end') as (keyof typeof graph.table)[]
 
   const optimizedSegs = []
   for (let i = 1; i < path.length - 1; i++) {

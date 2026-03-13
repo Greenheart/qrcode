@@ -286,6 +286,8 @@ export interface QRCode {
   errorCorrectionLevel: ErrorCorrectionLevel
   /**
    * Calculated Mask pattern
+   *
+   * TODO: Can this really be undefined when the QRCode symbol has been created?
    */
   maskPattern: QRCodeMaskPattern | undefined
   /**

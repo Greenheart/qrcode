@@ -305,8 +305,12 @@ const SJIS_UTF8 = [
 ] as const
 
 export default function toSJIS(utf8Char: string) {
+  // TODO: If we use a Map to lookup character replacements instead,
+  // we could just check if the utf8Char exists in the map or throw an error if not.
+  // TODO: Once we make this change, review the tests too.
   if (!utf8Char) return
 
+  // We could get much faster lookups by using a Map instead of a two-dimensional array
   for (let i = 0; i < SJIS_UTF8.length; i++) {
     const kanji = SJIS_UTF8[i][1]
 
