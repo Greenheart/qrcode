@@ -8,24 +8,14 @@ const kanji = `(?:[u3000-u303F]|[u3040-u309F]|[u30A0-u30FF]|\
 
 const byte = '(?:(?![A-Z0-9 $%*+\\-./:]|' + kanji + ')(?:.|[\r\n]))+'
 
+// Extractor regexes, used to extract segments
 export const KANJI = new RegExp(kanji, 'g')
 export const BYTE_KANJI = new RegExp('[^A-Z0-9 $%*+\\-./:]+', 'g')
 export const BYTE = new RegExp(byte, 'g')
 export const NUMERIC = new RegExp(numeric, 'g')
 export const LETTERS_AND_CHARACTERS = new RegExp(lettersAndCharacters, 'g')
 
-const TEST_KANJI = new RegExp('^' + kanji + '$')
-const TEST_NUMERIC = new RegExp('^' + numeric + '$')
-const TEST_ALPHANUMERIC = new RegExp('^[A-Z0-9 $%*+\\-./:]+$')
-
-export function testKanji(str: string) {
-  return TEST_KANJI.test(str)
-}
-
-export function testNumeric(str: string) {
-  return TEST_NUMERIC.test(str)
-}
-
-export function testAlphanumeric(str: string) {
-  return TEST_ALPHANUMERIC.test(str)
-}
+// Test regex, used to verify segments include only one type of data.
+export const TEST_KANJI = new RegExp('^' + kanji + '$')
+export const TEST_NUMERIC = new RegExp('^' + numeric + '$')
+export const TEST_ALPHANUMERIC = new RegExp('^[A-Z0-9 $%*+\\-./:]+$')

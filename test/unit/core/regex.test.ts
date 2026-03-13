@@ -16,19 +16,19 @@ test('Regex', () => {
 })
 
 test('Regex test', () => {
-  expect(Regex.testNumeric('123456'), 'Should return true if is a number').toEqual(true)
-  expect(Regex.testNumeric('a12345'), 'Should return false if is not a number').toEqual(false)
-  expect(Regex.testNumeric('ABC123'), 'Should return false if is not a number').toEqual(false)
+  expect(Regex.TEST_NUMERIC.test('123456'), 'Should return true if is a number').toEqual(true)
+  expect(Regex.TEST_NUMERIC.test('a12345'), 'Should return false if is not a number').toEqual(false)
+  expect(Regex.TEST_NUMERIC.test('ABC123'), 'Should return false if is not a number').toEqual(false)
 
-  expect(Regex.testAlphanumeric('123ABC'), 'Should return true if is alphanumeric').toEqual(true)
-  expect(Regex.testAlphanumeric('123456'), 'Should return true if is alphanumeric').toEqual(true)
-  expect(Regex.testAlphanumeric('ABCabc'), 'Should return false if is not alphanumeric').toEqual(
+  expect(Regex.TEST_ALPHANUMERIC.test('123ABC'), 'Should return true if is alphanumeric').toEqual(true)
+  expect(Regex.TEST_ALPHANUMERIC.test('123456'), 'Should return true if is alphanumeric').toEqual(true)
+  expect(Regex.TEST_ALPHANUMERIC.test('ABCabc'), 'Should return false if is not alphanumeric').toEqual(
     false,
   )
 
-  expect(Regex.testKanji('乂ЁЖぞβ'), 'Should return true if is a kanji').toEqual(true)
-  expect(Regex.testKanji('皿a晒三A'), 'Should return false if is not a kanji').toEqual(false)
-  expect(Regex.testKanji('123456'), 'Should return false if is not a kanji').toEqual(false)
-  expect(Regex.testKanji('ABC123'), 'Should return false if is not a kanji').toEqual(false)
-  expect(Regex.testKanji('abcdef'), 'Should return false if is not a kanji').toEqual(false)
+  expect(Regex.TEST_KANJI.test('乂ЁЖぞβ'), 'Should return true if is a kanji').toEqual(true)
+  expect(Regex.TEST_KANJI.test('皿a晒三A'), 'Should return false if is not a kanji').toEqual(false)
+  expect(Regex.TEST_KANJI.test('123456'), 'Should return false if is not a kanji').toEqual(false)
+  expect(Regex.TEST_KANJI.test('ABC123'), 'Should return false if is not a kanji').toEqual(false)
+  expect(Regex.TEST_KANJI.test('abcdef'), 'Should return false if is not a kanji').toEqual(false)
 })

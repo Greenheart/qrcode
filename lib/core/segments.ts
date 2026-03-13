@@ -71,10 +71,12 @@ function getSegmentsFromString(dataStr: string) {
 
   const segs = [...numSegs, ...alphaNumSegs, ...byteSegs, ...kanjiSegs]
 
-  return segs
-    .sort((s1, s2) => s1.index - s2.index)
-    // Remove the index property
-    .map(({ data, mode, length }) => ({ data, mode, length }))
+  return (
+    segs
+      .sort((s1, s2) => s1.index - s2.index)
+      // Remove the index property
+      .map(({ data, mode, length }) => ({ data, mode, length }))
+  )
 }
 
 /**
