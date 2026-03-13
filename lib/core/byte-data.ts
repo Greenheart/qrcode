@@ -6,7 +6,7 @@ export default class ByteData {
   mode = Mode.BYTE
   data: Uint8Array
 
-  constructor(data: QRCodeByteSegment['data']) {
+  constructor(data: string | QRCodeByteSegment['data']) {
     if (typeof data === 'string') {
       this.data = new TextEncoder().encode(data)
     } else {
