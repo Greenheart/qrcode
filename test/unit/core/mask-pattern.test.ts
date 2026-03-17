@@ -74,7 +74,7 @@ test('MaskPattern parse value', () => {
 })
 
 test('Mask pattern - Apply mask', () => {
-  const patterns = Object.keys(MaskPattern.Patterns).length
+  const patterns = Object.values(MaskPattern.Patterns)
   const expectedPatterns = [
     expectedPattern000,
     expectedPattern001,
@@ -86,7 +86,7 @@ test('Mask pattern - Apply mask', () => {
     expectedPattern111,
   ]
 
-  for (let p = 0; p < patterns; p++) {
+  for (const p of patterns) {
     const matrix = new BitMatrix(6)
     MaskPattern.applyMask(p, matrix)
     expect(matrix.data, 'Should return correct pattern').toStrictEqual(
@@ -95,10 +95,10 @@ test('Mask pattern - Apply mask', () => {
   }
 
   const matrix = new BitMatrix(2)
-  matrix.set(0, 0, false, true)
-  matrix.set(0, 1, false, true)
-  matrix.set(1, 0, false, true)
-  matrix.set(1, 1, false, true)
+  matrix.set(0, 0, 0, true)
+  matrix.set(0, 1, 0, true)
+  matrix.set(1, 0, 0, true)
+  matrix.set(1, 1, 0, true)
   MaskPattern.applyMask(0, matrix)
 
   expect(matrix.data, 'Should leave reserved bit unchanged').toStrictEqual(
@@ -106,6 +106,7 @@ test('Mask pattern - Apply mask', () => {
   )
 
   expect(() => {
+    // @ts-expect-error Testing invalid input
     MaskPattern.applyMask(-1, new BitMatrix(1))
   }, 'Should throw if pattern is invalid').toThrow()
 })
