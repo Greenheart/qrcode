@@ -109,22 +109,6 @@ function getSegmentBitsLength(length: number, mode: QREncodingMode) {
 }
 
 /**
- * Merges adjacent segments which have the same mode
- */
-function mergeSegments(segments: RawSegment[]): RawSegment[] {
-  const merged: RawSegment[] = []
-  for (const current of segments) {
-    const prevSeg = merged.at(-1)
-    if (prevSeg && prevSeg.mode === current.mode) {
-      prevSeg.data += current.data
-    } else {
-      merged.push(current)
-    }
-  }
-  return merged
-}
-
-/**
  * Representing a node in a graph of raw data segments.
  * These nodes will eventually be used to find the optimal encoding by
  * finding the optimal path through the graph by combining the nodes.
@@ -372,12 +356,21 @@ export function fromString(data: string, version: QRVersion): DataSegment[] {
   const path = findPath(graph.map, 'start', 'end') as (keyof typeof graph.table)[]
 
   const optimizedSegs: RawSegment[] = []
+
   // Skip the `start` and `end` nodes since they were only added for the path finding.
   for (let i = 1; i < path.length - 1; i++) {
-    optimizedSegs.push(graph.table[path[i]].node)
+    const current = graph.table[path[i]].node
+    const prev = optimizedSegs.at(-1)
+
+    // Merge adjacent segments with the same encoding mode to save space.
+    if (prev && prev.mode === current.mode) {
+      prev.data += current.data
+    } else {
+      optimizedSegs.push(current)
+    }
   }
 
-  return fromArray(mergeSegments(optimizedSegs))
+  return fromArray(optimizedSegs)
 }
 
 /**
