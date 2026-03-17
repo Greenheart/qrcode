@@ -1,4 +1,4 @@
-function hex2rgba(hex) {
+function hex2rgba(hex: string | number) {
   if (typeof hex === 'number') {
     hex = hex.toString()
   }
@@ -14,12 +14,7 @@ function hex2rgba(hex) {
 
   // Convert from short to long form (fff -> ffffff)
   if (hexCode.length === 3 || hexCode.length === 4) {
-    hexCode = Array.prototype.concat.apply(
-      [],
-      hexCode.map(function (c) {
-        return [c, c]
-      }),
-    )
+    hexCode = hexCode.flatMap(c => [c, c])
   }
 
   // Add default alpha value
