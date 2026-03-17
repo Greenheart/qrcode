@@ -285,7 +285,7 @@ function buildGraph(nodes: Node[], version: QRVersion): Graph {
  */
 function buildSingleSegment(
   data: string | QRCodeSegment['data'],
-  modeHint?: QRCodeSegment['mode'],
+  modeHint?: QRCodeSegment['mode'] | QREncodingMode,
 ): DataSegment {
   const bestMode = Mode.getBestModeForData(data)
   let mode = Mode.parse(modeHint) ?? bestMode
@@ -337,8 +337,7 @@ export function fromArray(input: Array<string | QRCodeSegment | RawSegment>): Da
     if (typeof seg === 'string') {
       dataSegments.push(buildSingleSegment(seg))
     } else if (seg.data) {
-      const mode = typeof seg.mode === 'string' ? seg.mode : (seg.mode?.id as QRCodeSegment['mode'])
-      dataSegments.push(buildSingleSegment(seg.data, mode))
+      dataSegments.push(buildSingleSegment(seg.data, seg.mode))
     }
   }
   return dataSegments
