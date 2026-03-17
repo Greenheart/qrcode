@@ -10,7 +10,7 @@ export type QRCodeErrorCorrectionLevel =
   | 'Q'
   | 'H'
 export type QRCodeMaskPattern = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7
-export type QRCodeToSJISFunc = (codePoint: string) => number
+export type QRCodeToSJISFunc = (codePoint: string) => number | undefined
 /** QR Code version (1-40) */
 export type QRVersion =
   | 1
