@@ -4,11 +4,11 @@ import type { Bit } from '#lib/types.ts'
  * Helper class to handle QR Code symbol modules
  */
 export default class BitMatrix {
-  // TODO: See if these fields could be made private only or if they need to be publicly accessible
-
   /** Symbol size */
   size: number
+  /** The actual symbol data */
   data: Uint8Array
+  /** Reserved bits are used to indicate which bits should be ignored during the masking process */
   reservedBit: Uint8Array
 
   constructor(size: number) {
