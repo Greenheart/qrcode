@@ -387,7 +387,7 @@ if (import.meta.vitest) {
   test('buildGraph should return correct length - issue 272', () => {
     // Nodes created from the input string `ABCDEF123`, matching issue 272
     // Learn more: https://github.com/soldair/node-qrcode/issues/272
-    const NODES = [
+    const NODES: Node[] = [
       [
         {
           data: 'ABCDEF',
@@ -421,7 +421,7 @@ if (import.meta.vitest) {
 
     // In issue 272, the cost between '00' and '11' was incorrectly calculated.
     // The cost was 16 but should be 17, like in the example output below:
-    const GRAPH_CORRECT = {
+    const GRAPH_CORRECT: Graph = {
       map: {
         10: { end: 0 },
         11: { end: 0 },
