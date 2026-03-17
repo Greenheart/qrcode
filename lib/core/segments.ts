@@ -110,21 +110,18 @@ function getSegmentBitsLength(length: number, mode: QREncodingMode) {
 
 /**
  * Merges adjacent segments which have the same mode
- *
- * @param  {Array} segs Array of object with segments data
- * @return {Array}      Array of object with segments data
  */
-function mergeSegments(segs) {
-  return segs.reduce(function (acc, curr) {
-    const prevSeg = acc.length - 1 >= 0 ? acc.at(-1) : null
-    if (prevSeg && prevSeg.mode === curr.mode) {
-      acc.at(-1).data += curr.data
-      return acc
+function mergeSegments(segments: RawSegment[]): RawSegment[] {
+  const merged: RawSegment[] = []
+  for (const current of segments) {
+    const prevSeg = merged.at(-1)
+    if (prevSeg && prevSeg.mode === current.mode) {
+      prevSeg.data += current.data
+    } else {
+      merged.push(current)
     }
-
-    acc.push(curr)
-    return acc
-  }, [])
+  }
+  return merged
 }
 
 /**
@@ -134,7 +131,11 @@ function mergeSegments(segs) {
  */
 type Node = NumericNode | AlphanumericNode | KanjiNode | ByteNode
 
-type NumericNode = [RawSegment, { data: string, mode: QREncodingMode<'Alphanumeric'>, length: number }, ByteNode[0]]
+type NumericNode = [
+  RawSegment,
+  { data: string; mode: QREncodingMode<'Alphanumeric'>; length: number },
+  ByteNode[0],
+]
 type AlphanumericNode = [RawSegment, ByteNode[0]]
 type KanjiNode = [RawSegment, ByteNode[0]]
 type ByteNode = [{ data: string; mode: QREncodingMode<'Byte'>; length: number }]
@@ -199,7 +200,7 @@ function buildNodes(segs: RawSegment[]): Node[] {
  * excluding the special `start` node.
  */
 type Graph = {
-  map: GraphMap,
+  map: GraphMap
   table: GraphTable
 }
 
@@ -346,13 +347,14 @@ function buildSingleSegment(
  * Objects must contain at least the property "data".
  * If property "mode" is not present, the more suitable mode will be used.
  */
-export function fromArray(input: Array<string | QRCodeSegment>): DataSegment[] {
+export function fromArray(input: Array<string | QRCodeSegment | RawSegment>): DataSegment[] {
   const dataSegments: DataSegment[] = []
   for (const seg of input) {
     if (typeof seg === 'string') {
       dataSegments.push(buildSingleSegment(seg))
     } else if (seg.data) {
-      dataSegments.push(buildSingleSegment(seg.data, seg.mode))
+      const mode = typeof seg.mode === 'string' ? seg.mode : (seg.mode?.id as QRCodeSegment['mode'])
+      dataSegments.push(buildSingleSegment(seg.data, mode))
     }
   }
   return dataSegments
@@ -369,7 +371,8 @@ export function fromString(data: string, version: QRVersion): DataSegment[] {
   const graph = buildGraph(nodes, version)
   const path = findPath(graph.map, 'start', 'end') as (keyof typeof graph.table)[]
 
-  const optimizedSegs = []
+  const optimizedSegs: RawSegment[] = []
+  // Skip the `start` and `end` nodes since they were only added for the path finding.
   for (let i = 1; i < path.length - 1; i++) {
     optimizedSegs.push(graph.table[path[i]].node)
   }
