@@ -5,6 +5,7 @@ import * as Mode from '#core/mode.ts'
 import * as QRCode from '#core/qrcode.ts'
 import toSJIS from '#helper/to-sjis.ts'
 import { arrayWithLength } from '#test/helpers.js'
+import type { QRCodeErrorCorrectionLevel } from '#lib/types.ts'
 
 test('QRCode interface', () => {
   expect(QRCode.create, 'Should have "create" function').toBeTypeOf('function')
@@ -57,10 +58,10 @@ test('QRCode interface', () => {
 test('QRCode error correction', () => {
   let qr: ReturnType<typeof QRCode.create>
   const ecValues = [
-    { name: ['l', 'low'], level: ECLevel.L },
-    { name: ['m', 'medium'], level: ECLevel.M },
-    { name: ['q', 'quartile'], level: ECLevel.Q },
-    { name: ['h', 'high'], level: ECLevel.H },
+    { name: ['l', 'low'] as QRCodeErrorCorrectionLevel[], level: ECLevel.L },
+    { name: ['m', 'medium'] as QRCodeErrorCorrectionLevel[], level: ECLevel.M },
+    { name: ['q', 'quartile'] as QRCodeErrorCorrectionLevel[], level: ECLevel.Q },
+    { name: ['h', 'high'] as QRCodeErrorCorrectionLevel[], level: ECLevel.H },
   ]
 
   for (let l = 0; l < ecValues.length; l++) {
@@ -75,7 +76,7 @@ test('QRCode error correction', () => {
       ).toStrictEqual(ecValues[l].level)
 
       expect(() => {
-        qr = QRCode.create('ABCDEFG', { errorCorrectionLevel: ecValues[l].name[i].toUpperCase() })
+        qr = QRCode.create('ABCDEFG', { errorCorrectionLevel: ecValues[l].name[i].toUpperCase() as QRCodeErrorCorrectionLevel })
       }, 'Should accept errorCorrectionLevel value: ' + ecValues[l].name[i].toUpperCase()).not.toThrow()
 
       expect(
@@ -113,6 +114,7 @@ test('QRCode version', () => {
   }, 'Should throw if data cannot be contained in a qr code').toThrow()
 
   expect(() => {
+    // @ts-expect-error Testing invalid version input
     qr = QRCode.create('abcdefg', { version: 'invalid' })
   }, 'Should use best version if the one provided is invalid').not.toThrow()
 })
@@ -120,6 +122,7 @@ test('QRCode version', () => {
 test('QRCode capacity', () => {
   let qr: ReturnType<typeof QRCode.create>
 
+  // @ts-expect-error Testing byte input as string, supported for backwards compatibility.
   qr = QRCode.create([{ data: 'abcdefg', mode: 'byte' }])
   expect(qr.version, 'Should contain 7 byte characters').toEqual(1)
 
