@@ -19,7 +19,7 @@ import type {
   QRCodeSegment,
   QRVersion,
   QRCode,
-  DataSegment,
+  GeneratedQRCodeSegment,
 } from '#lib/types.ts'
 
 /**
@@ -227,17 +227,12 @@ function setupData(matrix: BitMatrix, data: Uint8Array) {
 
 /**
  * Create encoded codewords from data input
- *
- * @param version QR Code version
- * @param  {ErrorCorrectionLevel}   errorCorrectionLevel Error correction level
- * @param  {ByteData} data                 Data input
- * @return {Uint8Array}                    Buffer containing encoded codewords
  */
-function createData(version: QRVersion, errorCorrectionLevel, segments) {
+function createData(version: QRVersion, errorCorrectionLevel: ErrorCorrectionLevel, segments: GeneratedQRCodeSegment[]) {
   // Prepare data buffer
   const buffer = new BitBuffer()
 
-  segments.forEach(function (data) {
+  for (const data of segments) {
     // prefix data with mode indicator (4 bits)
     buffer.put(data.mode.bit, 4)
 
@@ -252,7 +247,7 @@ function createData(version: QRVersion, errorCorrectionLevel, segments) {
 
     // add binary data sequence to buffer
     data.write(buffer)
-  })
+  }
 
   // Calculate required number of bits
   const totalCodewords = Utils.getSymbolTotalCodewords(version)
@@ -293,12 +288,12 @@ function createData(version: QRVersion, errorCorrectionLevel, segments) {
  * Encode input data with Reed-Solomon and return codewords with
  * relative error correction bits
  *
- * @param  {BitBuffer} bitBuffer            Data to encode
+ * @param bitBuffer Data to encode
  * @param version QR Code version
- * @param  {ErrorCorrectionLevel} errorCorrectionLevel Error correction level
- * @return {Uint8Array}                     Buffer containing encoded codewords
+ * @param errorCorrectionLevel Error correction level
+ * @return Buffer containing encoded codewords
  */
-function createCodewords(bitBuffer, version: QRVersion, errorCorrectionLevel) {
+function createCodewords(bitBuffer: BitBuffer, version: QRVersion, errorCorrectionLevel: ErrorCorrectionLevel) {
   // Total codewords for this QR code version (Data + Error correction)
   const totalCodewords = Utils.getSymbolTotalCodewords(version)
 
@@ -350,11 +345,10 @@ function createCodewords(bitBuffer, version: QRVersion, errorCorrectionLevel) {
   // Interleave the data and error correction codewords from each block
   const data = new Uint8Array(totalCodewords)
   let index = 0
-  let i, r
 
   // Add data codewords
-  for (i = 0; i < maxDataSize; i++) {
-    for (r = 0; r < ecTotalBlocks; r++) {
+  for (let i = 0; i < maxDataSize; i++) {
+    for (let r = 0; r < ecTotalBlocks; r++) {
       if (i < dcData[r].length) {
         data[index++] = dcData[r][i]
       }
@@ -362,8 +356,8 @@ function createCodewords(bitBuffer, version: QRVersion, errorCorrectionLevel) {
   }
 
   // Apped EC codewords
-  for (i = 0; i < ecCount; i++) {
-    for (r = 0; r < ecTotalBlocks; r++) {
+  for (let i = 0; i < ecCount; i++) {
+    for (let r = 0; r < ecTotalBlocks; r++) {
       data[index++] = ecData[r][i]
     }
   }
@@ -380,7 +374,7 @@ function createSymbol(
   version?: QRVersion,
   maskPattern?: QRCodeMaskPattern,
 ): QRCode {
-  let segments: DataSegment[]
+  let segments: GeneratedQRCodeSegment[]
 
   if (Array.isArray(data)) {
     segments = Segments.fromArray(data)

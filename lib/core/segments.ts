@@ -9,7 +9,6 @@ import KanjiData from './kanji-data.ts'
 import * as Regex from './regex.ts'
 import * as Utils from './utils.ts'
 import type {
-  DataSegment,
   QRCodeSegment,
   QRVersion,
   QRCodeByteSegment,
@@ -17,6 +16,7 @@ import type {
   QRCodeNumericSegment,
   QRCodeKanjiSegment,
   QREncodingMode,
+  GeneratedQRCodeSegment,
 } from '#lib/types.ts'
 
 /**
@@ -137,7 +137,7 @@ type ByteNode = [{ data: string; mode: QREncodingMode<'Byte'>; length: number }]
  *
  * Each node represents a possible segment.
  *
- * @return {Array} Array of object with segments data
+ * @return Array of object with segments data
  */
 function buildNodes(segs: RawSegment[]): Node[] {
   const nodes: Node[] = []
@@ -286,7 +286,7 @@ function buildGraph(nodes: Node[], version: QRVersion): Graph {
 function buildSingleSegment(
   data: string | QRCodeSegment['data'],
   modeHint?: QRCodeSegment['mode'] | QREncodingMode,
-): DataSegment {
+): GeneratedQRCodeSegment {
   const bestMode = Mode.getBestModeForData(data)
   let mode = Mode.parse(modeHint) ?? bestMode
 
@@ -331,23 +331,23 @@ function buildSingleSegment(
  * Objects must contain at least the property "data".
  * If property "mode" is not present, the more suitable mode will be used.
  */
-export function fromArray(input: Array<string | QRCodeSegment | RawSegment>): DataSegment[] {
-  const dataSegments: DataSegment[] = []
+export function fromArray(input: Array<string | QRCodeSegment | RawSegment>): GeneratedQRCodeSegment[] {
+  const segments: GeneratedQRCodeSegment[] = []
   for (const seg of input) {
     if (typeof seg === 'string') {
-      dataSegments.push(buildSingleSegment(seg))
+      segments.push(buildSingleSegment(seg))
     } else if (seg.data) {
-      dataSegments.push(buildSingleSegment(seg.data, seg.mode))
+      segments.push(buildSingleSegment(seg.data, seg.mode))
     }
   }
-  return dataSegments
+  return segments
 }
 
 /**
  * Builds an optimized sequence of segments from a string,
  * which will produce the shortest possible bitstream.
  */
-export function fromString(data: string, version: QRVersion): DataSegment[] {
+export function fromString(data: string, version: QRVersion): GeneratedQRCodeSegment[] {
   const segs = getSegmentsFromString(data)
 
   const nodes = buildNodes(segs)
@@ -379,7 +379,7 @@ export function fromString(data: string, version: QRVersion): DataSegment[] {
  * The output of this function is only used to estimate a QR Code version
  * which may contain the data.
  */
-export function rawSplit(data: string): DataSegment[] {
+export function rawSplit(data: string): GeneratedQRCodeSegment[] {
   return fromArray(getSegmentsFromString(data))
 }
 

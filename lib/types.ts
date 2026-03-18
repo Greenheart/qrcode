@@ -1,4 +1,8 @@
+import type AlphanumericData from './core/alphanumeric-data.ts'
 import type BitMatrix from './core/bit-matrix.ts'
+import type ByteData from './core/byte-data.ts'
+import type KanjiData from './core/kanji-data.ts'
+import type NumericData from './core/numeric-data.ts'
 
 export type QRCodeErrorCorrectionLevel =
   | 'low'
@@ -322,32 +326,7 @@ export interface QREncodingMode<TModeId extends QREncodingModeId = QREncodingMod
   ccBits: readonly number[]
 }
 
-export type GeneratedQRCodeSegment = NumericData | AlphanumericData | ByteData | KanjiData
-
 /**
  * Processed segment containing a part of the QR code data.
  */
-export interface DataSegment {
-  getLength(): number
-  getBitsLength(): number
-}
-
-export interface NumericData extends DataSegment {
-  mode: QREncodingMode<'Numeric'>
-  data: string
-}
-
-export interface AlphanumericData extends DataSegment {
-  mode: QREncodingMode<'Alphanumeric'>
-  data: string
-}
-
-export interface ByteData extends DataSegment {
-  mode: QREncodingMode<'Byte'>
-  data: Uint8Array
-}
-
-export interface KanjiData extends DataSegment {
-  mode: QREncodingMode<'Kanji'>
-  data: string
-}
+export type GeneratedQRCodeSegment = NumericData | AlphanumericData | ByteData | KanjiData
