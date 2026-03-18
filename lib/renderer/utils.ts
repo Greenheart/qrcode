@@ -14,7 +14,7 @@ function hex2rgba(hex: string | number) {
 
   // Convert from short to long form (fff -> ffffff)
   if (hexCode.length === 3 || hexCode.length === 4) {
-    hexCode = hexCode.flatMap(c => [c, c])
+    hexCode = hexCode.flatMap((c) => [c, c])
   }
 
   // Add default alpha value

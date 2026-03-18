@@ -228,7 +228,11 @@ function setupData(matrix: BitMatrix, data: Uint8Array) {
 /**
  * Create encoded codewords from data input
  */
-function createData(version: QRVersion, errorCorrectionLevel: ErrorCorrectionLevel, segments: GeneratedQRCodeSegment[]) {
+function createData(
+  version: QRVersion,
+  errorCorrectionLevel: ErrorCorrectionLevel,
+  segments: GeneratedQRCodeSegment[],
+) {
   // Prepare data buffer
   const buffer = new BitBuffer()
 
@@ -293,7 +297,11 @@ function createData(version: QRVersion, errorCorrectionLevel: ErrorCorrectionLev
  * @param errorCorrectionLevel Error correction level
  * @return Buffer containing encoded codewords
  */
-function createCodewords(bitBuffer: BitBuffer, version: QRVersion, errorCorrectionLevel: ErrorCorrectionLevel) {
+function createCodewords(
+  bitBuffer: BitBuffer,
+  version: QRVersion,
+  errorCorrectionLevel: ErrorCorrectionLevel,
+) {
   // Total codewords for this QR code version (Data + Error correction)
   const totalCodewords = Utils.getSymbolTotalCodewords(version)
 
@@ -323,7 +331,7 @@ function createCodewords(bitBuffer: BitBuffer, version: QRVersion, errorCorrecti
 
   let offset = 0
   const dcData: Uint8Array[] = Array.from({ length: ecTotalBlocks })
-  const ecData: Uint8Array[] = Array.from({ length: ecTotalBlocks})
+  const ecData: Uint8Array[] = Array.from({ length: ecTotalBlocks })
   let maxDataSize = 0
   const buffer = new Uint8Array(bitBuffer.buffer)
 

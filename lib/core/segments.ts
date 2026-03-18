@@ -331,7 +331,9 @@ function buildSingleSegment(
  * Objects must contain at least the property "data".
  * If property "mode" is not present, the more suitable mode will be used.
  */
-export function fromArray(input: Array<string | QRCodeSegment | RawSegment>): GeneratedQRCodeSegment[] {
+export function fromArray(
+  input: Array<string | QRCodeSegment | RawSegment>,
+): GeneratedQRCodeSegment[] {
   const segments: GeneratedQRCodeSegment[] = []
   for (const seg of input) {
     if (typeof seg === 'string') {
