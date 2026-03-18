@@ -322,8 +322,8 @@ function createCodewords(bitBuffer: BitBuffer, version: QRVersion, errorCorrecti
   const rs = new ReedSolomonEncoder(ecCount)
 
   let offset = 0
-  const dcData = [ecTotalBlocks]
-  const ecData = [ecTotalBlocks]
+  const dcData: Uint8Array[] = Array.from({ length: ecTotalBlocks })
+  const ecData: Uint8Array[] = Array.from({ length: ecTotalBlocks})
   let maxDataSize = 0
   const buffer = new Uint8Array(bitBuffer.buffer)
 
