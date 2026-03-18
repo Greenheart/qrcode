@@ -48,14 +48,6 @@ test('Char count bits', () => {
     expect(Mode.getCharCountIndicator(Mode.BYTE, v)).toEqual(EXPECTED_BITS.byte[2])
     expect(Mode.getCharCountIndicator(Mode.KANJI, v)).toEqual(EXPECTED_BITS.kanji[2])
   }
-
-  expect(() => {
-    // NOTE: Ideally we should ensure the mode is valid closer to the
-    // public API surface and use strict types to enforce internal usage.
-    // Then we could stop throwing errors in getCharCountIndicator()
-    // @ts-expect-error Testing invalid mode
-    Mode.getCharCountIndicator({}, 1)
-  }, 'Should throw if mode is invalid').toThrow()
 })
 
 test(Mode.getBestModeForData.name, () => {

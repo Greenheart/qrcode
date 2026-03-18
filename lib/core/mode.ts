@@ -73,10 +73,6 @@ const MODES = {
  * according to QR Code specifications.
  */
 export function getCharCountIndicator(mode: QREncodingMode, version: QRVersion): number {
-  // TODO: See how this function is called, and if the validation is needed.
-  // Since it is a internal API in the module, it should be safe to rely on TypeScript types instead of manual checks and throwing errors
-  if (!mode.ccBits) throw new Error('Invalid mode: ' + mode)
-
   if (version < 10) return mode.ccBits[0]
   else if (version < 27) return mode.ccBits[1]
   return mode.ccBits[2]
