@@ -76,7 +76,9 @@ test('QRCode error correction', () => {
       ).toStrictEqual(ecValues[l].level)
 
       expect(() => {
-        qr = QRCode.create('ABCDEFG', { errorCorrectionLevel: ecValues[l].name[i].toUpperCase() as QRCodeErrorCorrectionLevel })
+        qr = QRCode.create('ABCDEFG', {
+          errorCorrectionLevel: ecValues[l].name[i].toUpperCase() as QRCodeErrorCorrectionLevel,
+        })
       }, 'Should accept errorCorrectionLevel value: ' + ecValues[l].name[i].toUpperCase()).not.toThrow()
 
       expect(

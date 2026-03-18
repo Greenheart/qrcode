@@ -30,7 +30,7 @@ function getStringByteLength(str: string): number {
  * Raw, unoptimized segments.
  * These are used to build a graph and find the optimal way to encode data.
  */
-type RawSegment = {
+export type RawSegment = {
   data: string
   mode: QREncodingMode
   length: number
