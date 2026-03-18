@@ -213,6 +213,8 @@ test('Mask pattern - Best mask', () => {
   const mask = MaskPattern.getBestMask(matrix, () => {})
   expect(Number.isInteger(mask), 'Should return a number').toEqual(true)
 
-  // TODO: Use the actual Mask.MIN and Mask.MAX constants here
-  expect(mask >= 0 && mask < 8, 'Should return a number in range 0,7').toBeTruthy()
+  expect(
+    mask >= MaskPattern.MIN && mask <= MaskPattern.MAX,
+    'Should return a number in range 0,7',
+  ).toBeTruthy()
 })

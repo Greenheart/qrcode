@@ -12,8 +12,8 @@ export const Patterns = {
   PATTERN111: 7,
 } as const
 
-const MIN = Patterns.PATTERN000
-const MAX = Patterns.PATTERN111
+export const MIN = Patterns.PATTERN000
+export const MAX = Patterns.PATTERN111
 export const QR_MASK_RANGE = [MIN, MAX] as const
 
 /**
