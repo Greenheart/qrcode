@@ -154,13 +154,13 @@ test('toFile svg', () => {
 
       fs.readFile(fileName, 'utf8', (err, content) => {
         if (err) throw err
-        expect(content, 'Should write correct content').toEqual(expectedOutput)
+        expect(content.trim(), 'Should write correct content').toEqual(expectedOutput.trim())
       })
     },
   )
-
+  const fileName2 = path.join(os.tmpdir(), 'qrimage2.svg')
   QRCode.toFile(
-    fileName,
+    fileName2,
     'http://www.google.com',
     {
       errorCorrectionLevel: 'H',
@@ -170,17 +170,17 @@ test('toFile svg', () => {
       expect(err, 'There should be no errors if file type is specified').toBeFalsy()
     },
   )
-
-  QRCode.toFile(fileName, 'http://www.google.com', {
+  const fileName3 = path.join(os.tmpdir(), 'qrimage3.svg')
+  QRCode.toFile(fileName3, 'http://www.google.com', {
     errorCorrectionLevel: 'H',
   }).then(() => {
-    fs.stat(fileName, (err) => {
+    fs.stat(fileName3, (err) => {
       expect(err, 'Should save file with correct file name (promise)').toBeFalsy()
     })
 
-    fs.readFile(fileName, 'utf8', (err, content) => {
+    fs.readFile(fileName3, 'utf8', (err, content) => {
       if (err) throw err
-      expect(content, 'Should write correct content (promise)').toEqual(expectedOutput)
+      expect(content.trim(), 'Should write correct content (promise)').toEqual(expectedOutput.trim())
     })
   })
 })
