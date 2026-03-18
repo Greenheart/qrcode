@@ -186,6 +186,7 @@ test('Segments from array', () => {
     'Should return correct segment from array of objects if mode is not specified',
   ).toStrictEqual([new ByteData('abcdef'), new NumericData('12345')])
 
+  // @ts-expect-error Testing empty input
   expect(Segments.fromArray([{}]), 'Should return an empty array').toStrictEqual([])
 
   expect(() => {
