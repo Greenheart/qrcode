@@ -11,12 +11,8 @@ const EXPECTED_FORMAT_BITS = [
 ]
 
 test('Format encoded info', () => {
-  // TODO: Create a test helper function to get the mask patterns with correct types
-  // Maybe use Object.values(MaskPattern.Patterns) and return that with the correct type
-  const patterns = Object.keys(MaskPattern.Patterns).length
-
   for (let l = 0; l < ALL_EC_LEVELS.length; l++) {
-    for (let p = 0; p < patterns; p++) {
+    for (const p of Object.values(MaskPattern.Patterns)) {
       const bch = FormatInfo.getEncodedBits(ALL_EC_LEVELS[l], p)
       expect(bch, 'Should return correct bits').toEqual(EXPECTED_FORMAT_BITS[l][p])
     }
