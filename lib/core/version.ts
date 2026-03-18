@@ -1,7 +1,7 @@
 import * as Utils from './utils.ts'
 import * as ECCode from './error-correction-code.ts'
 import * as Mode from './mode.ts'
-import type { QRVersion, QREncodingMode, ErrorCorrectionLevel } from '#lib/types.ts'
+import type { QRVersion, QREncodingMode, ErrorCorrectionLevel, GeneratedQRCodeSegment } from '#lib/types.ts'
 
 export const MIN = 1
 export const MAX = 40
@@ -40,7 +40,7 @@ function getReservedBitsCount(mode: QREncodingMode, version: QRVersion) {
   return Mode.getCharCountIndicator(mode, version) + 4
 }
 
-function getTotalBitsFromDataArray(segments, version: QRVersion) {
+function getTotalBitsFromDataArray(segments: GeneratedQRCodeSegment[], version: QRVersion) {
   let totalBits = 0
 
   for (const data of segments) {
@@ -50,7 +50,7 @@ function getTotalBitsFromDataArray(segments, version: QRVersion) {
   return totalBits
 }
 
-function getBestVersionForMixedData(segments, errorCorrectionLevel) {
+function getBestVersionForMixedData(segments: GeneratedQRCodeSegment[], errorCorrectionLevel: ErrorCorrectionLevel) {
   for (let currentVersion = MIN; currentVersion <= MAX; currentVersion++) {
     const length = getTotalBitsFromDataArray(segments, currentVersion as QRVersion)
     if (length <= getCapacity(currentVersion as QRVersion, errorCorrectionLevel, Mode.MIXED)) {
@@ -108,14 +108,12 @@ export function getCapacity(
 
 /**
  * Returns the minimum version needed to contain the amount of data
- *
- * @param {Segment} data Segment of data
  */
 export function getBestVersionForData(
-  data,
+  data: GeneratedQRCodeSegment | GeneratedQRCodeSegment[],
   errorCorrectionLevel: ErrorCorrectionLevel,
 ): QRVersion | undefined {
-  let seg
+  let seg: GeneratedQRCodeSegment
 
   if (Array.isArray(data)) {
     if (data.length > 1) {
