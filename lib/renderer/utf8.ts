@@ -29,27 +29,32 @@ export function render(qrData, options, cb) {
 
   const size = qrData.modules.size
   const data = qrData.modules.data
+  const margin = Math.max(0, Math.floor(opts.margin))
+  const totalSize = size + margin * 2
+  const lines = []
 
-  let output = ''
-  let hMargin = Array(size + opts.margin * 2 + 1).join(blocks.WW)
-  hMargin = Array(opts.margin / 2 + 1).join(hMargin + '\n')
+  function getModule(x, y) {
+    const dataX = x - margin
+    const dataY = y - margin
 
-  const vMargin = Array(opts.margin + 1).join(blocks.WW)
-
-  output += hMargin
-  for (let i = 0; i < size; i += 2) {
-    output += vMargin
-    for (let j = 0; j < size; j++) {
-      const topModule = data[i * size + j]
-      const bottomModule = data[(i + 1) * size + j]
-
-      output += getBlockChar(topModule, bottomModule, blocks)
+    if (dataX < 0 || dataX >= size || dataY < 0 || dataY >= size) {
+      return false
     }
 
-    output += vMargin + '\n'
+    return data[dataY * size + dataX]
   }
 
-  output += hMargin.slice(0, -1)
+  for (let y = 0; y < totalSize; y += 2) {
+    let line = ''
+
+    for (let x = 0; x < totalSize; x++) {
+      line += getBlockChar(getModule(x, y), getModule(x, y + 1), blocks)
+    }
+
+    lines.push(line)
+  }
+
+  const output = lines.join('\n')
 
   if (typeof cb === 'function') {
     cb(null, output)
