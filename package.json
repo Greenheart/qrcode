@@ -62,7 +62,7 @@
   "devDependencies": {
     "@babel/core": "^7.29.0",
     "@babel/preset-env": "^7.29.2",
-    "@e18e/eslint-plugin": "^0.2.0",
+    "@e18e/eslint-plugin": "^0.3.0",
     "@rollup/plugin-babel": "^7.0.0",
     "@rollup/plugin-commonjs": "^29.0.2",
     "@rollup/plugin-node-resolve": "^16.0.3",
@@ -70,17 +70,17 @@
     "@types/node": "^25.5.0",
     "@types/pngjs": "^6.0.5",
     "@types/sinon": "^21.0.0",
-    "@vitest/coverage-v8": "^4.1.0",
-    "canvas": "^3.2.1",
+    "@vitest/coverage-v8": "^4.1.1",
+    "canvas": "^3.2.2",
     "canvasutil": "0.0.4",
     "express": "^4.22.1",
     "htmlparser2": "^10.1.0",
-    "oxfmt": "^0.41.0",
-    "oxlint": "^1.56.0",
-    "rollup": "^4.59.0",
+    "oxfmt": "^0.42.0",
+    "oxlint": "^1.57.0",
+    "rollup": "^4.60.0",
     "sinon": "^21.0.3",
     "typescript": "^5.9.3",
-    "vitest": "^4.1.0"
+    "vitest": "^4.1.1"
   },
   "engines": {
     "node": ">=24"
