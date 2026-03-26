@@ -154,7 +154,7 @@ test('toFile svg', () => {
 
       fs.readFile(fileName, 'utf8', (err, content) => {
         if (err) throw err
-        expect(content.trim(), 'Should write correct content').toEqual(expectedOutput.trim())
+        expect(content, 'Should write correct content').toEqual(expectedOutput)
       })
     },
   )
@@ -180,9 +180,7 @@ test('toFile svg', () => {
 
     fs.readFile(fileName3, 'utf8', (err, content) => {
       if (err) throw err
-      expect(content.trim(), 'Should write correct content (promise)').toEqual(
-        expectedOutput.trim(),
-      )
+      expect(content, 'Should write correct content (promise)').toEqual(expectedOutput)
     })
   })
 })
