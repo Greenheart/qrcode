@@ -223,6 +223,38 @@ test('toString utf8', () => {
   })
 })
 
+test('toString utf8 supports odd margins', async () => {
+  await new Promise<void>((resolve, reject) => {
+    QRCode.toString(
+      'http://www.google.com',
+      {
+        errorCorrectionLevel: 'M',
+        type: 'utf8',
+        margin: 3,
+      },
+      (err, code) => {
+        try {
+          expect(err, 'there should be no error for odd margins').toBeFalsy()
+          expect(code, 'should output a valid symbol').toBeTypeOf('string')
+          expect(code?.split('\n').length, 'the output should have multiple lines').toBeGreaterThan(0)
+          resolve()
+        } catch (error) {
+          reject(error)
+        }
+      },
+    )
+  })
+
+  const code = await QRCode.toString('http://www.google.com', {
+    errorCorrectionLevel: 'M',
+    type: 'utf8',
+    margin: 1,
+  })
+
+  expect(code, 'should output a valid symbol (promise)').toBeTypeOf('string')
+  expect(code.split('\n').length, 'the promise output should have multiple lines').toBeGreaterThan(0)
+})
+
 test('toString terminal', () => {
   const expectedTerminal =
     fs.readFileSync(path.join(import.meta.dirname, '/terminal.expected.out')) + ''

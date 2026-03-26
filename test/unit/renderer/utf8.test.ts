@@ -24,6 +24,12 @@ test('Utf8Renderer render', () => {
     })
   }, 'Should not throw with options param').not.toThrow()
 
+  expect(() => {
+    str = Utf8Renderer.render(sampleQrData, {
+      margin: 1,
+    })
+  }, 'Should not throw with odd margins').not.toThrow()
+
   expect(str, 'Should return a string').toBeTypeOf('string')
 })
 
