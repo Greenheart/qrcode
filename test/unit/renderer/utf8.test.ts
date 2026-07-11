@@ -46,7 +46,7 @@ test('Utf8 renderToFile', async () => {
     })
   })
 
-  await new Promise<void>(resolve => {
+  await new Promise<void>((resolve) => {
     const fileName = 'qr-utf8.txt'
     Utf8Renderer.renderToFile(
       fileName,

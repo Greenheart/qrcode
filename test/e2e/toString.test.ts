@@ -69,39 +69,35 @@ test('toString (browser)', () => {
   })
 })
 
-test('toString svg', () => {
-  const file = path.join(import.meta.dirname, '/svgtag.expected.out')
+test('toString svg', async () => {
+  const expectedSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 37 37" shape-rendering="crispEdges"><path fill="#ffffff" d="M0 0h37v37H0z"/><path stroke="#000000" d="M4 4.5h7m3 0h1m2 0h3m6 0h7M4 5.5h1m5 0h1m3 0h1m1 0h2m1 0h2m5 0h1m5 0h1M4 6.5h1m1 0h3m1 0h1m3 0h1m2 0h1m1 0h1m3 0h1m2 0h1m1 0h3m1 0h1M4 7.5h1m1 0h3m1 0h1m3 0h1m2 0h3m1 0h1m4 0h1m1 0h3m1 0h1M4 8.5h1m1 0h3m1 0h1m1 0h3m1 0h1m1 0h2m3 0h1m2 0h1m1 0h3m1 0h1M4 9.5h1m5 0h1m2 0h1m1 0h1m2 0h7m1 0h1m5 0h1M4 10.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M12 11.5h6m2 0h1M6 12.5h2m2 0h3m1 0h1m1 0h1m2 0h2m1 0h2m1 0h2m1 0h1M5 13.5h1m2 0h1m2 0h1m1 0h1m3 0h1m1 0h1m2 0h1m1 0h3m1 0h1m3 0h1M4 14.5h1m1 0h2m2 0h2m1 0h1m1 0h3m1 0h1m1 0h1m1 0h2m1 0h1m2 0h1m1 0h1M4 15.5h1m4 0h1m1 0h1m1 0h1m1 0h4m5 0h1m2 0h1m4 0h1M5 16.5h2m1 0h3m1 0h1m2 0h6m2 0h3m1 0h1m2 0h3M4 17.5h3m1 0h1m4 0h3m2 0h1m1 0h2m1 0h1m2 0h2m1 0h2m1 0h1M4 18.5h1m1 0h3m1 0h1m1 0h4m1 0h2m2 0h3m1 0h1m1 0h3m1 0h2M4 19.5h1m4 0h1m2 0h2m1 0h1m3 0h3m3 0h2m1 0h2M4 20.5h8m1 0h1m5 0h3m2 0h2m1 0h3m2 0h1M6 21.5h1m1 0h1m4 0h4m1 0h2m1 0h3m3 0h1m1 0h1M4 22.5h1m1 0h1m3 0h1m1 0h4m1 0h1m2 0h1m3 0h1m1 0h1m1 0h3M6 23.5h2m6 0h1m1 0h1m3 0h3m2 0h2m2 0h3M5 24.5h1m1 0h2m1 0h1m1 0h1m2 0h1m3 0h2m1 0h11M12 25.5h1m2 0h1m1 0h1m2 0h1m2 0h2m3 0h2m1 0h2M4 26.5h7m1 0h1m3 0h4m1 0h4m1 0h1m1 0h1m1 0h2M4 27.5h1m5 0h1m2 0h4m1 0h1m1 0h2m2 0h1m3 0h1m3 0h1M4 28.5h1m1 0h3m1 0h1m2 0h3m2 0h1m5 0h7m1 0h1M4 29.5h1m1 0h3m1 0h1m1 0h1m5 0h2m1 0h3m4 0h2m1 0h1M4 30.5h1m1 0h3m1 0h1m1 0h1m2 0h1m1 0h2m1 0h1m3 0h1m2 0h1m2 0h1m1 0h1M4 31.5h1m5 0h1m4 0h3m1 0h1m3 0h2m3 0h2m1 0h1M4 32.5h7m4 0h1m2 0h3m2 0h3m1 0h1m3 0h1"/></svg>\n`
 
   QRCode.toString(
-    'http://www.google.com',
+    'https://publiccode.eu',
     {
       version: 1, // force version=1 to trigger an error
       errorCorrectionLevel: 'H',
       type: 'svg',
     },
     (err, code) => {
-      expect(err, 'there should be an error ')
+      expect(err, 'there should be an error')
       expect(code, 'string should be undefined').toBeUndefined()
     },
   )
 
-  fs.readFile(file, 'utf8', (err, expectedSvg) => {
-    if (err) throw err
+  QRCode.toString(
+    'https://publiccode.eu',
+    {
+      errorCorrectionLevel: 'H',
+      type: 'svg',
+    },
+    (err, code) => {
+      expect(err, 'There should be no error').toBeFalsy()
+      expect(code, 'should output a valid svg').toEqual(expectedSvg)
+    },
+  )
 
-    QRCode.toString(
-      'http://www.google.com',
-      {
-        errorCorrectionLevel: 'H',
-        type: 'svg',
-      },
-      (err, code) => {
-        expect(err, 'There should be no error').toBeFalsy()
-        expect(code, 'should output a valid svg').toEqual(expectedSvg)
-      },
-    )
-  })
-
-  QRCode.toString('http://www.google.com', {
+  await QRCode.toString('https://publiccode.eu', {
     version: 1, // force version=1 to trigger an error
     errorCorrectionLevel: 'H',
     type: 'svg',
@@ -109,83 +105,75 @@ test('toString svg', () => {
     expect(err, 'there should be an error (promise)')
   })
 
-  fs.readFile(file, 'utf8', (err, expectedSvg) => {
-    if (err) throw err
-
-    QRCode.toString('http://www.google.com', {
-      errorCorrectionLevel: 'H',
-      type: 'svg',
-    }).then((code) => {
-      expect(code, 'should output a valid svg (promise)').toEqual(expectedSvg)
-    })
+  await QRCode.toString('https://publiccode.eu', {
+    errorCorrectionLevel: 'H',
+    type: 'svg',
+  }).then((code) => {
+    expect(code, 'should output a valid svg (promise)').toEqual(expectedSvg)
   })
 })
 
 test('toString browser svg', () => {
-  const file = path.join(import.meta.dirname, '/svgtag.expected.out')
+  const expectedSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 37 37" shape-rendering="crispEdges"><path fill="#ffffff" d="M0 0h37v37H0z"/><path stroke="#000000" d="M4 4.5h7m3 0h1m2 0h3m6 0h7M4 5.5h1m5 0h1m3 0h1m1 0h2m1 0h2m5 0h1m5 0h1M4 6.5h1m1 0h3m1 0h1m3 0h1m2 0h1m1 0h1m3 0h1m2 0h1m1 0h3m1 0h1M4 7.5h1m1 0h3m1 0h1m3 0h1m2 0h3m1 0h1m4 0h1m1 0h3m1 0h1M4 8.5h1m1 0h3m1 0h1m1 0h3m1 0h1m1 0h2m3 0h1m2 0h1m1 0h3m1 0h1M4 9.5h1m5 0h1m2 0h1m1 0h1m2 0h7m1 0h1m5 0h1M4 10.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M12 11.5h6m2 0h1M6 12.5h2m2 0h3m1 0h1m1 0h1m2 0h2m1 0h2m1 0h2m1 0h1M5 13.5h1m2 0h1m2 0h1m1 0h1m3 0h1m1 0h1m2 0h1m1 0h3m1 0h1m3 0h1M4 14.5h1m1 0h2m2 0h2m1 0h1m1 0h3m1 0h1m1 0h1m1 0h2m1 0h1m2 0h1m1 0h1M4 15.5h1m4 0h1m1 0h1m1 0h1m1 0h4m5 0h1m2 0h1m4 0h1M5 16.5h2m1 0h3m1 0h1m2 0h6m2 0h3m1 0h1m2 0h3M4 17.5h3m1 0h1m4 0h3m2 0h1m1 0h2m1 0h1m2 0h2m1 0h2m1 0h1M4 18.5h1m1 0h3m1 0h1m1 0h4m1 0h2m2 0h3m1 0h1m1 0h3m1 0h2M4 19.5h1m4 0h1m2 0h2m1 0h1m3 0h3m3 0h2m1 0h2M4 20.5h8m1 0h1m5 0h3m2 0h2m1 0h3m2 0h1M6 21.5h1m1 0h1m4 0h4m1 0h2m1 0h3m3 0h1m1 0h1M4 22.5h1m1 0h1m3 0h1m1 0h4m1 0h1m2 0h1m3 0h1m1 0h1m1 0h3M6 23.5h2m6 0h1m1 0h1m3 0h3m2 0h2m2 0h3M5 24.5h1m1 0h2m1 0h1m1 0h1m2 0h1m3 0h2m1 0h11M12 25.5h1m2 0h1m1 0h1m2 0h1m2 0h2m3 0h2m1 0h2M4 26.5h7m1 0h1m3 0h4m1 0h4m1 0h1m1 0h1m1 0h2M4 27.5h1m5 0h1m2 0h4m1 0h1m1 0h2m2 0h1m3 0h1m3 0h1M4 28.5h1m1 0h3m1 0h1m2 0h3m2 0h1m5 0h7m1 0h1M4 29.5h1m1 0h3m1 0h1m1 0h1m5 0h2m1 0h3m4 0h2m1 0h1M4 30.5h1m1 0h3m1 0h1m1 0h1m2 0h1m1 0h2m1 0h1m3 0h1m2 0h1m2 0h1m1 0h1M4 31.5h1m5 0h1m4 0h3m1 0h1m3 0h2m3 0h2m1 0h1M4 32.5h7m4 0h1m2 0h3m2 0h3m1 0h1m3 0h1"/></svg>\n`
 
-  fs.readFile(file, 'utf8', (err, expectedSvg) => {
-    if (err) throw err
+  browser.toString(
+    'https://publiccode.eu',
+    {
+      errorCorrectionLevel: 'H',
+      type: 'svg',
+    },
+    (err, code) => {
+      expect(err, 'There should be no error').toBeFalsy()
+      expect(code, 'should output a valid svg').toEqual(expectedSvg)
+    },
+  )
 
-    browser.toString(
-      'http://www.google.com',
-      {
-        errorCorrectionLevel: 'H',
-        type: 'svg',
-      },
-      (err, code) => {
-        expect(err, 'There should be no error').toBeFalsy()
-        expect(code, 'should output a valid svg').toEqual(expectedSvg)
-      },
-    )
-
-    browser
-      .toString('http://www.google.com', {
-        errorCorrectionLevel: 'H',
-        type: 'svg',
-      })
-      .then((code) => {
-        expect(code, 'should output a valid svg (promise)').toEqual(expectedSvg)
-      })
-  })
+  browser
+    .toString('https://publiccode.eu', {
+      errorCorrectionLevel: 'H',
+      type: 'svg',
+    })
+    .then((code) => {
+      expect(code, 'should output a valid svg (promise)').toEqual(expectedSvg)
+    })
 })
 
 test('toString utf8', () => {
   const expectedUtf8 = [
     '                                 ',
     '                                 ',
-    '    █▀▀▀▀▀█ █ ▄█  ▀ █ █▀▀▀▀▀█    ',
-    '    █ ███ █ ▀█▄▀▄█ ▀▄ █ ███ █    ',
-    '    █ ▀▀▀ █ ▀▄ ▄ ▄▀ █ █ ▀▀▀ █    ',
-    '    ▀▀▀▀▀▀▀ ▀ ▀ █▄▀ █ ▀▀▀▀▀▀▀    ',
-    '    ▀▄ ▀▀▀▀█▀▀█▄ ▄█▄▀█ ▄█▄██▀    ',
-    '    █▄ ▄▀▀▀▄▄█ █▀▀▄█▀ ▀█ █▄▄█    ',
-    '    █▄ ▄█▄▀█▄▄  ▀ ▄██▀▀ ▄  ▄▀    ',
-    '    █▀▄▄▄▄▀▀█▀▀█▀▀▀█ ▀ ▄█▀█▀█    ',
-    '    ▀ ▀▀▀▀▀▀███▄▄▄▀ █▀▀▀█ ▀█     ',
-    '    █▀▀▀▀▀█ █▀█▀▄ ▄▄█ ▀ █▀ ▄█    ',
-    '    █ ███ █ █ █ ▀▀██▀███▀█ ██    ',
-    '    █ ▀▀▀ █  █▀ ▀ █ ▀▀▄██ ███    ',
-    '    ▀▀▀▀▀▀▀ ▀▀▀  ▀▀ ▀    ▀  ▀    ',
+    '    █▀▀▀▀▀█  ▄▀██ ▄▄▀ █▀▀▀▀▀█    ',
+    '    █ ███ █ ██▄▀ ▄▀█▀ █ ███ █    ',
+    '    █ ▀▀▀ █ █▀▀███▄▄█ █ ▀▀▀ █    ',
+    '    ▀▀▀▀▀▀▀ █ ▀▄█ ▀ █ ▀▀▀▀▀▀▀    ',
+    '    ▀▄█▀██▀▄▄▄▄ █▀▀ ▄▄▀█▀▀▀▄     ',
+    '    █ ▀▄ ▄▀█▄▄ ██ █▀▀██  ▀ ▀█    ',
+    '    █▀█ ▄█▀█▀█ ▀▀▀█▀▄▀▀█▀▄▀█▀    ',
+    '    █ ▄▀█▀▀ █▄▀█▀ █▀▀ ▀██▀ ▀█    ',
+    '    ▀ ▀ ▀ ▀ █  ▀▄▄ ██▀▀▀█▄▀      ',
+    '    █▀▀▀▀▀█ ▄█  ▄█▀ █ ▀ █▄▀██    ',
+    '    █ ███ █ ██  ▀ ▀▀▀██▀█▄███    ',
+    '    █ ▀▀▀ █ ▀▄██▀ ▄██▄ ▄▄█▀ █    ',
+    '    ▀▀▀▀▀▀▀ ▀▀ ▀      ▀▀▀▀▀▀▀    ',
     '                                 ',
     '                                 ',
   ].join('\n')
 
   QRCode.toString(
-    'http://www.google.com',
+    'https://publiccode.eu',
     {
       version: 1, // force version=1 to trigger an error
       errorCorrectionLevel: 'H',
       type: 'utf8',
     },
     (err, code) => {
-      expect(err, 'there should be an error ')
+      expect(err, 'there should be an error')
       expect(code, 'string should be undefined').toBeUndefined()
     },
   )
 
   QRCode.toString(
-    'http://www.google.com',
+    'https://publiccode.eu',
     {
       errorCorrectionLevel: 'M',
       type: 'utf8',
@@ -196,12 +184,12 @@ test('toString utf8', () => {
     },
   )
 
-  QRCode.toString('http://www.google.com', (err, code) => {
+  QRCode.toString('https://publiccode.eu', (err, code) => {
     expect(err, 'There should be no error').toBeFalsy()
     expect(code, 'Should output a valid symbol with default options').toEqual(expectedUtf8)
   })
 
-  QRCode.toString('http://www.google.com', {
+  QRCode.toString('https://publiccode.eu', {
     version: 1, // force version=1 to trigger an error
     errorCorrectionLevel: 'H',
     type: 'utf8',
@@ -209,14 +197,14 @@ test('toString utf8', () => {
     expect(err, 'there should be an error (promise)')
   })
 
-  QRCode.toString('http://www.google.com', {
+  QRCode.toString('https://publiccode.eu', {
     errorCorrectionLevel: 'M',
     type: 'utf8',
   }).then((code) => {
     expect(code, 'should output a valid symbol (promise)').toEqual(expectedUtf8)
   })
 
-  QRCode.toString('http://www.google.com').then((code) => {
+  QRCode.toString('https://publiccode.eu').then((code) => {
     expect(code, 'Should output a valid symbol with default options (promise)').toEqual(
       expectedUtf8,
     )
