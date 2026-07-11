@@ -1,5 +1,8 @@
-import stream from 'stream'
-import util from 'util'
+import stream from 'node:stream'
+import util from 'node:util'
+
+// TODO: Replace this mock with memfs instead
+// TODO: Uninstall sinon and replace with memfs and vitest mocking
 
 function WritableStream() {
   stream.Writable.call(this)

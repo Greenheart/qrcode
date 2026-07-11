@@ -1,6 +1,6 @@
 import { test, expect } from 'vitest'
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import path from 'node:path'
 import QRCode from '#lib/index.ts'
 import * as browser from '#lib/browser.ts'
 import * as Helpers from '#test/helpers.js'

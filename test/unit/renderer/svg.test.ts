@@ -9,6 +9,7 @@ vi.mock('node:fs/promises')
 
 beforeEach(() => {
   vol.reset()
+  vol.mkdirSync(process.cwd(), { recursive: true })
 })
 
 function getExpectedViewbox(size: number, margin: number) {

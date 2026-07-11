@@ -1,4 +1,5 @@
 import * as Utils from './utils.ts'
+
 const BLOCK_CHAR = {
   WW: ' ',
   WB: '▄',
