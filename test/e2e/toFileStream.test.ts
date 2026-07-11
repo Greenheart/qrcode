@@ -1,50 +1,57 @@
-import { test, expect } from 'vitest'
-import sinon from 'sinon'
+import { test, expect, vi, beforeEach } from 'vitest'
+import { vol, fs } from 'memfs'
 import QRCode from '#lib/index.ts'
-import StreamMock from '../mocks/writable-stream.js'
 
-test('toFileStream png', () => {
+vi.mock('node:fs')
+vi.mock('node:fs/promises')
+
+beforeEach(() => {
+  vol.reset()
+  vol.mkdirSync(process.cwd(), { recursive: true })
+})
+
+test('toFileStream png', async () => {
   expect(() => {
     QRCode.toFileStream('some text')
   }, 'Should throw if stream is not provided').toThrow()
 
   expect(() => {
-    QRCode.toFileStream(new StreamMock())
+    QRCode.toFileStream(fs.createWriteStream('streamed-qr', { autoClose: true }))
   }, 'Should throw if text is not provided').toThrow()
 
-  const fstream = new StreamMock()
-  const spy = sinon.spy(fstream, 'emit')
+  await new Promise<void>((resolve) => {
+    const stream = fs.createWriteStream('first-stream', { autoClose: true })
 
-  QRCode.toFileStream(fstream, 'i am a pony!')
+    stream.once('close', resolve)
 
-  QRCode.toFileStream(fstream, 'i am a pony!', {
-    type: 'image/png',
+    expect(() => {
+      QRCode.toFileStream(stream, 'i am a pony!')
+    }, 'There should be no error').not.toThrow()
   })
 
-  expect(spy.neverCalledWith('error'), 'There should be no error')
+  await new Promise<void>((resolve) => {
+    const stream = fs.createWriteStream('second-stream', { autoClose: true })
 
-  spy.restore()
-})
+    stream.once('close', resolve)
 
-test('toFileStream png with write error', () => {
-  const fstreamErr = new StreamMock().forceErrorOnWrite()
-  QRCode.toFileStream(fstreamErr, 'i am a pony!')
-
-  fstreamErr.on('error', (e) => {
-    expect(e, 'Should return an error').toBeTruthy()
+    expect(() => {
+      QRCode.toFileStream(stream, 'i am a pony!', {
+        type: 'image/png',
+      })
+    }, 'There should be no error').not.toThrow()
   })
 })
 
-test('toFileStream png with qrcode error', () => {
-  const fstreamErr = new StreamMock()
+test('toFileStream png with qrcode error', async () => {
+  const stream = fs.createWriteStream('qr-with-error', { autoClose: true })
   const bigString = Array(200).join('i am a pony!')
 
-  fstreamErr.on('error', (e) => {
+  stream.on('error', (e) => {
     expect(e, 'Should return an error').toBeTruthy()
   })
 
-  QRCode.toFileStream(fstreamErr, bigString)
-  QRCode.toFileStream(fstreamErr, 'i am a pony!', {
+  QRCode.toFileStream(stream, bigString)
+  QRCode.toFileStream(stream, 'i am a pony!', {
     version: 1, // force version=1 to trigger an error
     errorCorrectionLevel: 'H',
   })

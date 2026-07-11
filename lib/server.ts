@@ -4,6 +4,7 @@ import * as PngRenderer from './renderer/png.ts'
 import * as Utf8Renderer from './renderer/utf8.ts'
 import * as TerminalRenderer from './renderer/terminal.ts'
 import * as SvgRenderer from './renderer/svg.ts'
+import type { WriteStream } from 'node:fs'
 
 function checkParams(text, opts, cb) {
   if (typeof text === 'undefined') {
@@ -123,7 +124,7 @@ export function toFile(path, text, opts, cb) {
   return render(renderToFile, text, params)
 }
 
-export function toFileStream(stream, text, opts) {
+export function toFileStream(stream: WriteStream, text, opts) {
   if (arguments.length < 2) {
     throw new Error('Too few arguments provided')
   }
