@@ -80,7 +80,7 @@ test('PNG renderToDataURL', () => {
 test('PNG renderToFile', async () => {
   const sampleQrData = QRCode.create('sample text', { version: 2 })
 
-  await new Promise<void>(resolve => {
+  await new Promise<void>((resolve) => {
     const fileName = 'qr1.png'
 
     PngRenderer.renderToFile(fileName, sampleQrData, (err) => {
@@ -90,7 +90,7 @@ test('PNG renderToFile', async () => {
     })
   })
 
-  await new Promise<void>(resolve => {
+  await new Promise<void>((resolve) => {
     const fileName2 = 'qr2.png'
 
     PngRenderer.renderToFile(
@@ -113,20 +113,13 @@ test('PNG renderToFileStream', async () => {
   const sampleQrData = QRCode.create('sample text', { version: 2 })
 
   expect(() => {
-    PngRenderer.renderToFileStream(
-      fs.createWriteStream('streamed.png'),
-      sampleQrData,
-    )
+    PngRenderer.renderToFileStream(fs.createWriteStream('streamed.png'), sampleQrData)
   }, 'Should not throw with only qrData param').not.toThrow()
 
   expect(() => {
-    PngRenderer.renderToFileStream(
-      fs.createWriteStream('streamed2.png'),
-      sampleQrData,
-      {
-        margin: 10,
-        scale: 1,
-      },
-    )
+    PngRenderer.renderToFileStream(fs.createWriteStream('streamed2.png'), sampleQrData, {
+      margin: 10,
+      scale: 1,
+    })
   }, 'Should not throw with options param').not.toThrow()
 })
