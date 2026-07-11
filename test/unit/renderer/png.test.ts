@@ -77,54 +77,51 @@ test('PNG renderToDataURL', () => {
   })
 })
 
-test('PNG renderToFile', () => {
+test('PNG renderToFile', async () => {
   const sampleQrData = QRCode.create('sample text', { version: 2 })
-  const fileName = 'qr1.png'
 
-  // IDEA: Maybe all async stream operations need to be wrapped in promises?
-  // If we await the promises, then perhaps the files will be accepted?
+  await new Promise<void>(resolve => {
+    const fileName = 'qr1.png'
 
-  PngRenderer.renderToFile(fileName, sampleQrData, (err) => {
-    expect(err, 'Should not generate errors with only qrData param').toBeFalsy()
-
-    expect(vol.existsSync(fileName), 'Should save file with correct filename').toBe(true)
+    PngRenderer.renderToFile(fileName, sampleQrData, (err) => {
+      expect(err, 'Should not generate errors with only qrData param').toBeFalsy()
+      expect(vol.existsSync(fileName), 'Should save file with correct filename').toBe(true)
+      resolve()
+    })
   })
 
-  const fileName2 = 'qr2.png'
-  PngRenderer.renderToFile(
-    fileName2,
-    sampleQrData,
-    {
-      margin: 10,
-      scale: 1,
-    },
-    (err) => {
-      expect(err, 'Should not generate errors with options param').toBeFalsy()
+  await new Promise<void>(resolve => {
+    const fileName2 = 'qr2.png'
 
-      expect(vol.existsSync(fileName2), 'Should save file with correct filename').toBe(true)
-    },
-  )
+    PngRenderer.renderToFile(
+      fileName2,
+      sampleQrData,
+      {
+        margin: 10,
+        scale: 1,
+      },
+      (err) => {
+        expect(err, 'Should not generate errors with options param').toBeFalsy()
+        expect(vol.existsSync(fileName2), 'Should save file with correct filename').toBe(true)
+        resolve()
+      },
+    )
+  })
 })
 
 test('PNG renderToFileStream', async () => {
   const sampleQrData = QRCode.create('sample text', { version: 2 })
 
-  // const stream1 = fs.createWriteStream('streamed.png')
-  // const stream2 = fs.createWriteStream('streamed2.png')
-
-  // stream1.once('finish', () => stream1.close())
-  // stream2.once('finish', () => stream1.close())
-
   expect(() => {
     PngRenderer.renderToFileStream(
-      fs.createWriteStream('streamed.png', { autoClose: true }),
+      fs.createWriteStream('streamed.png'),
       sampleQrData,
     )
   }, 'Should not throw with only qrData param').not.toThrow()
 
   expect(() => {
     PngRenderer.renderToFileStream(
-      fs.createWriteStream('streamed2.png', { autoClose: true }),
+      fs.createWriteStream('streamed2.png'),
       sampleQrData,
       {
         margin: 10,
