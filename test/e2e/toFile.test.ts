@@ -1,15 +1,19 @@
-import { test, expect } from 'vitest'
-import fs, { WriteStream } from 'node:fs'
-import path from 'node:path'
-import os from 'node:os'
-import sinon from 'sinon'
+import { test, expect, vi, beforeEach } from 'vitest'
+import { vol } from 'memfs'
 import QRCode from '#lib/index.ts'
 import * as Helpers from '#test/helpers.js'
-import StreamMock from '#test/mocks/writable-stream.js'
+
+vi.mock('node:fs')
+vi.mock('node:fs/promises')
+
+beforeEach(() => {
+  vol.reset()
+  vol.mkdirSync(process.cwd(), { recursive: true })
+})
 
 test('toFile - no promise available', () => {
   Helpers.removeNativePromise()
-  const fileName = path.join(os.tmpdir(), 'qrimage.png')
+  const fileName = 'qrimage1.png'
 
   expect(() => {
     QRCode.toFile(fileName, 'some text')
@@ -22,8 +26,8 @@ test('toFile - no promise available', () => {
   Helpers.restoreNativePromise()
 })
 
-test('toFile', () => {
-  const fileName = path.join(os.tmpdir(), 'qrimage.png')
+test('toFile', async () => {
+  const fileName = 'qrimage2.png'
 
   expect(() => {
     QRCode.toFile('some text', () => {})
@@ -33,13 +37,17 @@ test('toFile', () => {
     QRCode.toFile(fileName)
   }, 'Should throw if text is not provided').toThrow()
 
-  expect(QRCode.toFile(fileName, 'some text').then, 'Should return a promise').toBeTypeOf(
-    'function',
-  )
+  await new Promise<void>(async resolve => {
+    const promise = QRCode.toFile(fileName, 'some text')
+    expect(promise.then, 'Should return a promise').toBeTypeOf(
+      'function',
+    )
+    await promise
+    resolve()
+  })
 })
 
-test('toFile png', () => {
-  const fileName = path.join(os.tmpdir(), 'qrimage.png')
+test('toFile png', async () => {
   const expectedBase64Output = [
     'iVBORw0KGgoAAAANSUhEUgAAAHQAAAB0CAYAAABUmhYnAAAAAklEQVR4AewaftIAAAKzSU',
     'RBVO3BQW7kQAwEwSxC//9y7h55akCQxvYQjIj/scYo1ijFGqVYoxRrlGKNUqxRijVKsUYp',
@@ -58,195 +66,167 @@ test('toFile png', () => {
     'UqxRijXKP0OHEepgrecVAAAAAElFTkSuQmCC',
   ].join('')
 
-  QRCode.toFile(
-    fileName,
-    'i am a pony!',
-    {
-      errorCorrectionLevel: 'L',
-    },
-    (err) => {
-      expect(err, 'There should be no error').toBeFalsy()
+  await new Promise<void>((resolve) => {
+    const fileName = 'qr1.png'
+    QRCode.toFile(
+      fileName,
+      'i am a pony!',
+      {
+        errorCorrectionLevel: 'L',
+      },
+      (err) => {
+        expect(err, 'There should be no error').toBeFalsy()
 
-      fs.stat(fileName, (err) => {
-        expect(err, 'Should save file with correct file name').toBeFalsy()
-      })
+        expect(vol.existsSync(fileName), 'Should save file with correct filename').toBe(true)
 
-      fs.readFile(fileName, (err, buffer) => {
-        if (err) throw err
+        const base64Output = vol.readFileSync(fileName).toString('base64')
+        expect(base64Output, 'Should write correct content').toEqual(expectedBase64Output)
+        resolve()
+      },
+    )
+  })
 
-        expect(buffer.toString('base64'), 'Should write correct content').toEqual(
-          expectedBase64Output,
-        )
-      })
-    },
-  )
+  await new Promise<void>((resolve) => {
+    const fileName = 'qr2.png'
+    QRCode.toFile(
+      fileName,
+      'i am a pony!',
+      {
+        errorCorrectionLevel: 'L',
+        type: 'png',
+      },
+      (err) => {
+        expect(err, 'There should be no errors if file type is specified').toBeFalsy()
+        resolve()
+      },
+    )
+  })
 
-  QRCode.toFile(
-    fileName,
-    'i am a pony!',
-    {
-      errorCorrectionLevel: 'L',
-      type: 'png',
-    },
-    (err) => {
-      expect(err, 'There should be no errors if file type is specified').toBeFalsy()
-    },
-  )
+  const fileName = 'qr3.png'
 
-  QRCode.toFile(fileName, 'i am a pony!', {
+  await QRCode.toFile(fileName, 'i am a pony!', {
     errorCorrectionLevel: 'L',
   }).then(() => {
-    fs.stat(fileName, (err) => {
-      expect(err, 'Should save file with correct file name (promise)').toBeFalsy()
-    })
+    expect(vol.existsSync(fileName), 'Should save file with correct file name (promise)').toBe(true)
 
-    fs.readFile(fileName, (err, buffer) => {
-      if (err) throw err
-
-      expect(buffer.toString('base64'), 'Should write correct content (promise)').toEqual(
-        expectedBase64Output,
-      )
-    })
+    const base64Output = vol.readFileSync(fileName).toString('base64')
+    expect(base64Output, 'Should write correct content (promise)').toEqual(expectedBase64Output)
   })
-
-  const fsStub = sinon.stub(fs, 'createWriteStream')
-  fsStub.returns(new StreamMock().forceErrorOnWrite() as unknown as WriteStream)
-
-  QRCode.toFile(
-    fileName,
-    'i am a pony!',
-    {
-      errorCorrectionLevel: 'L',
-    },
-    (err) => {
-      expect(err, 'There should be an error').toBeTruthy()
-    },
-  )
-
-  QRCode.toFile(fileName, 'i am a pony!', {
-    errorCorrectionLevel: 'L',
-  }).catch((err) => {
-    expect(err, 'Should catch an error (promise)').toBeTruthy()
-  })
-
-  fsStub.restore()
 })
 
-test('toFile svg', () => {
-  const fileName = path.join(os.tmpdir(), 'qrimage.svg')
-  const expectedOutput = fs.readFileSync(
-    path.join(import.meta.dirname, '/svg.expected.out'),
-    'utf-8',
-  )
+test('toFile svg', async () => {
+  const expectedOutput = `<?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 37 37" shape-rendering="crispEdges"><path fill="#ffffff" d="M0 0h37v37H0z"/><path stroke="#000000" d="M4 4.5h7m3 0h1m2 0h3m6 0h7M4 5.5h1m5 0h1m3 0h1m1 0h2m1 0h2m5 0h1m5 0h1M4 6.5h1m1 0h3m1 0h1m3 0h1m2 0h1m1 0h1m3 0h1m2 0h1m1 0h3m1 0h1M4 7.5h1m1 0h3m1 0h1m3 0h1m2 0h3m1 0h1m4 0h1m1 0h3m1 0h1M4 8.5h1m1 0h3m1 0h1m1 0h3m1 0h1m1 0h2m3 0h1m2 0h1m1 0h3m1 0h1M4 9.5h1m5 0h1m2 0h1m1 0h1m2 0h7m1 0h1m5 0h1M4 10.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M12 11.5h6m2 0h1M6 12.5h2m2 0h3m1 0h1m1 0h1m2 0h2m1 0h2m1 0h2m1 0h1M5 13.5h1m2 0h1m2 0h1m1 0h1m3 0h1m1 0h1m2 0h1m1 0h3m1 0h1m3 0h1M4 14.5h1m1 0h2m2 0h2m1 0h1m1 0h3m1 0h1m1 0h1m1 0h2m1 0h1m2 0h1m1 0h1M4 15.5h1m4 0h1m1 0h1m1 0h1m1 0h4m5 0h1m2 0h1m4 0h1M5 16.5h2m1 0h3m1 0h1m2 0h6m2 0h3m1 0h1m2 0h3M4 17.5h3m1 0h1m4 0h3m2 0h1m1 0h2m1 0h1m2 0h2m1 0h2m1 0h1M4 18.5h1m1 0h3m1 0h1m1 0h4m1 0h2m2 0h3m1 0h1m1 0h3m1 0h2M4 19.5h1m4 0h1m2 0h2m1 0h1m3 0h3m3 0h2m1 0h2M4 20.5h8m1 0h1m5 0h3m2 0h2m1 0h3m2 0h1M6 21.5h1m1 0h1m4 0h4m1 0h2m1 0h3m3 0h1m1 0h1M4 22.5h1m1 0h1m3 0h1m1 0h4m1 0h1m2 0h1m3 0h1m1 0h1m1 0h3M6 23.5h2m6 0h1m1 0h1m3 0h3m2 0h2m2 0h3M5 24.5h1m1 0h2m1 0h1m1 0h1m2 0h1m3 0h2m1 0h11M12 25.5h1m2 0h1m1 0h1m2 0h1m2 0h2m3 0h2m1 0h2M4 26.5h7m1 0h1m3 0h4m1 0h4m1 0h1m1 0h1m1 0h2M4 27.5h1m5 0h1m2 0h4m1 0h1m1 0h2m2 0h1m3 0h1m3 0h1M4 28.5h1m1 0h3m1 0h1m2 0h3m2 0h1m5 0h7m1 0h1M4 29.5h1m1 0h3m1 0h1m1 0h1m5 0h2m1 0h3m4 0h2m1 0h1M4 30.5h1m1 0h3m1 0h1m1 0h1m2 0h1m1 0h2m1 0h1m3 0h1m2 0h1m2 0h1m1 0h1M4 31.5h1m5 0h1m4 0h3m1 0h1m3 0h2m3 0h2m1 0h1M4 32.5h7m4 0h1m2 0h3m2 0h3m1 0h1m3 0h1"/></svg>\n`
 
-  QRCode.toFile(
-    fileName,
-    'http://www.google.com',
-    {
-      errorCorrectionLevel: 'H',
-    },
-    (err) => {
-      expect(err, 'There should be no error').toBeFalsy()
+  await new Promise<void>((resolve) => {
+    const fileName = 'qrimage.svg'
+    QRCode.toFile(
+      fileName,
+      'https://publiccode.eu',
+      {
+        errorCorrectionLevel: 'H',
+      },
+      (err) => {
+        expect(err, 'There should be no error').toBeFalsy()
+        expect(vol.existsSync(fileName), 'Should save file with correct filename').toBe(true)
+        expect(vol.readFileSync(fileName, 'utf-8'), 'Should write correct content').toEqual(
+          expectedOutput,
+        )
+        resolve()
+      },
+    )
+  })
 
-      fs.stat(fileName, (err) => {
-        expect(err, 'Should save file with correct file name').toBeFalsy()
-      })
+  await new Promise<void>((resolve) => {
+    const fileName2 = 'qrimage2.svg'
+    QRCode.toFile(
+      fileName2,
+      'https://publiccode.eu',
+      {
+        errorCorrectionLevel: 'H',
+        type: 'svg',
+      },
+      (err) => {
+        expect(err, 'There should be no errors if file type is specified').toBeFalsy()
+        resolve()
+      },
+    )
+  })
 
-      fs.readFile(fileName, 'utf8', (err, content) => {
-        if (err) throw err
-        expect(content, 'Should write correct content').toEqual(expectedOutput)
-      })
-    },
-  )
-  const fileName2 = path.join(os.tmpdir(), 'qrimage2.svg')
-  QRCode.toFile(
-    fileName2,
-    'http://www.google.com',
-    {
-      errorCorrectionLevel: 'H',
-      type: 'svg',
-    },
-    (err) => {
-      expect(err, 'There should be no errors if file type is specified').toBeFalsy()
-    },
-  )
-  const fileName3 = path.join(os.tmpdir(), 'qrimage3.svg')
-  QRCode.toFile(fileName3, 'http://www.google.com', {
+  const fileName3 = 'qrimage3.svg'
+  await QRCode.toFile(fileName3, 'https://publiccode.eu', {
     errorCorrectionLevel: 'H',
   }).then(() => {
-    fs.stat(fileName3, (err) => {
-      expect(err, 'Should save file with correct file name (promise)').toBeFalsy()
-    })
+    expect(vol.existsSync(fileName3), 'Should save file with correct filename (promise)').toBe(true)
 
-    fs.readFile(fileName3, 'utf8', (err, content) => {
-      if (err) throw err
-      expect(content, 'Should write correct content (promise)').toEqual(expectedOutput)
-    })
+    expect(vol.readFileSync(fileName3, 'utf-8'), 'Should write correct content (promise)').toEqual(
+      expectedOutput,
+    )
   })
 })
 
-test('toFile utf8', () => {
-  const fileName = path.join(os.tmpdir(), 'qrimage-utf8.txt')
+test('toFile utf8', async () => {
   const expectedOutput = [
     '                                 ',
     '                                 ',
-    '    █▀▀▀▀▀█ █ ▄█  ▀ █ █▀▀▀▀▀█    ',
-    '    █ ███ █ ▀█▄▀▄█ ▀▄ █ ███ █    ',
-    '    █ ▀▀▀ █ ▀▄ ▄ ▄▀ █ █ ▀▀▀ █    ',
-    '    ▀▀▀▀▀▀▀ ▀ ▀ █▄▀ █ ▀▀▀▀▀▀▀    ',
-    '    ▀▄ ▀▀▀▀█▀▀█▄ ▄█▄▀█ ▄█▄██▀    ',
-    '    █▄ ▄▀▀▀▄▄█ █▀▀▄█▀ ▀█ █▄▄█    ',
-    '    █▄ ▄█▄▀█▄▄  ▀ ▄██▀▀ ▄  ▄▀    ',
-    '    █▀▄▄▄▄▀▀█▀▀█▀▀▀█ ▀ ▄█▀█▀█    ',
-    '    ▀ ▀▀▀▀▀▀███▄▄▄▀ █▀▀▀█ ▀█     ',
-    '    █▀▀▀▀▀█ █▀█▀▄ ▄▄█ ▀ █▀ ▄█    ',
-    '    █ ███ █ █ █ ▀▀██▀███▀█ ██    ',
-    '    █ ▀▀▀ █  █▀ ▀ █ ▀▀▄██ ███    ',
-    '    ▀▀▀▀▀▀▀ ▀▀▀  ▀▀ ▀    ▀  ▀    ',
+    '    █▀▀▀▀▀█  ▄▀██ ▄▄▀ █▀▀▀▀▀█    ',
+    '    █ ███ █ ██▄▀ ▄▀█▀ █ ███ █    ',
+    '    █ ▀▀▀ █ █▀▀███▄▄█ █ ▀▀▀ █    ',
+    '    ▀▀▀▀▀▀▀ █ ▀▄█ ▀ █ ▀▀▀▀▀▀▀    ',
+    '    ▀▄█▀██▀▄▄▄▄ █▀▀ ▄▄▀█▀▀▀▄     ',
+    '    █ ▀▄ ▄▀█▄▄ ██ █▀▀██  ▀ ▀█    ',
+    '    █▀█ ▄█▀█▀█ ▀▀▀█▀▄▀▀█▀▄▀█▀    ',
+    '    █ ▄▀█▀▀ █▄▀█▀ █▀▀ ▀██▀ ▀█    ',
+    '    ▀ ▀ ▀ ▀ █  ▀▄▄ ██▀▀▀█▄▀      ',
+    '    █▀▀▀▀▀█ ▄█  ▄█▀ █ ▀ █▄▀██    ',
+    '    █ ███ █ ██  ▀ ▀▀▀██▀█▄███    ',
+    '    █ ▀▀▀ █ ▀▄██▀ ▄██▄ ▄▄█▀ █    ',
+    '    ▀▀▀▀▀▀▀ ▀▀ ▀      ▀▀▀▀▀▀▀    ',
     '                                 ',
     '                                 ',
   ].join('\n')
 
-  QRCode.toFile(fileName, 'http://www.google.com', (err) => {
-    expect(err, 'There should be no error').toBeFalsy()
+  await new Promise<void>((resolve) => {
+    const fileName = 'qrimage-utf8.txt'
 
-    fs.stat(fileName, (err) => {
-      expect(err, 'Should save file with correct file name').toBeFalsy()
-    })
-
-    fs.readFile(fileName, 'utf8', (err, content) => {
-      if (err) throw err
-      expect(content, 'Should write correct content').toEqual(expectedOutput)
+    QRCode.toFile(fileName, 'https://publiccode.eu', (err) => {
+      expect(err, 'There should be no error').toBeFalsy()
+      expect(vol.existsSync(fileName), 'Should save file with correct file name').toBe(true)
+      expect(vol.readFileSync(fileName, 'utf-8'), 'Should write correct content').toEqual(
+        expectedOutput,
+      )
+      resolve()
     })
   })
 
-  QRCode.toFile(
-    fileName,
-    'http://www.google.com',
-    {
-      errorCorrectionLevel: 'M',
-      type: 'utf8',
-    },
-    (err) => {
-      expect(err, 'There should be no errors if file type is specified').toBeFalsy()
-    },
-  )
+  await new Promise<void>((resolve) => {
+    const fileName2 = 'qr2.txt'
 
-  QRCode.toFile(fileName, 'http://www.google.com').then(() => {
-    fs.stat(fileName, (err) => {
-      expect(err, 'Should save file with correct file name (promise)').toBeFalsy()
-    })
+    QRCode.toFile(
+      fileName2,
+      'https://publiccode.eu',
+      {
+        errorCorrectionLevel: 'M',
+        type: 'utf8',
+      },
+      (err) => {
+        expect(err, 'There should be no errors if file type is specified').toBeFalsy()
+        resolve()
+      },
+    )
+  })
 
-    fs.readFile(fileName, 'utf8', (err, content) => {
-      if (err) throw err
-      expect(content, 'Should write correct content (promise)').toEqual(expectedOutput)
-    })
+  const fileName3 = 'qr3.txt'
+  await QRCode.toFile(fileName3, 'https://publiccode.eu').then(() => {
+    expect(vol.existsSync(fileName3), 'Should save file with correct filename (promise)').toBe(true)
+    expect(vol.readFileSync(fileName3, 'utf-8'), 'Should write correct content (promise)').toEqual(
+      expectedOutput,
+    )
   })
 })
 
-test('toFile manual segments', () => {
-  const fileName = path.join(os.tmpdir(), 'qrimage-manual-segments.txt')
-  const segs = [
+test('toFile manual segments', async () => {
+  const fileName = 'qrimage-manual-segments.txt'
+  const segments = [
     { data: 'ABCDEFG', mode: 'alphanumeric' },
     { data: '0123456', mode: 'numeric' },
   ]
@@ -268,23 +248,21 @@ test('toFile manual segments', () => {
     '                             ',
   ].join('\n')
 
-  QRCode.toFile(
-    fileName,
-    segs,
-    {
-      errorCorrectionLevel: 'L',
-    },
-    (err) => {
-      expect(err, 'There should be no errors if text is not string').toBeFalsy()
-
-      fs.stat(fileName, (err) => {
-        expect(err, 'Should save file with correct file name').toBeFalsy()
-      })
-
-      fs.readFile(fileName, 'utf8', (err, content) => {
-        if (err) throw err
-        expect(content, 'Should write correct content').toEqual(expectedOutput)
-      })
-    },
-  )
+  await new Promise<void>((resolve) => {
+    QRCode.toFile(
+      fileName,
+      segments,
+      {
+        errorCorrectionLevel: 'L',
+      },
+      (err) => {
+        expect(err, 'There should be no errors if text is not string').toBeFalsy()
+        expect(vol.existsSync(fileName), 'Should save file with correct filename').toBe(true)
+        expect(vol.readFileSync(fileName, 'utf-8'), 'Should write correct content').toEqual(
+          expectedOutput,
+        )
+        resolve()
+      },
+    )
+  })
 })

@@ -573,7 +573,7 @@ Callback function called on finish.
 ##### Example
 
 ```javascript
-QRCode.toString('http://www.google.com', function (err, string) {
+QRCode.toString('https://publiccode.eu', function (err, string) {
   if (err) throw err
   console.log(string)
 })
@@ -658,7 +658,7 @@ Callback function called on finish.
 ##### Example
 
 ```javascript
-QRCode.toString('http://www.google.com', function (err, string) {
+QRCode.toString('https://publiccode.eu', function (err, string) {
   if (err) throw err
   console.log(string)
 })
