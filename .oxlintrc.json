@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": null,
+  // "plugins": [],
   // "jsPlugins": ["@e18e/eslint-plugin"],
   "categories": {},
   "rules": {
