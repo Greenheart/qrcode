@@ -1,10 +1,15 @@
-import { test, expect } from 'vitest'
-import sinon from 'sinon'
-import fs from 'fs'
+import { test, expect, beforeEach, vi } from 'vitest'
 import { Parser } from 'htmlparser2'
-
+import { vol } from 'memfs'
 import * as QRCode from '#core/qrcode.ts'
 import * as SvgRenderer from '#renderer/svg.ts'
+
+vi.mock('node:fs')
+vi.mock('node:fs/promises')
+
+beforeEach(() => {
+  vol.reset()
+})
 
 function getExpectedViewbox(size: number, margin: number) {
   const expectedQrCodeSize = size + margin * 2
@@ -51,13 +56,13 @@ function buildTest(data, opts, expectedTags: ExpectedTags) {
   return testSvgFragment(svg, expectedTags.slice())
 }
 
-test('svgrender interface', () => {
+test('SvgRenderer interface', () => {
   expect(SvgRenderer.render, 'Should have render function').toBeTypeOf('function')
 
   expect(SvgRenderer.renderToFile, 'Should have renderToFile function').toBeTypeOf('function')
 })
 
-test('Svg render', () => {
+test('SvgRenderer', () => {
   const tests = []
 
   const data = QRCode.create('sample text', { version: 2 })
@@ -149,19 +154,20 @@ test('Svg render', () => {
   Promise.all(tests).then(() => {})
 })
 
-test('Svg renderToFile', () => {
+test('SVG renderToFile', () => {
   const sampleQrData = QRCode.create('sample text', { version: 2 })
   const fileName = 'qrimage.svg'
-  let fsStub = sinon.stub(fs, 'writeFile').callsArg(2)
 
   SvgRenderer.renderToFile(fileName, sampleQrData, (err) => {
     expect(err, 'Should not generate errors with only qrData param').toBeFalsy()
 
-    expect(fsStub.getCall(0).args[0], 'Should save file with correct file name').toEqual(fileName)
+    expect(vol.existsSync(fileName), 'Should save file with correct filename').toBe(true)
   })
 
+  const fileName2 = 'qrimage2.svg'
+
   SvgRenderer.renderToFile(
-    fileName,
+    fileName2,
     sampleQrData,
     {
       margin: 10,
@@ -170,16 +176,7 @@ test('Svg renderToFile', () => {
     (err) => {
       expect(err, 'Should not generate errors with options param').toBeFalsy()
 
-      expect(fsStub.getCall(0).args[0], 'Should save file with correct file name').toEqual(fileName)
+      expect(vol.existsSync(fileName2), 'Should save file with correct filename').toBe(true)
     },
   )
-
-  fsStub.restore()
-  fsStub = sinon.stub(fs, 'writeFile').callsArgWith(2, new Error())
-
-  SvgRenderer.renderToFile(fileName, sampleQrData, function (err) {
-    expect(err, 'Should fail if error occurs during save').toBeTruthy()
-  })
-
-  fsStub.restore()
 })

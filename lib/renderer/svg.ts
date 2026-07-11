@@ -1,5 +1,5 @@
+import { writeFile } from 'node:fs'
 import { render } from './svg-tag.ts'
-import fs from 'node:fs'
 
 export function renderToFile(path, qrData, options, cb) {
   if (typeof cb === 'undefined') {
@@ -14,7 +14,7 @@ export function renderToFile(path, qrData, options, cb) {
     '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">' +
     svgTag
 
-  fs.writeFile(path, xmlStr, cb)
+  writeFile(path, xmlStr, cb)
 }
 
 export { render }
