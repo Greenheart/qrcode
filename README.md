@@ -766,46 +766,46 @@ QR Code version. If not specified the more suitable value will be calculated.
 ##### `errorCorrectionLevel`
 
 Type: `String`  
- Default: `M`
+Default: `M`
 
 Error correction level.  
- Possible values are `low, medium, quartile, high` or `L, M, Q, H`.
+Possible values are `low, medium, quartile, high` or `L, M, Q, H`.
 
 ##### `maskPattern`
 
 Type: `Number`
 
 Mask pattern used to mask the symbol.  
- Possible values are `0`, `1`, `2`, `3`, `4`, `5`, `6`, `7`.  
- If not specified the more suitable value will be calculated.
+Possible values are `0`, `1`, `2`, `3`, `4`, `5`, `6`, `7`.  
+If not specified the more suitable value will be calculated.
 
 ##### `toSJISFunc`
 
 Type: `Function`
 
 Helper function used internally to convert a kanji to its Shift JIS value.  
- Provide this function if you need support for Kanji mode.
+Provide this function if you need support for Kanji mode.
 
 #### Renderers options
 
 ##### `margin`
 
 Type: `Number`  
- Default: `4`
+Default: `4`
 
 Define how much wide the quiet zone should be.
 
 ##### `scale`
 
 Type: `Number`  
- Default: `4`
+Default: `4`
 
 Scale factor. A value of `1` means 1px per modules (black dots).
 
 ##### `small`
 
 Type: `Boolean`  
- Default: `false`
+Default: `false`
 
 Relevant only for terminal renderer. Outputs smaller QR code.
 
@@ -814,8 +814,8 @@ Relevant only for terminal renderer. Outputs smaller QR code.
 Type: `Number`
 
 Forces a specific width for the output image.  
- If width is too small to contain the qr symbol, this option will be ignored.  
- Takes precedence over `scale`.
+If width is too small to contain the qr symbol, this option will be ignored.  
+Takes precedence over `scale`.
 
 ##### `color.dark`
 
