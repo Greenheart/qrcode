@@ -46,8 +46,7 @@
   },
   "scripts": {
     "lint": "oxlint",
-    "format": "oxfmt --write",
-    "pretest": "pnpm lint",
+    "fix": "oxlint --fix && oxfmt --write",
     "test": "vitest",
     "test:coverage": "vitest --run --coverage",
     "build": "rollup -c",
