@@ -59,19 +59,13 @@ export function render(qrData, options, cb) {
   return output
 }
 
-// NOTE: This test fails because of the async import
-// renderToFile and similar output methods using the Node.js runtime
-// should either be moved to a separate module to allow the core UTF-8
-// renderer to work even for browser environments.
-// Or, removed since this is literally just a fs.writeFile() call over the render(qrData) to a path.
-// Or, use a file stream similar to how it's done for the PNG.renderToFile() method.
 export function renderToFile(path, qrData, options, cb) {
   if (typeof cb === 'undefined') {
     cb = options
     options = undefined
   }
 
-  import('fs').then(({ default: fs }) => {
+  import('node:fs').then(({ default: fs }) => {
     const utf8 = render(qrData, options)
     fs.writeFile(path, utf8, cb)
   })
