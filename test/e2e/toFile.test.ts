@@ -37,13 +37,10 @@ test('toFile', async () => {
     QRCode.toFile(fileName)
   }, 'Should throw if text is not provided').toThrow()
 
-  await new Promise<void>(async resolve => {
+  await new Promise<void>((resolve) => {
     const promise = QRCode.toFile(fileName, 'some text')
-    expect(promise.then, 'Should return a promise').toBeTypeOf(
-      'function',
-    )
-    await promise
-    resolve()
+    expect(promise.then, 'Should return a promise').toBeTypeOf('function')
+    promise.then(resolve)
   })
 })
 
