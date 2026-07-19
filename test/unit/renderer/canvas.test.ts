@@ -176,7 +176,7 @@ test('CanvasRenderer renderToBlob', () => {
         expect(
           // @ts-expect-error
           imageBlob.toString('base64'),
-          'Blob data cannot be converted to base64 econding',
+          'Blob data cannot be converted to base64 encoding',
         ).toEqual('[object Blob]')
 
         // TODO: This test is broken for some reson with Node.js 24 and `canvas@3.2.1`. Might be a breaking change of some sort.
