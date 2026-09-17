@@ -1,10 +1,10 @@
 import { test, expect } from 'vitest'
 import { Canvas, createCanvas } from 'canvas'
 import QRCode from '#lib/index.ts'
-import * as Helpers from '#test/helpers.js'
+import { removeNativePromise, restoreNativePromise } from '#test/helpers.js'
 
 test('toCanvas - no promise available', () => {
-  Helpers.removeNativePromise()
+  removeNativePromise()
 
   // Mock document object
   global.document = {
@@ -34,7 +34,7 @@ test('toCanvas - no promise available', () => {
   }, 'Should throw if callback is not a function').toThrow()
 
   global.document = undefined
-  Helpers.restoreNativePromise()
+  restoreNativePromise()
 })
 
 test('toCanvas', () => {

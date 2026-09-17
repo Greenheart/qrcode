@@ -1,4 +1,4 @@
-import * as Utils from './utils.ts'
+import { getOptions, getImageWidth, qrToImageData } from './utils.ts'
 
 function clearCanvas(ctx, canvas, size) {
   ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -32,12 +32,12 @@ export function render(qrData, canvas, options) {
     canvasEl = getCanvasElement()
   }
 
-  opts = Utils.getOptions(opts)
-  const size = Utils.getImageWidth(qrData.modules.size, opts)
+  opts = getOptions(opts)
+  const size = getImageWidth(qrData.modules.size, opts)
 
   const ctx = canvasEl.getContext('2d')
   const image = ctx.createImageData(size, size)
-  Utils.qrToImageData(image.data, qrData, opts)
+  qrToImageData(image.data, qrData, opts)
 
   clearCanvas(ctx, canvasEl, size)
   ctx.putImageData(image, 0, 0)

@@ -1,11 +1,11 @@
 import { Canvas, createCanvas } from 'canvas'
-import * as QRCode from '#core/qrcode.ts'
-import * as CanvasRenderer from '#renderer/canvas.ts'
+import { create } from '#core/qrcode.ts'
+import { render, renderToDataURL, renderToBlob } from '#renderer/canvas.ts'
 import { test, expect } from 'vitest'
 
 test('CanvasRenderer interface', () => {
-  expect(CanvasRenderer.render, 'Should have render function').toBeTypeOf('function')
-  expect(CanvasRenderer.renderToDataURL, 'Should have renderToDataURL function').toBeTypeOf(
+  expect(render, 'Should have render function').toBeTypeOf('function')
+  expect(renderToDataURL, 'Should have renderToDataURL function').toBeTypeOf(
     'function',
   )
 })
@@ -21,17 +21,17 @@ test('CanvasRenderer render', () => {
     },
   }
 
-  const sampleQrData = QRCode.create('sample text', { version: 2 })
+  const sampleQrData = create('sample text', { version: 2 })
   let canvasEl
 
   expect(() => {
-    canvasEl = CanvasRenderer.render(sampleQrData)
+    canvasEl = render(sampleQrData)
   }, 'Should not throw if canvas is not provided').not.toThrow()
 
   expect(canvasEl, 'Should return a new canvas object').toBeInstanceOf(Canvas)
 
   expect(() => {
-    canvasEl = CanvasRenderer.render(sampleQrData, {
+    canvasEl = render(sampleQrData, {
       margin: 10,
       scale: 1,
     })
@@ -45,20 +45,20 @@ test('CanvasRenderer render', () => {
   global.document = undefined
 
   expect(() => {
-    canvasEl = CanvasRenderer.render(sampleQrData)
+    canvasEl = render(sampleQrData)
   }, 'Should throw if canvas cannot be created').toThrow()
 })
 
 test('CanvasRenderer render to provided canvas', () => {
-  const sampleQrData = QRCode.create('sample text', { version: 2 })
+  const sampleQrData = create('sample text', { version: 2 })
   const canvasEl = createCanvas(200, 200)
 
   expect(() => {
-    CanvasRenderer.render(sampleQrData, canvasEl)
+    render(sampleQrData, canvasEl)
   }, 'Should not throw with only qrData and canvas param').not.toThrow()
 
   expect(() => {
-    CanvasRenderer.render(sampleQrData, canvasEl, {
+    render(sampleQrData, canvasEl, {
       margin: 10,
       scale: 1,
     })
@@ -81,15 +81,15 @@ test('CanvasRenderer renderToDataURL', () => {
     },
   }
 
-  const sampleQrData = QRCode.create('sample text', { version: 2 })
+  const sampleQrData = create('sample text', { version: 2 })
   let url
 
   expect(() => {
-    url = CanvasRenderer.renderToDataURL(sampleQrData)
+    url = renderToDataURL(sampleQrData)
   }, 'Should not throw if canvas is not provided').not.toThrow()
 
   expect(() => {
-    url = CanvasRenderer.renderToDataURL(sampleQrData, {
+    url = renderToDataURL(sampleQrData, {
       margin: 10,
       scale: 1,
       type: 'image/png',
@@ -107,16 +107,16 @@ test('CanvasRenderer renderToDataURL', () => {
 })
 
 test('CanvasRenderer renderToDataURL to provided canvas', () => {
-  const sampleQrData = QRCode.create('sample text', { version: 2 })
+  const sampleQrData = create('sample text', { version: 2 })
   const canvasEl = createCanvas(200, 200)
   let url
 
   expect(() => {
-    url = CanvasRenderer.renderToDataURL(sampleQrData, canvasEl)
+    url = renderToDataURL(sampleQrData, canvasEl)
   }, 'Should not throw with only qrData and canvas param').not.toThrow()
 
   expect(() => {
-    url = CanvasRenderer.renderToDataURL(sampleQrData, canvasEl, {
+    url = renderToDataURL(sampleQrData, canvasEl, {
       margin: 10,
       scale: 1,
       type: 'image/png',
@@ -163,11 +163,11 @@ test('CanvasRenderer renderToBlob', () => {
   let imageBlob: Blob
 
   expect(() => {
-    CanvasRenderer.renderToBlob(() => {}, sampleQrData)
+    renderToBlob(() => {}, sampleQrData)
   }, 'Should not throw if canvas is not provided').not.toThrow()
 
   expect(() => {
-    CanvasRenderer.renderToBlob(
+    renderToBlob(
       (blob) => {
         imageBlob = blob
 
