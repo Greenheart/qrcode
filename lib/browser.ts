@@ -1,7 +1,7 @@
 import canPromise from './can-promise.ts'
-import * as QRCode from './core/qrcode.ts'
-import * as CanvasRenderer from './renderer/canvas.ts'
-import * as SvgRenderer from './renderer/svg-tag.ts'
+import { create } from './core/qrcode.ts'
+import { render, renderToDataURL } from './renderer/canvas.ts'
+import { render as svgRender } from './renderer/svg-tag.ts'
 
 function renderCanvas(renderFunc, canvas, text, opts, cb) {
   const args = [].slice.call(arguments, 1)
@@ -48,7 +48,7 @@ function renderCanvas(renderFunc, canvas, text, opts, cb) {
 
     return new Promise(function (resolve, reject) {
       try {
-        const data = QRCode.create(text, opts)
+        const data = create(text, opts)
         resolve(renderFunc(data, canvas, opts))
       } catch (e) {
         reject(e)
@@ -57,18 +57,18 @@ function renderCanvas(renderFunc, canvas, text, opts, cb) {
   }
 
   try {
-    const data = QRCode.create(text, opts)
+    const data = create(text, opts)
     cb(null, renderFunc(data, canvas, opts))
   } catch (e) {
     cb(e)
   }
 }
 
-export const create = QRCode.create
-export const toCanvas = renderCanvas.bind(null, CanvasRenderer.render)
-export const toDataURL = renderCanvas.bind(null, CanvasRenderer.renderToDataURL)
+export { create }
+export const toCanvas = renderCanvas.bind(null, render)
+export const toDataURL = renderCanvas.bind(null, renderToDataURL)
 
 // only svg for now.
 export const toString = renderCanvas.bind(null, function (data, _, opts) {
-  return SvgRenderer.render(data, opts)
+  return svgRender(data, opts)
 })
